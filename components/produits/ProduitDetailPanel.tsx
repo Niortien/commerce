@@ -433,7 +433,7 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
 
         {/* SÉLECTEUR BOUTIQUE (admin uniquement, création uniquement) */}
         {isNew && user?.role === "ADMIN" && (
-          <section className="rounded-lg border border-border/80 bg-[color:rgba(45,69,103,0.4)] p-4">
+          <section className="rounded-lg border border-border/80 bg-[var(--color-surface-high)] p-4">
             <p className="mb-3 text-xs uppercase tracking-[0.08em] text-text-muted">Boutiques</p>
             <div className="flex flex-col gap-2">
               {boutiques.map((b) => (
@@ -466,7 +466,7 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
 
         {/* RÉATTRIBUTION BOUTIQUE (admin, édition d'un produit existant) */}
         {!isNew && isAdmin && produit && (
-          <section className="rounded-lg border border-border/80 bg-[color:rgba(45,69,103,0.4)] p-4">
+          <section className="rounded-lg border border-border/80 bg-[var(--color-surface-high)] p-4">
             <p className="mb-1 text-xs uppercase tracking-[0.08em] text-text-muted">Boutique</p>
             <p className="mb-3 text-[11px] text-text-muted/70">
               {produitBoutiqueIds.length === 0
@@ -531,7 +531,7 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
         )}
 
         {/* IMAGE */}
-        <section className="rounded-lg border border-border/80 bg-[color:rgba(45,69,103,0.4)] p-4">
+        <section className="rounded-lg border border-border/80 bg-[var(--color-surface-high)] p-4">
           <p className="mb-2 text-xs uppercase tracking-[0.08em] text-text-muted">Photo</p>
           <div
             role="button"
@@ -569,35 +569,50 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
         </section>
 
         {/* IDENTITÉ */}
-        <section className="rounded-lg border border-border/80 bg-[color:rgba(45,69,103,0.4)] p-4">
+        <section className="rounded-lg border border-border/80 bg-[var(--color-surface-high)] p-4">
           <p className="mb-3 text-xs uppercase tracking-[0.08em] text-text-muted">Identité</p>
           <div className="space-y-3">
             <Input
-              variant="underlined"
-              placeholder="Nom du produit"
+              variant="bordered"
+              label="Nom du produit"
+              placeholder="Ex : Tee-shirt oversize"
               isInvalid={!!errors.nom}
               errorMessage={errors.nom?.message}
-              classNames={{ input: "text-xl font-[var(--font-display)]" }}
+              classNames={{
+                label: "text-text-muted",
+                input: "text-xl font-[var(--font-display)] text-white",
+                inputWrapper: "border-2 border-[var(--color-border-active)]/50 bg-[var(--color-surface)] data-[hover=true]:border-[var(--color-border-active)]",
+              }}
               {...register("nom")}
             />
             <Input
-              variant="underlined"
-              placeholder="SKU (auto-généré)"
+              variant="bordered"
+              label="SKU"
+              placeholder="Auto-généré si vide"
               isInvalid={!!errors.sku}
-              classNames={{ input: "font-[var(--font-mono)] text-sm" }}
+              classNames={{
+                label: "text-text-muted",
+                input: "font-[var(--font-mono)] text-sm text-white",
+                inputWrapper: "border-2 border-[var(--color-border-active)]/50 bg-[var(--color-surface)] data-[hover=true]:border-[var(--color-border-active)]",
+              }}
               {...register("sku")}
             />
             <Input
-              variant="underlined"
-              placeholder="Description (optionnel)"
-              classNames={{ input: "text-sm text-text-muted" }}
+              variant="bordered"
+              label="Description"
+              placeholder="Optionnel"
+              classNames={{
+                label: "text-text-muted",
+                input: "text-sm text-white",
+                inputWrapper: "border-2 border-[var(--color-border-active)]/50 bg-[var(--color-surface)] data-[hover=true]:border-[var(--color-border-active)]",
+              }}
               {...register("description")}
             />
           </div>
         </section>
 
         {/* CATÉGORIE — groupée */}
-        <section className="rounded-lg border border-border/80 bg-[color:rgba(45,69,103,0.4)] p-4">
+        <section className="rounded-lg border border-border/80 bg-[var(--color-surface-high)] p-4">
           <p className="mb-3 text-xs uppercase tracking-[0.08em] text-text-muted">Catégorie</p>
           {catsLoading ? (
             <div className="space-y-3">
@@ -645,30 +660,42 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
         </section>
 
         {/* PRIX */}
-        <section className="rounded-lg border border-border/80 bg-[color:rgba(45,69,103,0.4)] p-4">
+        <section className="rounded-lg border border-border/80 bg-[var(--color-surface-high)] p-4">
           <p className="mb-3 text-xs uppercase tracking-[0.08em] text-text-muted">Prix</p>
           <div className="grid grid-cols-2 gap-3">
             <Input
               variant="bordered"
-              placeholder="Prix vente"
+              label="Prix vente"
+              placeholder="0"
               endContent={<span className="text-xs text-text-muted">FCFA</span>}
               isInvalid={!!errors.prixVente}
               errorMessage={errors.prixVente?.message}
+              classNames={{
+                label: "text-text-muted",
+                input: "text-white",
+                inputWrapper: "border-2 border-[var(--color-border-active)]/50 bg-[var(--color-surface)] data-[hover=true]:border-[var(--color-border-active)]",
+              }}
               {...register("prixVente")}
             />
             <Input
               variant="bordered"
-              placeholder="Prix achat"
+              label="Prix achat"
+              placeholder="0"
               endContent={<span className="text-xs text-text-muted">FCFA</span>}
               isInvalid={!!errors.prixAchat}
               errorMessage={errors.prixAchat?.message}
+              classNames={{
+                label: "text-text-muted",
+                input: "text-white",
+                inputWrapper: "border-2 border-[var(--color-border-active)]/50 bg-[var(--color-surface)] data-[hover=true]:border-[var(--color-border-active)]",
+              }}
               {...register("prixAchat")}
             />
           </div>
         </section>
 
         {/* VARIANTES */}
-        <section className="rounded-lg border border-border/80 bg-[color:rgba(45,69,103,0.4)] p-4">
+        <section className="rounded-lg border border-border/80 bg-[var(--color-surface-high)] p-4">
 
           {/* ── Tailles ── */}
           <p className="mb-3 text-xs uppercase tracking-[0.08em] text-text-muted">Tailles</p>
@@ -702,6 +729,10 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
                   onValueChange={setNewTaille}
                   onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addTaille(); } }}
                   size="sm"
+                  classNames={{
+                    input: "text-white",
+                    inputWrapper: "border-2 border-[var(--color-border-active)]/50 bg-[var(--color-surface)] data-[hover=true]:border-[var(--color-border-active)]",
+                  }}
                 />
                 <Button variant="flat" className="shrink-0 bg-accent text-white" onPress={addTaille} size="sm">+</Button>
               </div>
@@ -734,8 +765,12 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
                   onValueChange={setNewTaille}
                   onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addTaille(); } }}
                   size="sm"
+                  classNames={{
+                    input: "text-white",
+                    inputWrapper: "border-2 border-[var(--color-border-active)]/50 bg-[var(--color-surface)] data-[hover=true]:border-[var(--color-border-active)]",
+                  }}
                 />
-                <Button variant="flat" className="shrink-0 bg-accent/20 text-accent" onPress={addTaille} size="sm">+</Button>
+                <Button variant="flat" className="shrink-0 bg-accent text-white" onPress={addTaille} size="sm">+</Button>
               </div>
               {selectedTailles.filter((t) => !taillePresets.includes(t)).length > 0 && (
                 <div className="flex flex-wrap gap-1.5">
@@ -814,6 +849,10 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
               onValueChange={setNewColor}
               onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addColor(); } }}
               size="sm"
+              classNames={{
+                input: "text-white",
+                inputWrapper: "border-2 border-[var(--color-border-active)]/50 bg-[var(--color-surface)] data-[hover=true]:border-[var(--color-border-active)]",
+              }}
             />
             <Button variant="flat" className="shrink-0 bg-accent text-white" onPress={addColor} size="sm">+</Button>
           </div>
@@ -838,14 +877,18 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
                 <tbody>
                   {selectedTailles.map((t) => (
                     <tr key={t}>
-                      <td className="py-1 pr-3 font-[var(--font-mono)] text-accent">{t}</td>
+                      <td className="py-1 pr-3 font-[var(--font-mono)] text-white">{t}</td>
                       {selectedCouleurs.map((c) => (
                         <td key={c} className="py-1 pr-2">
                           <Input
                             type="number"
                             variant="bordered"
                             size="sm"
-                            classNames={{ input: "text-center font-[var(--font-mono)]", base: "max-w-[72px]" }}
+                            classNames={{
+                              input: "text-center font-[var(--font-mono)] text-white",
+                              base: "max-w-[72px]",
+                              inputWrapper: "border-2 border-[var(--color-border-active)]/50 bg-[var(--color-surface)] data-[hover=true]:border-[var(--color-border-active)]",
+                            }}
                             value={String(quantites[`${t}-${c}`] ?? 0)}
                             onChange={(e) => setQty(t, c, Number(e.target.value))}
                             aria-label={`Quantité ${t} ${c}`}
@@ -861,7 +904,7 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
         </section>
 
         {/* SEUIL ALERTE */}
-        <section className="rounded-lg border border-border/80 bg-[color:rgba(45,69,103,0.4)] p-4">
+        <section className="rounded-lg border border-border/80 bg-[var(--color-surface-high)] p-4">
           <p className="mb-3 text-xs uppercase tracking-[0.08em] text-text-muted">Seuil alerte</p>
           <Slider
             aria-label="Seuil d'alerte stock"
@@ -883,7 +926,7 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
       {/* footer fixe */}
       <div className="border-t border-border/60 p-4 pb-6">
         <Button
-          className="w-full bg-accent font-semibold text-white"
+          className="w-full bg-in font-semibold text-black"
           size="lg"
           onPress={() => void onSubmit()}
           isDisabled={isPending}
