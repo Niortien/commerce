@@ -597,7 +597,7 @@ export function SortieCreatePanel({ isOpen, onClose }: SortieCreatePanelProps) {
                 ← Retour
               </Button>
               <Button
-                className="flex-1 bg-accent font-semibold text-black"
+                className="flex-1 bg-accent font-semibold text-white"
                 size="lg"
                 isDisabled={!paiementMode || montantInsuffisant || isPending}
                 isLoading={isPending}

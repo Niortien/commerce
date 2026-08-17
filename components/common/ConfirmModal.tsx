@@ -54,7 +54,7 @@ export function ConfirmModal({
             Annuler
           </Button>
           <Button
-            className={`flex-1 font-semibold ${danger ? "bg-[var(--color-out)] text-white" : "bg-accent text-black"}`}
+            className={`flex-1 font-semibold ${danger ? "bg-[var(--color-out)] text-white" : "bg-accent text-white"}`}
             isLoading={isLoading}
             isDisabled={isLoading}
             onPress={onConfirm}

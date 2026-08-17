@@ -297,7 +297,7 @@ export function RecuPrint({
               Fermer
             </Button>
             <Button
-              className="flex-1 bg-accent font-semibold text-black"
+              className="flex-1 bg-accent font-semibold text-white"
               onPress={printRecu}
             >
               🖨 Imprimer

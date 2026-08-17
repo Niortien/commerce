@@ -75,7 +75,7 @@ export function BoutiquesView() {
     <div className="p-6">
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-bold text-text">Boutiques</h1>
-        <Button className="bg-accent text-black" onPress={openCreate}>
+        <Button className="bg-accent text-white" onPress={openCreate}>
           + Nouvelle boutique
         </Button>
       </div>
@@ -130,7 +130,7 @@ export function BoutiquesView() {
           <ModalFooter>
             <Button variant="light" onPress={onClose}>Annuler</Button>
             <Button
-              className="bg-accent text-black"
+              className="bg-accent text-white"
               isLoading={createMutation.isPending || updateMutation.isPending}
               onPress={() => void onSubmit()}
             >

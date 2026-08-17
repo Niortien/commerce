@@ -70,7 +70,7 @@ export function ResetPasswordView() {
           errorMessage={errors.password?.message}
           {...register("password")}
         />
-        <Button className="w-full bg-accent text-black" onPress={() => void onSubmit()} isLoading={isSubmitting}>
+        <Button className="w-full bg-accent text-white" onPress={() => void onSubmit()} isLoading={isSubmitting}>
           Réinitialiser
         </Button>
       </div>

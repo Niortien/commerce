@@ -101,7 +101,7 @@ export function UtilisateursView() {
     <div className="p-6">
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-bold text-text">Utilisateurs</h1>
-        <Button className="bg-accent text-black" onPress={openCreate}>
+        <Button className="bg-accent text-white" onPress={openCreate}>
           + Nouvel utilisateur
         </Button>
       </div>
@@ -181,7 +181,7 @@ export function UtilisateursView() {
               </ModalBody>
               <ModalFooter>
                 <Button variant="light" onPress={onClose}>Annuler</Button>
-                <Button className="bg-accent text-black" isLoading={updateMutation.isPending} onPress={() => void onSubmitUpdate()}>
+                <Button className="bg-accent text-white" isLoading={updateMutation.isPending} onPress={() => void onSubmitUpdate()}>
                   Enregistrer
                 </Button>
               </ModalFooter>
@@ -221,7 +221,7 @@ export function UtilisateursView() {
               </ModalBody>
               <ModalFooter>
                 <Button variant="light" onPress={onClose}>Annuler</Button>
-                <Button className="bg-accent text-black" isLoading={createMutation.isPending} onPress={() => void onSubmitCreate()}>
+                <Button className="bg-accent text-white" isLoading={createMutation.isPending} onPress={() => void onSubmitCreate()}>
                   Créer
                 </Button>
               </ModalFooter>

@@ -138,7 +138,7 @@ export function PhotosClientsView() {
             <Tab key="vu" title="Vues" />
             <Tab key="traite" title="Traitées" />
           </Tabs>
-          <Button className="bg-accent text-black" size="sm" onPress={onAddOpen}>
+          <Button className="bg-accent text-white" size="sm" onPress={onAddOpen}>
             + Ajouter une photo
           </Button>
         </div>
@@ -167,7 +167,7 @@ export function PhotosClientsView() {
                 className="object-cover transition-transform group-hover:scale-105"
               />
               {photo.publiee && (
-                <span className="absolute right-2 top-2 rounded-full bg-accent px-2 py-0.5 text-[10px] font-bold text-black">
+                <span className="absolute right-2 top-2 rounded-full bg-accent px-2 py-0.5 text-[10px] font-bold text-white">
                   Publiée
                 </span>
               )}
@@ -338,7 +338,7 @@ export function PhotosClientsView() {
                 Annuler
               </Button>
               <Button
-                className="bg-accent text-black"
+                className="bg-accent text-white"
                 type="submit"
                 isLoading={uploadMutation.isPending}
               >
