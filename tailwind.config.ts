@@ -1,0 +1,210 @@
+import type { Config } from "tailwindcss";
+import { heroui } from "@heroui/react";
+
+const config: Config = {
+  content: [
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./hooks/**/*.{js,ts,jsx,tsx,mdx}",
+    "./lib/**/*.{js,ts,jsx,tsx,mdx}",
+    "./providers/**/*.{js,ts,jsx,tsx,mdx}",
+    "./store/**/*.{js,ts,jsx,tsx,mdx}",
+    "./messages/**/*.{json}",
+    "./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}",
+  ],
+  darkMode: "class",
+  theme: {
+    extend: {
+      fontFamily: {
+        display: ["var(--font-display)", "sans-serif"],
+        body:    ["var(--font-body)", "sans-serif"],
+        mono:    ["var(--font-mono)", "monospace"],
+      },
+      fontSize: {
+        "2xs": "var(--text-2xs)",
+        xs:    "var(--text-xs)",
+        sm:    "var(--text-sm)",
+        base:  "var(--text-base)",
+        md:    "var(--text-md)",
+        lg:    "var(--text-lg)",
+        xl:    "var(--text-xl)",
+        "2xl": "var(--text-2xl)",
+        "3xl": "var(--text-3xl)",
+        "4xl": "var(--text-4xl)",
+        "5xl": "var(--text-5xl)",
+      },
+      colors: {
+        /* ── Tokens sémantiques existants ── */
+        base:            "var(--color-base)",
+        surface:         "var(--color-surface)",
+        "surface-high":  "var(--color-surface-high)",
+        border:          "var(--color-border)",
+        "border-active": "var(--color-border-active)",
+        accent:          "var(--color-accent)",
+        "accent-dim":    "var(--color-accent-dim)",
+        in:              "var(--color-in)",
+        out:             "var(--color-out)",
+        return:          "var(--color-return)",
+        cash:            "var(--color-cash)",
+        text:            "var(--color-text)",
+        "text-muted":    "var(--color-text-muted)",
+        "text-dim":      "var(--color-text-dim)",
+
+        /* ── Primary scale (Gold) ── */
+        primary: {
+          50:  "var(--primary-50)",
+          100: "var(--primary-100)",
+          200: "var(--primary-200)",
+          300: "var(--primary-300)",
+          400: "var(--primary-400)",
+          500: "var(--primary-500)",
+          600: "var(--primary-600)",
+          700: "var(--primary-700)",
+          800: "var(--primary-800)",
+          900: "var(--primary-900)",
+          950: "var(--primary-950)",
+          DEFAULT: "var(--primary-400)",
+        },
+
+        /* ── Brand scale (Night Blue) ── */
+        brand: {
+          50:  "var(--brand-50)",
+          100: "var(--brand-100)",
+          200: "var(--brand-200)",
+          300: "var(--brand-300)",
+          400: "var(--brand-400)",
+          500: "var(--brand-500)",
+          600: "var(--brand-600)",
+          700: "var(--brand-700)",
+          800: "var(--brand-800)",
+          900: "var(--brand-900)",
+          950: "var(--brand-950)",
+          DEFAULT: "var(--brand-800)",
+        },
+
+        /* ── Success scale ── */
+        success: {
+          50:  "var(--success-50)",
+          100: "var(--success-100)",
+          200: "var(--success-200)",
+          300: "var(--success-300)",
+          400: "var(--success-400)",
+          500: "var(--success-500)",
+          600: "var(--success-600)",
+          700: "var(--success-700)",
+          800: "var(--success-800)",
+          900: "var(--success-900)",
+          950: "var(--success-950)",
+          DEFAULT: "var(--success-400)",
+        },
+
+        /* ── Error scale ── */
+        error: {
+          50:  "var(--error-50)",
+          100: "var(--error-100)",
+          200: "var(--error-200)",
+          300: "var(--error-300)",
+          400: "var(--error-400)",
+          500: "var(--error-500)",
+          600: "var(--error-600)",
+          700: "var(--error-700)",
+          800: "var(--error-800)",
+          900: "var(--error-900)",
+          950: "var(--error-950)",
+          DEFAULT: "var(--error-400)",
+        },
+
+        /* ── Warning scale ── */
+        warning: {
+          50:  "var(--warning-50)",
+          100: "var(--warning-100)",
+          200: "var(--warning-200)",
+          300: "var(--warning-300)",
+          400: "var(--warning-400)",
+          500: "var(--warning-500)",
+          600: "var(--warning-600)",
+          700: "var(--warning-700)",
+          800: "var(--warning-800)",
+          900: "var(--warning-900)",
+          950: "var(--warning-950)",
+          DEFAULT: "var(--warning-400)",
+        },
+
+        /* ── Info / Caisse scale ── */
+        info: {
+          50:  "var(--info-50)",
+          100: "var(--info-100)",
+          200: "var(--info-200)",
+          300: "var(--info-300)",
+          400: "var(--info-400)",
+          500: "var(--info-500)",
+          600: "var(--info-600)",
+          700: "var(--info-700)",
+          800: "var(--info-800)",
+          900: "var(--info-900)",
+          950: "var(--info-950)",
+          DEFAULT: "var(--info-500)",
+        },
+
+        /* ── Neutral scale ── */
+        neutral: {
+          50:  "var(--neutral-50)",
+          100: "var(--neutral-100)",
+          200: "var(--neutral-200)",
+          300: "var(--neutral-300)",
+          400: "var(--neutral-400)",
+          500: "var(--neutral-500)",
+          600: "var(--neutral-600)",
+          700: "var(--neutral-700)",
+          800: "var(--neutral-800)",
+          900: "var(--neutral-900)",
+          950: "var(--neutral-950)",
+        },
+      },
+      borderRadius: {
+        sm: "var(--radius-sm)",
+        md: "var(--radius-md)",
+        lg: "var(--radius-lg)",
+        xl: "var(--radius-xl)",
+      },
+      boxShadow: {
+        sm:           "var(--shadow-sm)",
+        md:           "var(--shadow-md)",
+        lg:           "var(--shadow-lg)",
+        card:         "var(--shadow-card)",
+        "glow-yellow":  "var(--shadow-glow-yellow)",
+        "glow-green":   "var(--shadow-glow-green)",
+        "glow-red":     "var(--shadow-glow-red)",
+        "glow-purple":  "var(--shadow-glow-purple)",
+        "glow-orange":  "var(--shadow-glow-orange)",
+      },
+      zIndex: {
+        base:     "var(--z-base)",
+        raised:   "var(--z-raised)",
+        dropdown: "var(--z-dropdown)",
+        sticky:   "var(--z-sticky)",
+        overlay:  "var(--z-overlay)",
+        modal:    "var(--z-modal)",
+        panel:    "var(--z-panel)",
+        toast:    "var(--z-toast)",
+        tooltip:  "var(--z-tooltip)",
+      },
+    },
+  },
+  plugins: [
+    heroui({
+      themes: {
+        dark: {
+          colors: {
+            primary:   { DEFAULT: "#E65D99", foreground: "#FFFFFF" },
+            danger:    { DEFAULT: "#F25C7A", foreground: "#FFFFFF" },
+            success:   { DEFAULT: "#2EB98A", foreground: "#FFFFFF" },
+            secondary: { DEFAULT: "#B98CF5", foreground: "#FFFFFF" },
+          },
+        },
+      },
+    }),
+  ],
+};
+
+export default config;
