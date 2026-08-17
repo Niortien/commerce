@@ -4,34 +4,34 @@
 
 :root {
   /* ════════════════════════════════════════════════════════════
-     Palette indigo premium — plus de rose
-     Base: blanc froid / gris lavande très clair
-     Accent: indigo profond #2A2A8C
+     Palette corail dashboard — inspirée référence Polytrox
+     Base: pêche très clair / blanc chaud
+     Accent: corail-terracotta #E8674A
      ════════════════════════════════════════════════════════════ */
 
-  --color-base:         #F5F5FA;
-  --color-surface:      #FAFAFE;
-  --color-surface-high: #ECECF6;
-  --color-border:       #D8D8EC;
-  --color-border-active:#B4B4DA;
+  --color-base:         #FDF1EC;
+  --color-surface:      #FFFFFF;
+  --color-surface-high: #FBE4DC;
+  --color-border:       #F0D9CD;
+  --color-border-active:#E8AF98;
 
-  /* Accent indigo */
-  --color-accent:     #2A2A8C;
-  --color-accent-dim: #DADAF6;
+  /* Accent corail */
+  --color-accent:     #E8674A;
+  --color-accent-dim: #FBE0D6;
 
-  /* Fonctionnels — harmonisés avec l'indigo */
-  --color-in:         #2EB98A;
-  --color-in-dim:     rgba(46, 185, 138, 0.12);
-  --color-out:        #D93B3B;
-  --color-out-dim:    rgba(217, 59, 59, 0.12);
-  --color-return:     #E08A3C;
-  --color-return-dim: rgba(224, 138, 60, 0.12);
-  --color-cash:       #6C6CC4;
+  /* Fonctionnels — inspirés des badges de statut de la référence */
+  --color-in:         #2FAF6B;
+  --color-in-dim:     rgba(47, 175, 107, 0.12);
+  --color-out:        #E15B4F;
+  --color-out-dim:    rgba(225, 91, 79, 0.12);
+  --color-return:     #E3A730;
+  --color-return-dim: rgba(227, 167, 48, 0.12);
+  --color-cash:       #6C6FD9;
 
-  /* Typographie — anthracite froid */
-  --color-text:       #1A1A2E;
-  --color-text-muted: #55556E;
-  --color-text-dim:   #8A8AA6;
+  /* Typographie — bleu marine profond */
+  --color-text:       #23283B;
+  --color-text-muted: #6B7280;
+  --color-text-dim:   #9CA3AF;
 
   --space-1:  4px;
   --space-2:  8px;
@@ -63,12 +63,12 @@
     0 4px 24px rgba(0, 0, 0, 0.8),
     0 0 0 1px rgba(255, 255, 255, 0.04);
 
-  /* Glows — indigo et fonctionnels */
-  --shadow-glow-yellow: 0 0 20px rgba(42, 42, 140, 0.30);
-  --shadow-glow-green:  0 0 12px rgba(46, 185, 138, 0.18);
-  --shadow-glow-red:    0 0 12px rgba(217, 59, 59, 0.18);
-  --shadow-glow-purple: 0 0 18px rgba(108, 108, 196, 0.22);
-  --shadow-glow-orange: 0 0 20px rgba(224, 138, 60, 0.30);
+  /* Glows — corail et fonctionnels */
+  --shadow-glow-yellow: 0 0 20px rgba(232, 103, 74, 0.32);
+  --shadow-glow-green:  0 0 12px rgba(47, 175, 107, 0.18);
+  --shadow-glow-red:    0 0 12px rgba(225, 91, 79, 0.18);
+  --shadow-glow-purple: 0 0 18px rgba(108, 111, 217, 0.20);
+  --shadow-glow-orange: 0 0 20px rgba(227, 167, 48, 0.30);
 
   --duration-fast:   120ms;
   --duration-normal: 220ms;
@@ -79,31 +79,31 @@
   --ease-in-out-circ: cubic-bezier(0.85, 0, 0.15, 1);
   --ease-spring:      cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  /* ── Primary scale (indigo) — base: #2A2A8C ── */
-  --primary-50:  #EEEEFB;
-  --primary-100: #DADAF6;
-  --primary-200: #B4B4ED;
-  --primary-300: #7A7ADC;
-  --primary-400: #2A2A8C;
-  --primary-500: #232374;
-  --primary-600: #1C1C5D;
-  --primary-700: #151546;
-  --primary-800: #0E0E2F;
-  --primary-900: #080819;
-  --primary-950: #04040D;
+  /* ── Primary scale (corail) — base: #E8674A ── */
+  --primary-50:  #FEF3EF;
+  --primary-100: #FCE3DA;
+  --primary-200: #F8C4AE;
+  --primary-300: #F29E7C;
+  --primary-400: #E8674A;
+  --primary-500: #D4553A;
+  --primary-600: #B8452D;
+  --primary-700: #953824;
+  --primary-800: #6E2A1B;
+  --primary-900: #4A1C12;
+  --primary-950: #2C110A;
 
-  /* ── Brand scale (lavande neutre) — surfaces ── */
-  --brand-50:  #FAFAFE;
-  --brand-100: #F0F0F8;
-  --brand-200: #E4E4F2;
-  --brand-300: #C8C8E4;
-  --brand-400: #A0A0CC;
-  --brand-500: #7878B0;
-  --brand-600: #585890;
-  --brand-700: #404070;
-  --brand-800: #2C2C50;
-  --brand-900: #1C1C34;
-  --brand-950: #10101E;
+  /* ── Brand scale (pêche neutre) — surfaces ── */
+  --brand-50:  #FFFBF9;
+  --brand-100: #FDF1EC;
+  --brand-200: #FBE4DC;
+  --brand-300: #F5CBBC;
+  --brand-400: #EBAA92;
+  --brand-500: #DD8768;
+  --brand-600: #C06A4C;
+  --brand-700: #98503A;
+  --brand-800: #6E3A2A;
+  --brand-900: #4A281C;
+  --brand-950: #2C1710;
 
   /* ── Success scale ── */
   --success-50:  #EDFDF5;
@@ -212,15 +212,14 @@ body {
 
 body {
   /*
-    Fond neutre indigo : blanc froid avec lumière diffuse,
-    pour garder une ambiance premium et élégante sans casser
-    la lisibilité ni la structure ERP.
+    Fond pêche doux : blanc chaud avec lumière diffuse et une
+    pointe de corail, pour l'ambiance dashboard de la référence.
   */
   background:
-    radial-gradient(700px 360px at 50% -10%, rgba(255, 255, 255, 0.5), transparent 42%),
-    radial-gradient(550px 300px at 0% 100%, rgba(42, 42, 140, 0.06), transparent 55%),
-    radial-gradient(480px 260px at 100% 30%, rgba(108, 108, 196, 0.05), transparent 50%),
-    linear-gradient(180deg, #F5F5FA 0%, #F0F0F7 38%, #E8E8F2 100%);
+    radial-gradient(700px 360px at 50% -10%, rgba(255, 255, 255, 0.55), transparent 42%),
+    radial-gradient(550px 300px at 0% 100%, rgba(232, 103, 74, 0.08), transparent 55%),
+    radial-gradient(480px 260px at 100% 30%, rgba(108, 111, 217, 0.05), transparent 50%),
+    linear-gradient(180deg, #FDF1EC 0%, #FCE9E1 38%, #FAE0D6 100%);
   color: var(--color-text);
 }
 

@@ -196,10 +196,10 @@ const config: Config = {
       themes: {
         dark: {
           colors: {
-            primary:   { DEFAULT: "#2A2A8C", foreground: "#FFFFFF" },
-            danger:    { DEFAULT: "#D93B3B", foreground: "#FFFFFF" },
-            success:   { DEFAULT: "#2EB98A", foreground: "#FFFFFF" },
-            secondary: { DEFAULT: "#6C6CC4", foreground: "#FFFFFF" },
+            primary:   { DEFAULT: "#E8674A", foreground: "#FFFFFF" },
+            danger:    { DEFAULT: "#E15B4F", foreground: "#FFFFFF" },
+            success:   { DEFAULT: "#2FAF6B", foreground: "#FFFFFF" },
+            secondary: { DEFAULT: "#6C6FD9", foreground: "#FFFFFF" },
           },
         },
       },
