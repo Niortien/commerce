@@ -28,15 +28,15 @@ export function VitrineNav() {
       <Link
         href="/"
         aria-label="Luxury Boutique"
-        className="fixed left-5 top-5 z-50 flex h-11 items-center rounded-full border px-3 backdrop-blur-md md:left-6 md:top-6"
+        className="fixed left-5 top-5 z-50 flex h-12 w-12 items-center justify-center overflow-hidden rounded-full border backdrop-blur-md md:left-6 md:top-6"
         style={{ borderColor: "var(--v-nav-border)", backgroundColor: "var(--v-nav-bg)" }}
       >
         <Image
-          src="/images/logo/logo.jpeg"
-          alt="Luxury Boutique"
-          height={32}
-          width={104}
-          className="h-8 w-auto object-contain"
+          src="/images/image_luxury/accroche.jpg"
+          alt="Luxury Boutique — Be Luxury"
+          height={96}
+          width={96}
+          className="h-full w-full object-cover"
           priority
         />
       </Link>
@@ -135,7 +135,9 @@ export function VitrineNav() {
             transition={{ duration: 0.15 }}
           >
             <div className="flex h-16 items-center justify-between px-5">
-              <Image src="/images/logo/logo.jpeg" alt="Luxury Boutique" height={36} width={120} className="h-9 w-auto object-contain" />
+              <div className="h-10 w-10 overflow-hidden rounded-full">
+                <Image src="/images/image_luxury/accroche.jpg" alt="Luxury Boutique — Be Luxury" height={80} width={80} className="h-full w-full object-cover" />
+              </div>
               <button onClick={() => setOpen(false)} style={{ color: "var(--v-muted)" }}>
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>

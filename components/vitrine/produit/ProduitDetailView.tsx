@@ -68,7 +68,7 @@ export function ProduitDetailView({ id }: ProduitDetailViewProps) {
       transition={{ duration: 0.4 }}
     >
       {/* Breadcrumb */}
-      <div className="mx-auto max-w-7xl px-5 pt-8">
+      <div className="mx-auto max-w-7xl px-5 pt-28 md:pt-32">
         <p className="text-[11px] font-semibold uppercase tracking-widest" style={{ color: "var(--v-dim)" }}>
           <a href="/" className="hover:text-[var(--v-muted)] transition-colors">Accueil</a>
           {" / "}

@@ -9,21 +9,21 @@ interface CatalogueHeroProps {
 export function CatalogueHero({ total, search, onSearch }: CatalogueHeroProps) {
   return (
     <section
-      className="border-b px-5 pb-10 pt-12"
+      className="border-b px-5 pb-10 pt-28 md:pt-32"
       style={{ borderColor: "var(--v-border)" }}
     >
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
             <p
-              className="mb-2 text-[10px] font-black uppercase tracking-[0.3em]"
+              className="mb-2 font-[var(--font-display)] text-sm italic"
               style={{ color: "var(--v-gold)" }}
             >
               Luxury Boutique &mdash; Abidjan
             </p>
             <h1
-              className="font-[var(--font-display)] font-black uppercase leading-none tracking-tight"
-              style={{ fontSize: "clamp(48px, 9vw, 96px)", color: "var(--v-text)" }}
+              className="font-[var(--font-display)] leading-[1.05] tracking-tight"
+              style={{ fontSize: "clamp(40px, 7vw, 76px)", color: "var(--v-text)" }}
             >
               Catalogue
             </h1>
