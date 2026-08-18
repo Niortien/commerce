@@ -115,14 +115,16 @@ export function MobileNav() {
     <>
       <header className="flex shrink-0 items-center justify-between border-b border-border bg-surface px-4 py-3 lg:hidden">
         <div className="flex items-center gap-2.5">
-          <Image
-            src="/images/logo/logo.jpeg"
-            alt="Luxury Boutique"
-            height={36}
-            width={120}
-            className="h-9 w-auto object-contain"
-            priority
-          />
+          <div className="h-9 w-9 overflow-hidden rounded-full">
+            <Image
+              src="/images/image_luxury/accroche.jpg"
+              alt="Luxury Boutique — Be Luxury"
+              height={72}
+              width={72}
+              className="h-full w-full object-cover"
+              priority
+            />
+          </div>
           {isAdmin && <AdminBoutiqueBadge />}
         </div>
         <button
@@ -155,13 +157,15 @@ export function MobileNav() {
               className="fixed inset-y-0 left-0 z-[510] flex w-72 flex-col gap-3 overflow-y-auto border-r border-border bg-surface p-4 lg:hidden"
             >
               <div className="flex items-center justify-between">
-                <Image
-                  src="/images/logo/logo.jpeg"
-                  alt="Luxury Boutique"
-                  height={36}
-                  width={120}
-                  className="h-9 w-auto object-contain"
-                />
+                <div className="h-9 w-9 overflow-hidden rounded-full">
+                  <Image
+                    src="/images/image_luxury/accroche.jpg"
+                    alt="Luxury Boutique — Be Luxury"
+                    height={72}
+                    width={72}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
                 <button
                   type="button"
                   onClick={() => setOpen(false)}

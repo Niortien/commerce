@@ -103,14 +103,16 @@ export function Sidebar() {
       {/* Logo + étoiles */}
       <div className="flex flex-col gap-1">
         <Link href="/" tabIndex={-1}>
-          <Image
-            src="/images/logo/logo.jpeg"
-            alt="Luxury Boutique"
-            height={48}
-            width={160}
-            className="h-12 w-auto object-contain"
-            priority
-          />
+          <div className="h-12 w-12 overflow-hidden rounded-full">
+            <Image
+              src="/images/image_luxury/accroche.jpg"
+              alt="Luxury Boutique — Be Luxury"
+              height={96}
+              width={96}
+              className="h-full w-full object-cover"
+              priority
+            />
+          </div>
         </Link>
         <StarMotif />
       </div>
