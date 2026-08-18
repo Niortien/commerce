@@ -73,14 +73,6 @@ export function LookbookEditorial() {
             className="aspect-[3/4] w-full overflow-hidden rounded-2xl"
             style={{ backgroundColor: "var(--v-s2)" }}
           >
-            <img
-              src="/images/dri_style/boutique-interieur-2.jpg"
-              alt="Boutique Luxury Boutique — collection"
-              className="h-full w-full object-cover"
-              onError={(e) => {
-                (e.target as HTMLImageElement).style.display = "none";
-              }}
-            />
             <div
               className="flex h-full w-full items-end p-6"
               style={{

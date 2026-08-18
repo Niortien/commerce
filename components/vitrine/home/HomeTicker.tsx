@@ -1,34 +1,28 @@
-﻿"use client";
+"use client";
 
 const ITEMS = [
-  "★ BE LUXURY ★",
-  "MULTI-MARQUES À MARCORY",
-  "PAIEMENT WAVE · ORANGE MONEY · CASH",
-  "LIVRAISON ABIDJAN 24H",
-  "NOUVELLES PIÈCES CHAQUE SEMAINE",
-  "★ BE LUXURY ★",
-  "AUTHENTICITÉ GARANTIE",
-  "VÊTEMENTS · MAROQUINERIE · CHAUSSURES",
-  "C'EST ÇA LUXURY BOUTIQUE",
+  "Multi-marques à Marcory",
+  "Paiement Wave · Orange Money · Cash",
+  "Livraison Abidjan 24h",
+  "Authenticité garantie",
 ];
 
 export function HomeTicker() {
-  const text = ITEMS.join("   ✦   ") + "   ✦   ";
-
   return (
     <div
-      className="overflow-hidden border-y py-3.5"
+      className="border-y py-4"
       style={{ borderColor: "var(--v-border)", backgroundColor: "var(--v-s1)" }}
     >
-      <div className="vitrine-marquee-track flex whitespace-nowrap">
-        {[text, text].map((t, i) => (
-          <span
-            key={i}
-            aria-hidden={i > 0}
-            className="font-[var(--font-display)] text-[11px] font-black uppercase tracking-[0.22em]"
-            style={{ color: "var(--v-gold)" }}
-          >
-            {t}
+      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-3 gap-y-2 px-5 text-center">
+        {ITEMS.map((item, i) => (
+          <span key={item} className="flex items-center gap-3">
+            {i > 0 && <span style={{ color: "var(--v-border-gold)" }}>·</span>}
+            <span
+              className="font-[var(--font-display)] text-xs italic tracking-wide"
+              style={{ color: "var(--v-gold)" }}
+            >
+              {item}
+            </span>
           </span>
         ))}
       </div>

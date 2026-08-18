@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { motion } from "framer-motion";
 
@@ -25,75 +25,61 @@ const VALUES = [
 
 export function MarqueValues() {
   return (
-    <section
-      className="py-24"
-      style={{ backgroundColor: "var(--v-s1)" }}
-    >
-      <div className="mx-auto max-w-7xl px-5 md:px-16">
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mb-2 text-[10px] font-black uppercase tracking-[0.4em]"
-          style={{ color: "var(--v-gold)" }}
-        >
-          Ce en quoi on croit
-        </motion.p>
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.1 }}
-          className="mb-16 font-[var(--font-display)] font-black uppercase leading-none tracking-tight"
-          style={{ fontSize: "clamp(32px,6vw,64px)", color: "var(--v-text)" }}
-        >
-          Nos valeurs
-        </motion.h2>
+    <section className="py-24" style={{ backgroundColor: "var(--v-s1)" }}>
+      <div className="mx-auto max-w-5xl px-5 md:px-16">
+        <div className="mb-14 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div>
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="mb-2 font-[var(--font-display)] text-sm italic"
+              style={{ color: "var(--v-gold)" }}
+            >
+              Ce en quoi on croit
+            </motion.p>
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="font-[var(--font-display)] leading-[1.05] tracking-tight"
+              style={{ fontSize: "clamp(30px,5vw,52px)", color: "var(--v-text)" }}
+            >
+              Nos valeurs
+            </motion.h2>
+          </div>
+        </div>
 
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+        <div>
           {VALUES.map((val, i) => (
             <motion.div
               key={val.num}
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.1, duration: 0.5 }}
-              className="relative overflow-hidden rounded-2xl p-8"
-              style={{ backgroundColor: "var(--v-s2)" }}
+              transition={{ delay: i * 0.08, duration: 0.5 }}
+              className="grid grid-cols-1 gap-3 border-t py-8 md:grid-cols-[80px_1fr_1.4fr] md:gap-8"
+              style={{ borderColor: "var(--v-border)" }}
             >
-              {/* Numéro décoratif */}
-              <p
-                className="pointer-events-none absolute right-4 top-4 font-[var(--font-display)] font-black leading-none select-none"
-                style={{ fontSize: "100px", color: "var(--v-s3)", userSelect: "none" }}
-                aria-hidden
+              <span
+                className="font-[var(--font-mono)] text-sm font-black"
+                style={{ color: "var(--v-gold)" }}
               >
                 {val.num}
+              </span>
+              <h3
+                className="font-[var(--font-display)] text-2xl leading-snug"
+                style={{ color: "var(--v-text)" }}
+              >
+                {val.title}
+              </h3>
+              <p className="text-sm leading-relaxed" style={{ color: "var(--v-muted)" }}>
+                {val.description}
               </p>
-
-              <div className="relative z-10">
-                <p
-                  className="mb-4 font-[var(--font-mono)] text-xs font-black"
-                  style={{ color: "var(--v-gold)" }}
-                >
-                  {val.num}
-                </p>
-                <h3
-                  className="mb-4 font-[var(--font-display)] font-black uppercase leading-tight tracking-tight"
-                  style={{ fontSize: "clamp(22px,3vw,32px)", color: "var(--v-text)" }}
-                >
-                  {val.title}
-                </h3>
-                <p className="text-sm leading-relaxed" style={{ color: "var(--v-muted)" }}>
-                  {val.description}
-                </p>
-              </div>
-
-              <div
-                className="absolute bottom-0 left-0 h-1 w-full"
-                style={{ backgroundColor: "var(--v-gold)", opacity: 0.35 }}
-              />
             </motion.div>
           ))}
+          <div className="border-t" style={{ borderColor: "var(--v-border)" }} />
         </div>
       </div>
     </section>

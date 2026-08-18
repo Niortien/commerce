@@ -15,9 +15,9 @@ export function HomeCategoryGrid() {
   const categories = data?.data?.slice(0, 3) ?? [];
 
   const FALLBACK = [
-    { id: "1", nom: "Jordan", slug: "jordan", description: "Les icônes" },
-    { id: "2", nom: "Nike", slug: "nike", description: "Performance & style" },
-    { id: "3", nom: "Adidas", slug: "adidas", description: "Originals only" },
+    { id: "1", nom: "Vêtements", slug: "vetements", description: "Homme & femme" },
+    { id: "2", nom: "Maroquinerie", slug: "maroquinerie", description: "Sacs & cuirs" },
+    { id: "3", nom: "Chaussures", slug: "chaussures", description: "Multi-marques" },
   ];
 
   const items = categories.length > 0 ? categories : FALLBACK;

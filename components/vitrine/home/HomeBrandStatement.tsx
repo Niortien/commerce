@@ -1,12 +1,6 @@
-﻿"use client";
+"use client";
 
 import { motion } from "framer-motion";
-
-const WORDS = [
-  { text: "Élégant.", gold: false },
-  { text: "Luxe.", gold: true },
-  { text: "Toujours.", gold: false },
-];
 
 const STATS = [
   { value: "4.6K", label: "Followers" },
@@ -17,132 +11,83 @@ const STATS = [
 export function HomeBrandStatement() {
   return (
     <section
-      className="relative overflow-hidden py-28"
+      className="relative overflow-hidden py-24"
       style={{ backgroundColor: "var(--v-s1)" }}
     >
-      {/* Fond texte décoratif */}
-      <div
-        className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden select-none"
-        aria-hidden
-      >
-        <span
-          className="font-[var(--font-display)] font-black uppercase leading-none"
-          style={{ fontSize: "25vw", color: "rgba(240,180,41,0.04)" }}
-        >
-          LUXURY
-        </span>
-      </div>
+      <div className="relative mx-auto grid max-w-7xl gap-16 px-5 md:grid-cols-[1.3fr_1fr]">
+        {/* Colonne texte */}
+        <div>
+          <motion.p
+            className="mb-6 text-[10px] font-semibold uppercase tracking-[0.35em]"
+            style={{ color: "var(--v-gold)" }}
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            Qui on est
+          </motion.p>
 
-      {/* Gold glow accent */}
-      <div
-        className="pointer-events-none absolute -top-32 left-1/4 h-64 w-64 rounded-full blur-3xl"
-        style={{ backgroundColor: "rgba(240,180,41,0.06)" }}
-        aria-hidden
-      />
+          <motion.h2
+            className="font-[var(--font-display)] font-medium leading-tight"
+            style={{ fontSize: "clamp(32px, 4.5vw, 52px)", color: "var(--v-text)" }}
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+          >
+            Une maison faite pour ceux qui{" "}
+            <span className="italic" style={{ color: "var(--v-gold)" }}>
+              ne transigent pas
+            </span>{" "}
+            sur le style.
+          </motion.h2>
 
-      <div className="relative mx-auto max-w-7xl px-5">
-        <motion.p
-          className="mb-10 text-[10px] font-black uppercase tracking-[0.35em]"
-          style={{ color: "var(--v-gold)" }}
-          initial={{ opacity: 0, x: -20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-        >
-          Qui on est
-        </motion.p>
+          <motion.p
+            className="mt-8 max-w-xl text-base leading-relaxed"
+            style={{ color: "var(--v-muted)" }}
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+          >
+            Luxury Boutique, c&rsquo;est l&rsquo;&eacute;l&eacute;gance multi-marques &agrave; Marcory. V&ecirc;tements, maroquinerie,
+            chaussures et accessoires s&eacute;lectionn&eacute;s avec exigence, pour homme et femme &mdash; tout ce qu&rsquo;il faut
+            pour s&rsquo;habiller avec caract&egrave;re. On ne fait pas dans le g&eacute;n&eacute;rique.
+          </motion.p>
 
-        {/* Mots animés */}
-        <div className="flex flex-col">
-          {WORDS.map((word, i) => (
-            <motion.h2
-              key={word.text}
-              className="font-[var(--font-display)] font-black leading-[0.88] tracking-tight"
-              style={{
-                fontSize: "clamp(52px, 10vw, 120px)",
-                color: word.gold ? "var(--v-gold)" : "var(--v-text)",
-                paddingLeft: i === 1 ? "6vw" : i === 2 ? "12vw" : "0",
-              }}
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.14, duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-            >
-              {word.text}
-            </motion.h2>
-          ))}
+          <motion.blockquote
+            className="mt-8 border-l pl-5 font-[var(--font-display)] text-lg italic"
+            style={{ borderColor: "var(--v-gold)", color: "var(--v-text)" }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+          >
+            &ldquo;Be Luxury. Ici, on ne fait pas dans le compromis.&rdquo;
+          </motion.blockquote>
         </div>
 
-        {/* Description */}
-        <motion.p
-          className="mt-14 max-w-xl text-lg leading-relaxed md:ml-[12vw]"
-          style={{ color: "var(--v-muted)" }}
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.45, duration: 0.6 }}
-        >
-          Luxury Boutique, c&rsquo;est l&rsquo;&eacute;l&eacute;gance multi-marques &agrave; Marcory. V&ecirc;tements, maroquinerie,
-          chaussures et accessoires s&eacute;lectionn&eacute;s avec exigence, pour homme et femme &mdash; tout ce qu&rsquo;il faut
-          pour s&rsquo;habiller avec caract&egrave;re. On ne fait pas dans le g&eacute;n&eacute;rique.
-        </motion.p>
-
-        {/* Slogan officiel */}
+        {/* Colonne stats */}
         <motion.div
-          className="mt-10 flex items-center gap-3 md:ml-[12vw]"
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.5 }}
-        >
-          <span style={{ color: "var(--v-gold)", fontSize: 22 }}>★</span>
-          <p
-            className="font-[var(--font-display)] text-lg font-black uppercase tracking-[0.15em] md:text-2xl"
-            style={{ color: "var(--v-gold)" }}
-          >
-            Sortez toujours bien habill&eacute;
-          </p>
-          <span style={{ color: "var(--v-gold)", fontSize: 22 }}>★</span>
-        </motion.div>
-
-        {/* Ligne citation Nouchi */}
-        <motion.blockquote
-          className="mt-6 inline-block rounded-xl border-l-4 pl-5 font-[var(--font-display)] text-base italic md:ml-[12vw]"
-          style={{ borderColor: "var(--v-gold)", color: "var(--v-muted)" }}
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.6 }}
-        >
-          &ldquo;Be Luxury. Ici, on ne fait pas dans le compromis.&rdquo;
-        </motion.blockquote>
-
-        {/* Stats */}
-        <motion.div
-          className="mt-16 grid grid-cols-3 gap-4 border-t pt-12"
+          className="flex flex-col justify-center gap-8 border-t pt-8 md:border-l md:border-t-0 md:pl-10 md:pt-0"
           style={{ borderColor: "var(--v-border)" }}
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.5, duration: 0.5 }}
+          transition={{ delay: 0.25, duration: 0.5 }}
         >
-          {STATS.map((stat, i) => (
-            <motion.div
-              key={stat.label}
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.55 + i * 0.08 }}
-            >
+          {STATS.map((stat) => (
+            <div key={stat.label} className="flex items-baseline gap-4">
               <p
-                className="font-[var(--font-display)] font-black leading-none"
-                style={{ fontSize: "clamp(28px,4vw,52px)", color: "var(--v-gold)" }}
+                className="font-[var(--font-display)] font-medium leading-none"
+                style={{ fontSize: "clamp(28px,3vw,40px)", color: "var(--v-gold)" }}
               >
                 {stat.value}
               </p>
-              <p className="mt-2 text-xs uppercase tracking-widest" style={{ color: "var(--v-dim)" }}>
+              <p className="text-xs uppercase tracking-widest" style={{ color: "var(--v-dim)" }}>
                 {stat.label}
               </p>
-            </motion.div>
+            </div>
           ))}
         </motion.div>
       </div>

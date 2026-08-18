@@ -11,10 +11,10 @@ interface OutfitPiece {
 }
 
 const OUTFIT_PIECES: OutfitPiece[] = [
-  { nom: "Jordan Air 1 High OG", categorie: "Sneakers", prix: 85000, produitId: "" },
-  { nom: "Cargo Pant Wide Fit", categorie: "Bas", prix: 42000, produitId: "" },
-  { nom: "Oversized Tee Essential", categorie: "Hauts", prix: 18000, produitId: "" },
-  { nom: "Puffer Vest Tactical", categorie: "Vestes", prix: 55000, produitId: "" },
+  { nom: "Mocassin Cuir Signature", categorie: "Chaussures", prix: 85000, produitId: "" },
+  { nom: "Pantalon Tailleur Slim", categorie: "Bas", prix: 42000, produitId: "" },
+  { nom: "Chemise Soie Essential", categorie: "Hauts", prix: 18000, produitId: "" },
+  { nom: "Sac Cuir Structuré", categorie: "Maroquinerie", prix: 55000, produitId: "" },
 ];
 
 function PieceRow({ piece, index }: { piece: OutfitPiece; index: number }) {

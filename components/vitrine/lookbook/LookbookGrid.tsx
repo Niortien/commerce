@@ -1,14 +1,14 @@
-﻿"use client";
+"use client";
 
 import { motion } from "framer-motion";
 
 const GRID_ITEMS = [
-  { id: 1, src: "/images/dri_style/boutique-interieur-1.jpg", alt: "L'ambiance du shop — Luxury Boutique", tall: true },
-  { id: 2, src: "/images/dri_style/boutique-interieur-3.jpg", alt: "Pièces en boutique — Luxury Boutique", tall: false },
-  { id: 3, src: "/images/dri_style/client-sacs-drivale.jpg", alt: "Client Luxury Boutique — sortie boutique", tall: false },
-  { id: 4, src: "/images/dri_style/look-selfie-lacoste.jpg", alt: "Look du jour — Lacoste x DSQUARED2", tall: false },
-  { id: 5, src: "/images/dri_style/boutique-sneakers.jpg", alt: "Boutique Luxury Boutique — collection", tall: true },
-  { id: 6, src: "/images/dri_style/dri_style6.jpeg", alt: "Style Luxury Boutique", tall: false },
+  { id: 1, label: "L'ambiance", gradient: "radial-gradient(ellipse at 30% 20%, rgba(216,160,92,0.22) 0%, transparent 60%), #1a1a1a", tall: true },
+  { id: 2, label: "Pièces choisies", gradient: "radial-gradient(ellipse at 70% 80%, rgba(216,160,92,0.16) 0%, transparent 60%), #161616", tall: false },
+  { id: 3, label: "En boutique", gradient: "radial-gradient(ellipse at 50% 50%, rgba(232,92,92,0.10) 0%, transparent 65%), #1c1c1c", tall: false },
+  { id: 4, label: "Le look du jour", gradient: "radial-gradient(ellipse at 20% 70%, rgba(216,160,92,0.20) 0%, transparent 60%), #191919", tall: false },
+  { id: 5, label: "La sélection", gradient: "radial-gradient(ellipse at 80% 30%, rgba(185,140,245,0.12) 0%, transparent 60%), #1a1a1a", tall: true },
+  { id: 6, label: "Signature", gradient: "radial-gradient(ellipse at 40% 40%, rgba(216,160,92,0.18) 0%, transparent 60%), #171717", tall: false },
 ];
 
 function GridCell({
@@ -25,22 +25,15 @@ function GridCell({
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay }}
       whileHover={{ scale: 1.02 }}
-      className={`relative overflow-hidden rounded-xl ${item.tall ? "row-span-2" : ""}`}
-      style={{ aspectRatio: item.tall ? "3/4" : "1/1", backgroundColor: "var(--v-s2)" }}
+      className={`relative flex items-end overflow-hidden rounded-xl border p-4 ${item.tall ? "row-span-2" : ""}`}
+      style={{ aspectRatio: item.tall ? "3/4" : "1/1", background: item.gradient, borderColor: "var(--v-border)" }}
     >
-      <img
-        src={item.src}
-        alt={item.alt}
-        className="h-full w-full object-cover"
-        onError={(e) => {
-          (e.target as HTMLImageElement).style.display = "none";
-        }}
-      />
-      {/* Overlay gradient */}
-      <div
-        className="absolute inset-0 opacity-0 transition-opacity duration-300 hover:opacity-100"
-        style={{ background: "rgba(200,118,44,0.08)" }}
-      />
+      <span
+        className="font-[var(--font-display)] text-sm italic"
+        style={{ color: "var(--v-gold)" }}
+      >
+        {item.label}
+      </span>
     </motion.div>
   );
 }

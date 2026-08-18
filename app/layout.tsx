@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono, Montserrat, Poppins } from "next/font/google";
+import { JetBrains_Mono, Playfair_Display, Inter } from "next/font/google";
 import { Providers } from "@/providers";
 import "./globals.css";
 
-const displayFont = Montserrat({
+const displayFont = Playfair_Display({
   variable: "--font-display",
   subsets: ["latin"],
   weight: ["500", "600", "700", "800"],
 });
 
-const bodyFont = Poppins({
+const bodyFont = Inter({
   variable: "--font-body",
   subsets: ["latin"],
   weight: ["400", "600"],
@@ -39,7 +39,6 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://res.cloudinary.com" />
         <link rel="dns-prefetch" href="https://res.cloudinary.com" />
-        <link rel="preconnect" href="https://dri-vale.org" crossOrigin="anonymous" />
       </head>
       <body className="min-h-full bg-base text-text font-[var(--font-body)] flex flex-col">
         <Providers>{children}</Providers>

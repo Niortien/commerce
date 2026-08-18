@@ -15,21 +15,20 @@ export function LookbookHero() {
       className="relative flex min-h-screen items-end overflow-hidden"
       style={{ backgroundColor: "var(--v-bg)" }}
     >
-      {/* Fond parallax */}
+      {/* Fond dégradé parallax */}
       <motion.div style={{ y }} className="absolute inset-0">
         <div
           className="absolute inset-0"
           style={{
-            backgroundImage: "url('/images/dri_style/dir_hero.jpeg')",
-            backgroundSize: "cover",
-            backgroundPosition: "center 20%",
+            background:
+              "radial-gradient(ellipse at 70% 30%, rgba(216,160,92,0.16) 0%, transparent 55%), linear-gradient(160deg, #1a1a1a 0%, #0d0d0d 60%)",
           }}
         />
         <div
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(to bottom, rgba(6,6,7,0.15) 0%, rgba(6,6,7,0.92) 100%)",
+              "linear-gradient(to bottom, rgba(6,6,7,0.05) 0%, rgba(6,6,7,0.92) 100%)",
           }}
         />
       </motion.div>

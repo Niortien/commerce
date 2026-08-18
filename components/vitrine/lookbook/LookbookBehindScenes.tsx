@@ -3,23 +3,6 @@
 import { motion } from "framer-motion";
 import { usePublicLookbookPhotos } from "@/features/lookbook-photos/query/public-lookbook-photos-queries";
 
-const LOOKS = [
-  {
-    id: 1,
-    src: "/images/dri_style/look-selfie-lacoste.jpg",
-    alt: "Client Luxury Boutique — look Lacoste",
-    pieces: ["T-shirt Lacoste", "Short DSQUARED2", "Sandales à carreaux"],
-    tag: "Look du jour",
-  },
-  {
-    id: 2,
-    src: "/images/dri_style/client-sacs-drivale.jpg",
-    alt: "Client Luxury Boutique — sortie boutique",
-    pieces: ["Débardeur Off-White", "Cargo tie-dye"],
-    tag: "Fresh out the shop",
-  },
-];
-
 const WHATSAPP_NUMBER = "2250709294468";
 
 export function LookbookBehindScenes() {
@@ -60,70 +43,13 @@ export function LookbookBehindScenes() {
         className="flex gap-4 overflow-x-auto pb-4"
         style={{ paddingLeft: "clamp(20px,5vw,80px)", scrollbarWidth: "none" }}
       >
-        {LOOKS.map((look, i) => (
-          <motion.div
-            key={look.id}
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.1, duration: 0.4 }}
-            className="group flex-shrink-0"
-            style={{ width: "260px" }}
-          >
-            {/* Photo */}
-            <div
-              className="relative overflow-hidden rounded-xl"
-              style={{ aspectRatio: "3/4", backgroundColor: "var(--v-s2)" }}
-            >
-              <img
-                src={look.src}
-                alt={look.alt}
-                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).style.display = "none";
-                }}
-              />
-              {/* Gradient bas */}
-              <div
-                className="absolute inset-0"
-                style={{
-                  background:
-                    "linear-gradient(to top, rgba(6,6,7,0.75) 0%, transparent 50%)",
-                }}
-              />
-              {/* Tag */}
-              <div
-                className="absolute left-3 top-3 rounded-full px-3 py-1"
-                style={{ backgroundColor: "var(--v-hot)" }}
-              >
-                <p className="text-[9px] font-black uppercase tracking-widest text-white">
-                  {look.tag}
-                </p>
-              </div>
-            </div>
-
-            {/* Pièces portées */}
-            <div className="mt-3 space-y-1 px-1">
-              {look.pieces.map((piece) => (
-                <p
-                  key={piece}
-                  className="text-xs"
-                  style={{ color: "var(--v-muted)" }}
-                >
-                  — {piece}
-                </p>
-              ))}
-            </div>
-          </motion.div>
-        ))}
-
         {clientPhotos.map((photo, i) => (
           <motion.div
             key={photo.id}
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: (LOOKS.length + i) * 0.1, duration: 0.4 }}
+            transition={{ delay: i * 0.1, duration: 0.4 }}
             className="group flex-shrink-0"
             style={{ width: "260px" }}
           >
@@ -168,7 +94,7 @@ export function LookbookBehindScenes() {
 
         {/* Carte CTA — soumettre son look */}
         <motion.a
-          href={`https://wa.me/${WHATSAPP_NUMBER}?text=Bonjour%2C%20je%20veux%20partager%20mon%20look%20Dri%20Val%C3%A9%20%F0%9F%94%A5`}
+          href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Bonjour, je veux partager mon look Luxury Boutique 🔥")}`}
           target="_blank"
           rel="noopener noreferrer"
           initial={{ opacity: 0, x: 30 }}

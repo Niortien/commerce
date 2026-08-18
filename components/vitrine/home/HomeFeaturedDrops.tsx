@@ -113,7 +113,7 @@ export function HomeFeaturedDrops() {
                     className="text-[10px] font-black uppercase tracking-[0.28em]"
                     style={{ color: "var(--v-gold)" }}
                   >
-                    Drop #{String(i + 1).padStart(2, "0")}
+                    Réf. #{String(i + 1).padStart(2, "0")}
                   </span>
 
                   {produit ? (

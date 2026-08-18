@@ -1,79 +1,79 @@
-﻿"use client";
+"use client";
 
 import { motion } from "framer-motion";
-
-const WORDS = [
-  { text: "LUXURY BOUTIQUE", size: "clamp(52px,10vw,120px)", accent: false },
-  { text: "C'EST", size: "clamp(28px,5vw,56px)", accent: false },
-  { text: "BE", size: "clamp(64px,12vw,140px)", accent: true },
-  { text: "LUXURY.", size: "clamp(64px,12vw,140px)", accent: false },
-];
 
 export function MarqueHero() {
   return (
     <section
-      className="relative flex min-h-screen items-center overflow-hidden px-5 py-24 md:px-16"
+      className="relative overflow-hidden px-5 py-28 md:px-16 md:py-36"
       style={{ backgroundColor: "var(--v-bg)" }}
     >
-      {/* Gold glow */}
+      {/* Glow ambiant */}
       <div
-        className="pointer-events-none absolute right-0 top-1/2 h-[600px] w-[600px] -translate-y-1/2 translate-x-1/3 rounded-full blur-3xl opacity-[0.08]"
+        className="pointer-events-none absolute -top-1/4 left-1/2 h-[500px] w-[500px] -translate-x-1/2 rounded-full blur-3xl opacity-[0.07]"
         style={{ backgroundColor: "var(--v-gold)" }}
         aria-hidden
       />
 
-      {/* Hot red glow bottom-left */}
-      <div
-        className="pointer-events-none absolute -bottom-20 left-0 h-72 w-72 rounded-full blur-3xl opacity-[0.06]"
-        style={{ backgroundColor: "var(--v-hot)" }}
-        aria-hidden
-      />
-
-      {/* Lignes typographiques */}
-      <div>
-        {WORDS.map((word, i) => (
-          <motion.div
-            key={word.text}
-            initial={{ opacity: 0, x: i % 2 === 0 ? -40 : 40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: i * 0.12, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+      <div className="relative mx-auto grid max-w-6xl grid-cols-1 gap-14 md:grid-cols-[1.1fr_0.9fr] md:items-end">
+        {/* Colonne texte */}
+        <div>
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mb-5 font-[var(--font-display)] text-sm italic"
+            style={{ color: "var(--v-gold)" }}
           >
-            <h1
-              className="block font-[var(--font-display)] font-black leading-none tracking-tighter"
-              style={{
-                fontSize: word.size,
-                color: word.accent ? "var(--v-gold)" : "var(--v-text)",
-                marginLeft: i % 2 === 1 ? "clamp(20px,6vw,120px)" : 0,
-              }}
-            >
-              {word.text}
-            </h1>
-          </motion.div>
-        ))}
+            Notre maison
+          </motion.p>
+          <motion.h1
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            className="font-[var(--font-display)] leading-[1.05] tracking-tight"
+            style={{ fontSize: "clamp(38px,6vw,64px)", color: "var(--v-text)" }}
+          >
+            Le luxe multi&#8209;marques,{" "}
+            <span className="italic" style={{ color: "var(--v-gold)" }}>
+              pens&eacute; pour Abidjan.
+            </span>
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.25, duration: 0.5 }}
+            className="mt-7 max-w-md text-base leading-relaxed"
+            style={{ color: "var(--v-muted)" }}
+          >
+            V&ecirc;tements, maroquinerie, chaussures et accessoires s&eacute;lectionn&eacute;s
+            avec exigence &mdash; homme et femme, sans compromis sur l&apos;authenticit&eacute;.
+          </motion.p>
+        </div>
 
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
+        {/* Colonne cadre citation */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7 }}
-          className="mt-8 max-w-sm text-base leading-relaxed"
-          style={{ color: "var(--v-muted)" }}
+          transition={{ delay: 0.35, duration: 0.6 }}
+          className="border-l-2 pl-8"
+          style={{ borderColor: "var(--v-gold)" }}
         >
-          La boutique multi-marques de Marcory.
-          V&ecirc;tements et accessoires de luxe, authenticit&eacute; garantie.
-        </motion.p>
+          <p
+            className="font-[var(--font-display)] text-xl italic leading-snug md:text-2xl"
+            style={{ color: "var(--v-text)" }}
+          >
+            &laquo;&nbsp;Be Luxury n&apos;est pas un slogan, c&apos;est une exigence
+            qu&apos;on applique &agrave; chaque pi&egrave;ce.&nbsp;&raquo;
+          </p>
+          <p
+            className="mt-4 text-[11px] font-bold uppercase tracking-[0.3em]"
+            style={{ color: "var(--v-dim)" }}
+          >
+            Marcory Bd VGE &middot; Abidjan
+          </p>
+        </motion.div>
       </div>
-
-      {/* Déco lettre */}
-      <motion.p
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1, duration: 0.8 }}
-        className="pointer-events-none absolute bottom-10 right-10 font-[var(--font-display)] font-black leading-none select-none"
-        style={{ fontSize: "200px", color: "var(--v-s2)", userSelect: "none" }}
-        aria-hidden
-      >
-        L
-      </motion.p>
     </section>
   );
 }
