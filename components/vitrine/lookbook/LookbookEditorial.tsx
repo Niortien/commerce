@@ -20,18 +20,16 @@ export function LookbookEditorial() {
           transition={{ duration: 0.6 }}
         >
           <p
-            className="mb-6 text-[10px] font-black uppercase tracking-[0.4em]"
+            className="mb-4 font-[var(--font-display)] text-sm italic"
             style={{ color: "var(--v-gold)" }}
           >
             L&rsquo;histoire derri&egrave;re la collection
           </p>
           <h2
-            className="mb-8 font-[var(--font-display)] font-black uppercase leading-tight tracking-tight"
-            style={{ fontSize: "clamp(28px,5vw,52px)", color: "var(--v-text)" }}
+            className="mb-8 font-[var(--font-display)] leading-[1.05] tracking-tight"
+            style={{ fontSize: "clamp(28px,5vw,48px)", color: "var(--v-text)" }}
           >
-            Inspir&eacute; par
-            <br />
-            les nuits d&rsquo;Abidjan
+            Inspir&eacute; par <span className="italic" style={{ color: "var(--v-gold)" }}>Abidjan.</span>
           </h2>
           <p className="mb-5 text-sm leading-relaxed" style={{ color: "var(--v-muted)" }}>
             Quand la chaleur du jour laisse place &agrave; l&rsquo;&eacute;lectricit&eacute; de la nuit, Abidjan r&eacute;v&egrave;le
@@ -67,29 +65,31 @@ export function LookbookEditorial() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.15 }}
-          className="relative"
+          className="relative aspect-[3/4] w-full overflow-hidden rounded-2xl border"
+          style={{ borderColor: "var(--v-nav-border)", backgroundColor: "var(--v-s1)" }}
         >
-          <div
-            className="aspect-[3/4] w-full overflow-hidden rounded-2xl"
-            style={{ backgroundColor: "var(--v-s2)" }}
-          >
-            <div
-              className="flex h-full w-full items-end p-6"
-              style={{
-                background: "linear-gradient(135deg, var(--v-s2) 0%, var(--v-s3) 100%)",
-              }}
-            >
-              <p className="font-black text-5xl uppercase leading-none opacity-10" style={{ color: "var(--v-text)" }}>
-                EDITORIAL
-              </p>
-            </div>
-          </div>
-
-          {/* Accent gold */}
-          <div
-            className="absolute -bottom-4 -right-4 h-24 w-24 rounded-2xl"
-            style={{ backgroundColor: "var(--v-gold)", opacity: 0.25, zIndex: -1 }}
+          <img
+            src="/images/image_luxury/image3.jpg"
+            alt="Pièce Luxury Boutique, shooting éditorial"
+            className="absolute inset-0 h-full w-full scale-110 object-cover"
           />
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background: "linear-gradient(to top, rgba(13,13,13,0.85) 0%, transparent 50%)",
+            }}
+            aria-hidden
+          />
+          <div
+            className="pointer-events-none absolute inset-6 border"
+            style={{ borderColor: "var(--v-gold)", opacity: 0.3 }}
+            aria-hidden
+          />
+          <div className="relative flex h-full items-end p-8">
+            <p className="font-[var(--font-display)] text-sm italic leading-relaxed" style={{ color: "#fff" }}>
+              Marcory · Cocody · Le Plateau
+            </p>
+          </div>
         </motion.div>
       </div>
     </section>

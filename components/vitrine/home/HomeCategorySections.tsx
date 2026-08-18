@@ -102,16 +102,16 @@ function OneCategorySection({ categorie }: { categorie: Categorie }) {
       className="py-8"
     >
       {/* Header catégorie */}
-      <div className="mb-4 flex items-center justify-between px-4">
+      <div className="mb-4 flex items-end justify-between px-4">
         <div>
           <p
-            className="text-[9px] font-black uppercase tracking-[0.3em]"
+            className="font-[var(--font-display)] text-xs italic"
             style={{ color: "var(--v-gold)" }}
           >
             Collection
           </p>
           <h2
-            className="font-[var(--font-display)] text-xl font-black uppercase leading-tight tracking-tight"
+            className="font-[var(--font-display)] text-xl leading-tight"
             style={{ color: "var(--v-text)" }}
           >
             {categorie.nom}
@@ -119,8 +119,8 @@ function OneCategorySection({ categorie }: { categorie: Categorie }) {
         </div>
         <Link
           href={`/catalogue?categorieId=${categorie.id}`}
-          className="flex items-center gap-1 rounded-full border px-3 py-1.5 text-[10px] font-black uppercase tracking-wider transition-colors active:scale-95"
-          style={{ borderColor: "var(--v-gold)", color: "var(--v-gold)" }}
+          className="text-[10px] font-bold uppercase tracking-widest transition-colors active:scale-95"
+          style={{ color: "var(--v-dim)" }}
         >
           Voir tout &rarr;
         </Link>
@@ -166,21 +166,21 @@ export function HomeCategorySections() {
       style={{ borderColor: "var(--v-border)" }}
     >
       {/* Séparateur titre section */}
-      <div className="px-4 pt-10 pb-2">
-        <p
-          className="text-[9px] font-black uppercase tracking-[0.35em]"
-          style={{ color: "var(--v-hot)" }}
-        >
-          &#x25cf; Explore par cat&eacute;gorie
-        </p>
-        <h2
-          className="mt-1 font-[var(--font-display)] text-2xl font-black uppercase"
-          style={{ color: "var(--v-text)" }}
-        >
-          Qu&rsquo;est-ce que
-          <br />
-          <span style={{ color: "var(--v-gold)" }}>tu cherches ?</span>
-        </h2>
+      <div className="flex flex-col gap-2 px-4 pt-14 pb-4 md:flex-row md:items-end md:justify-between md:px-16">
+        <div>
+          <p
+            className="mb-1 font-[var(--font-display)] text-sm italic"
+            style={{ color: "var(--v-gold)" }}
+          >
+            Explorer par catégorie
+          </p>
+          <h2
+            className="font-[var(--font-display)] leading-[1.05] tracking-tight"
+            style={{ fontSize: "clamp(26px,4.5vw,44px)", color: "var(--v-text)" }}
+          >
+            Qu&rsquo;est-ce que <span className="italic" style={{ color: "var(--v-gold)" }}>tu cherches&nbsp;?</span>
+          </h2>
+        </div>
       </div>
 
       {categories.map((cat) => (

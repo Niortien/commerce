@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -22,36 +22,37 @@ export function HomeFeaturedDrops() {
   const items = produits.length > 0 ? produits : Array(4).fill(null);
 
   return (
-    <section className="mx-auto max-w-7xl px-5 py-24">
+    <section className="py-24">
       {/* Header */}
-      <div className="mb-14 flex items-end justify-between gap-4">
+      <div className="mx-auto mb-12 flex max-w-7xl items-end justify-between gap-4 px-5 md:px-16">
         <div>
           <p
-            className="mb-3 text-[10px] font-black uppercase tracking-[0.35em]"
-            style={{ color: "var(--v-hot)" }}
+            className="mb-2 font-[var(--font-display)] text-sm italic"
+            style={{ color: "var(--v-gold)" }}
           >
-            &#x2022; Stock limit&eacute; &#x2022; Commande rapide
+            Stock limité · Commande rapide
           </p>
           <h2
-            className="font-[var(--font-display)] font-black uppercase leading-none tracking-tight"
-            style={{ fontSize: "clamp(36px, 6vw, 72px)", color: "var(--v-text)" }}
+            className="font-[var(--font-display)] leading-[1.05] tracking-tight"
+            style={{ fontSize: "clamp(32px, 5vw, 56px)", color: "var(--v-text)" }}
           >
-            Derniers
-            <br />
-            <span style={{ color: "var(--v-gold)" }}>Arrivages</span>
+            Derniers arrivages
           </h2>
         </div>
         <Link
           href="/catalogue"
-          className="hidden shrink-0 rounded-full border px-5 py-2 text-xs font-black uppercase tracking-widest transition-all hover:border-[var(--v-gold)] hover:text-[var(--v-gold)] md:flex items-center gap-2"
-          style={{ borderColor: "var(--v-border)", color: "var(--v-muted)" }}
+          className="hidden shrink-0 items-center gap-2 text-xs font-bold uppercase tracking-widest transition-colors hover:text-[var(--v-gold)] md:flex"
+          style={{ color: "var(--v-muted)" }}
         >
           Tout voir &rarr;
         </Link>
       </div>
 
-      {/* Grid 2x2 on desktop, list on mobile */}
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      {/* Rail éditorial défilant */}
+      <div
+        className="flex gap-6 overflow-x-auto px-5 pb-6 md:px-16"
+        style={{ scrollbarWidth: "none" }}
+      >
         {items.map((produit, i) => {
           const prix = produit ? parseFloat(produit.prixVente || "0") : 0;
           const prixPromo = produit?.prixPromo ? parseFloat(produit.prixPromo) : null;
@@ -67,19 +68,18 @@ export function HomeFeaturedDrops() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.08, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              className="group relative flex overflow-hidden rounded-2xl border"
-              style={{ borderColor: "var(--v-border)", backgroundColor: "var(--v-s2)" }}
+              className="group relative w-[240px] shrink-0 md:w-[280px]"
             >
-              {/* Image zone */}
+              {/* Image portrait */}
               <div
-                className="relative h-40 w-36 shrink-0 overflow-hidden md:h-48 md:w-48"
-                style={{ backgroundColor: "var(--v-s3)" }}
+                className="relative overflow-hidden rounded-xl border"
+                style={{ aspectRatio: "3/4", borderColor: "var(--v-border)", backgroundColor: "var(--v-s2)" }}
               >
                 {produit?.imageUrl ? (
                   <img
                     src={produit.imageUrl}
                     alt={produit.nom}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 ) : (
                   <div className="flex h-full items-center justify-center text-5xl opacity-[0.07]">
@@ -87,104 +87,84 @@ export function HomeFeaturedDrops() {
                   </div>
                 )}
 
-                {/* Hot badge */}
                 {(isNewDrop || isPromo) && produit && (
                   <div
-                    className="absolute left-2 top-2 rounded-md px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-white"
+                    className="absolute left-3 top-3 rounded-full px-2.5 py-1 text-[9px] font-black uppercase tracking-wider text-white"
                     style={{ backgroundColor: "var(--v-hot)" }}
                   >
                     {isPromo ? `−${Math.round(((prix - prixPromo!) / prix) * 100)}%` : "NEW"}
                   </div>
                 )}
 
-                {/* Drop number */}
-                <div
-                  className="absolute bottom-2 right-2 font-[var(--font-display)] text-[52px] font-black leading-none opacity-[0.08] select-none"
-                  style={{ color: "var(--v-text)" }}
+                <a
+                  href={waUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-full backdrop-blur-md transition-colors hover:bg-[#25D366] hover:text-white"
+                  style={{ backgroundColor: "rgba(0,0,0,0.45)", color: "#25D366" }}
+                  title="Commander sur WhatsApp"
                 >
-                  {i + 1}
-                </div>
+                  {WA_SVG}
+                </a>
               </div>
 
-              {/* Content */}
-              <div className="flex flex-1 flex-col justify-between p-5">
-                <div>
-                  <span
-                    className="text-[10px] font-black uppercase tracking-[0.28em]"
-                    style={{ color: "var(--v-gold)" }}
-                  >
-                    Réf. #{String(i + 1).padStart(2, "0")}
-                  </span>
+              {/* Légende */}
+              <div className="mt-4">
+                <span
+                  className="font-[var(--font-mono)] text-[10px] font-bold uppercase tracking-[0.28em]"
+                  style={{ color: "var(--v-gold)" }}
+                >
+                  Réf. #{String(i + 1).padStart(2, "0")}
+                </span>
 
-                  {produit ? (
-                    <>
-                      <h3
-                        className="mt-1 font-[var(--font-display)] text-lg font-black uppercase leading-tight md:text-xl"
-                        style={{ color: "var(--v-text)" }}
-                      >
-                        {produit.nom}
-                      </h3>
-                      {produit.categorie && (
-                        <p className="mt-0.5 text-[11px] uppercase tracking-widest" style={{ color: "var(--v-muted)" }}>
-                          {produit.categorie.nom}
-                        </p>
-                      )}
-                    </>
-                  ) : (
-                    <>
-                      <div className="mt-1 h-5 w-40 animate-pulse rounded" style={{ backgroundColor: "var(--v-s3)" }} />
-                      <div className="mt-1 h-3 w-20 animate-pulse rounded" style={{ backgroundColor: "var(--v-s3)" }} />
-                    </>
-                  )}
-                </div>
+                {produit ? (
+                  <>
+                    <h3
+                      className="mt-1.5 font-[var(--font-display)] text-lg leading-snug"
+                      style={{ color: "var(--v-text)" }}
+                    >
+                      {produit.nom}
+                    </h3>
+                    {produit.categorie && (
+                      <p className="mt-0.5 text-[11px] uppercase tracking-widest" style={{ color: "var(--v-muted)" }}>
+                        {produit.categorie.nom}
+                      </p>
+                    )}
 
-                <div>
-                  {/* Prix */}
-                  {produit ? (
-                    <div className="flex items-baseline gap-2">
-                      <span
-                        className="font-[var(--font-mono)] text-2xl font-black"
-                        style={{ color: isPromo ? "var(--v-gold)" : "var(--v-text)" }}
-                      >
-                        {(isPromo ? prixPromo! : prix).toLocaleString("fr-FR")}
-                        <span className="ml-1 text-xs font-normal" style={{ color: "var(--v-muted)" }}>FCFA</span>
-                      </span>
-                      {isPromo && (
+                    <div className="mt-3 flex items-baseline justify-between gap-2">
+                      <div className="flex items-baseline gap-2">
                         <span
-                          className="font-[var(--font-mono)] text-sm line-through"
-                          style={{ color: "var(--v-dim)" }}
+                          className="font-[var(--font-mono)] text-base font-black"
+                          style={{ color: isPromo ? "var(--v-gold)" : "var(--v-text)" }}
                         >
-                          {prix.toLocaleString("fr-FR")}
+                          {(isPromo ? prixPromo! : prix).toLocaleString("fr-FR")}
+                          <span className="ml-1 text-xs font-normal" style={{ color: "var(--v-muted)" }}>FCFA</span>
                         </span>
-                      )}
-                    </div>
-                  ) : (
-                    <div className="h-7 w-28 animate-pulse rounded" style={{ backgroundColor: "var(--v-s3)" }} />
-                  )}
-
-                  {/* CTAs */}
-                  {produit && (
-                    <div className="mt-3 flex items-center gap-2">
+                        {isPromo && (
+                          <span
+                            className="font-[var(--font-mono)] text-xs line-through"
+                            style={{ color: "var(--v-dim)" }}
+                          >
+                            {prix.toLocaleString("fr-FR")}
+                          </span>
+                        )}
+                      </div>
                       <Link
                         href={`/boutique/${produit.id}`}
-                        className="flex-1 rounded-xl py-2 text-center text-xs font-black uppercase tracking-wider transition-all hover:opacity-90 active:scale-95"
-                        style={{ backgroundColor: "var(--v-gold)", color: "#060607" }}
+                        className="text-[11px] font-bold uppercase tracking-widest transition-colors hover:text-[var(--v-gold)]"
+                        style={{ color: "var(--v-dim)" }}
                       >
-                        Voir
+                        Voir &rarr;
                       </Link>
-                      <a
-                        href={waUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border transition-colors hover:bg-[#25D366] hover:border-[#25D366] hover:text-white"
-                        style={{ borderColor: "var(--v-border)", color: "#25D366" }}
-                        title="Commander sur WhatsApp"
-                      >
-                        {WA_SVG}
-                      </a>
                     </div>
-                  )}
-                </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="mt-1.5 h-5 w-36 animate-pulse rounded" style={{ backgroundColor: "var(--v-s3)" }} />
+                    <div className="mt-2 h-3 w-20 animate-pulse rounded" style={{ backgroundColor: "var(--v-s3)" }} />
+                    <div className="mt-3 h-5 w-24 animate-pulse rounded" style={{ backgroundColor: "var(--v-s3)" }} />
+                  </>
+                )}
               </div>
             </motion.article>
           );
@@ -192,7 +172,7 @@ export function HomeFeaturedDrops() {
       </div>
 
       {/* Mobile "Voir tout" */}
-      <div className="mt-8 text-center md:hidden">
+      <div className="mt-4 text-center md:hidden">
         <Link
           href="/catalogue"
           className="inline-block rounded-full border px-6 py-3 text-xs font-black uppercase tracking-widest transition-all"
