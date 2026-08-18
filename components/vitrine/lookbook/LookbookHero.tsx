@@ -53,7 +53,7 @@ export function LookbookHero() {
           className="mb-4 text-[10px] font-black uppercase tracking-[0.5em]"
           style={{ color: "var(--v-gold)" }}
         >
-          Saison 2025 &mdash; Collection Yop City
+          Saison 2025 &mdash; Collection Abidjan
         </motion.p>
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
@@ -74,7 +74,7 @@ export function LookbookHero() {
           style={{ color: "var(--v-muted)" }}
         >
           Des pi&egrave;ces pour ceux qui vivent &agrave; leur propre rythme.
-          Shoot&eacute; dans les rues de Yop &mdash; pour les vrais.
+          Shoot&eacute; dans les rues d&rsquo;Abidjan &mdash; pour l&rsquo;&eacute;l&eacute;gance.
         </motion.p>
       </motion.div>
 

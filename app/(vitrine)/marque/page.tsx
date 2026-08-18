@@ -2,9 +2,9 @@ import { MarqueView } from "@/components/vitrine/marque/MarqueView";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "La Marque — Dri Valé | Boutique Yopougon",
+  title: "La Marque — Luxury Boutique | Marcory Abidjan",
   description:
-    "Découvrez l'histoire de Dri Valé, notre boutique à Yopougon Abidjan. Vêtements, accessoires et produits importés USA.",
+    "Découvrez Luxury Boutique, votre boutique multi-marques à Marcory Abidjan. Vêtements, maroquineries, chaussures et accessoires de luxe homme et femme.",
 };
 
 export default function MarquePage() {

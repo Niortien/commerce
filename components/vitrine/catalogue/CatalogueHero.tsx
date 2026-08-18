@@ -19,7 +19,7 @@ export function CatalogueHero({ total, search, onSearch }: CatalogueHeroProps) {
               className="mb-2 text-[10px] font-black uppercase tracking-[0.3em]"
               style={{ color: "var(--v-gold)" }}
             >
-              Dri Val&eacute; &mdash; Yop City
+              Luxury Boutique &mdash; Abidjan
             </p>
             <h1
               className="font-[var(--font-display)] font-black uppercase leading-none tracking-tight"

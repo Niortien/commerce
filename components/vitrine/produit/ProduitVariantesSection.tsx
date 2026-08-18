@@ -39,7 +39,7 @@ export function ProduitVariantesSection({
   // Pas de variantes → état vide avec CTA WhatsApp
   if (variantes.length === 0) {
     const url = getWhatsappUrl(
-      "Bonjour Dri Valé 👋 Je voudrais avoir des infos sur les tailles disponibles pour un produit."
+      "Bonjour Luxury Boutique 👋 Je voudrais avoir des infos sur les tailles disponibles pour un produit."
     );
     return (
       <div

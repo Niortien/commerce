@@ -41,7 +41,7 @@ export function buildWhatsappMessage(order: WhatsappOrder): string {
   const notesStr = order.notes ? `\n💬 *NOTES*\n${order.notes}` : "";
 
   return [
-    `🛒 *COMMANDE DRI VALÉ*`,
+    `🛒 *COMMANDE LUXURY BOUTIQUE*`,
     sep,
     ``,
     items,

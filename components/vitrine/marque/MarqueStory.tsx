@@ -7,28 +7,28 @@ const TIMELINE = [
     year: "Les débuts",
     title: "L'idée",
     description:
-      "À Yopougon, une passion pour la mode et les produits importés. Les premières pièces arrivent des États-Unis — ensembles, casquettes, accessoires — et trouvent preneur en quelques heures. Le bouche-à-oreille fait le reste.",
+      "Une passion pour la mode de luxe et le multi-marques. Les premières pièces sélectionnées avec exigence — vêtements, maroquinerie, accessoires — trouvent preneur en quelques jours. Le bouche-à-oreille fait le reste.",
     img: "/story-2020.jpg",
   },
   {
     year: "La boutique",
-    title: "Ananeraie Oasis",
+    title: "Marcory Bd VGE",
     description:
-      "Dri Valé ouvre ses portes à l'Ananeraie Oasis, quartier Maroc, Yopougon. Le concept se précise : vêtements de qualité, maroquinerie, parfumerie, produits importés USA — à prix justes, sans intermédiaire.",
+      "Luxury Boutique ouvre ses portes à Marcory Bd VGE, Abidjan. Le concept se précise : vêtements, maroquinerie, chaussures et accessoires de luxe, homme et femme, multi-marques — à prix justes, sans intermédiaire.",
     img: "/story-2022.jpg",
   },
   {
     year: "Digital",
-    title: "TikTok & WhatsApp",
+    title: "Réseaux & WhatsApp",
     description:
-      "La boutique se retrouve sur TikTok et les commandes via WhatsApp explosent. Livraisons à Abidjan (Selmer, Niangon) et expédition partout en Côte d'Ivoire.",
+      "La boutique se retrouve sur les réseaux sociaux et les commandes via WhatsApp se multiplient. Livraison à Abidjan et expédition partout en Côte d'Ivoire.",
     img: "/story-2024.jpg",
   },
   {
     year: "Aujourd'hui",
     title: "Toujours en mouvement",
     description:
-      "Nouvelles arrivées régulières, une clientèle fidèle qui grandit chaque jour, et une boutique qui reste le point de repère mode de Yopougon. Le mouvement continue.",
+      "Nouvelles arrivées régulières, une clientèle fidèle qui grandit chaque jour, et une boutique qui reste la référence luxe multi-marques d'Abidjan. Le mouvement continue.",
     img: "/story-now.jpg",
   },
 ];

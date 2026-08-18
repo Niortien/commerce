@@ -46,9 +46,9 @@ export function MarqueContact() {
             Adresse
           </p>
           <p className="text-sm font-semibold leading-relaxed" style={{ color: "var(--v-text)" }}>
-            Ananeraie Oasis, Quartier Maroc
+            Marcory Bd VGE
             <br />
-            Yopougon, Abidjan
+            Abidjan
             <br />
             C&ocirc;te d&rsquo;Ivoire
           </p>
@@ -111,14 +111,14 @@ export function MarqueContact() {
               +225 07 09 29 44 68
             </a>
             <a
-              href="https://www.tiktok.com/@kaypeurbienpaye1"
+              href="https://web.facebook.com/mirnalmahmoudzorkot1/"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-sm font-semibold transition-colors hover:text-[var(--v-text)]"
               style={{ color: "var(--v-muted)" }}
             >
               <span style={{ color: "var(--v-purple)" }}>&#9679;</span>
-              TikTok @kaypeurbienpaye1
+              Facebook — Luxury Boutique
             </a>
           </div>
         </motion.div>

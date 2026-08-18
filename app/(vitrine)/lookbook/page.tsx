@@ -2,7 +2,7 @@ import { LookbookView } from "@/components/vitrine/lookbook/LookbookView";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Lookbook — Abidjan Nights | Dri Valé",
+  title: "Lookbook — Abidjan Nights | Luxury Boutique",
   description: "Collection éditoriale Abidjan Nights. Découvrez nos looks et styles de la saison.",
 };
 

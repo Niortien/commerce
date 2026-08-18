@@ -56,7 +56,7 @@ export function ForgotPasswordView() {
             errorMessage={errors.email?.message}
             {...register("email")}
           />
-          <Button className="w-full bg-accent text-white" onPress={() => void onSubmit()} isLoading={isSubmitting}>
+          <Button className="w-full bg-accent text-black" onPress={() => void onSubmit()} isLoading={isSubmitting}>
             Envoyer le lien
           </Button>
         </div>

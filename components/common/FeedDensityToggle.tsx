@@ -13,7 +13,7 @@ export function FeedDensityToggle() {
       <Button
         size="sm"
         variant={density === "compact" ? "solid" : "flat"}
-        className={density === "compact" ? "bg-accent text-white" : "bg-[var(--color-surface-high)] text-text"}
+        className={density === "compact" ? "bg-accent text-black" : "bg-[var(--color-surface-high)] text-text"}
         onPress={() => setDensity("compact")}
       >
         Compact
@@ -21,7 +21,7 @@ export function FeedDensityToggle() {
       <Button
         size="sm"
         variant={density === "cozy" ? "solid" : "flat"}
-        className={density === "cozy" ? "bg-accent text-white" : "bg-[var(--color-surface-high)] text-text"}
+        className={density === "cozy" ? "bg-accent text-black" : "bg-[var(--color-surface-high)] text-text"}
         onPress={() => setDensity("cozy")}
       >
         Cozy

@@ -37,10 +37,10 @@ export function VitrineNav() {
           }}
         />
         <div className="relative mx-auto flex h-16 max-w-7xl items-center justify-between px-5">
-          <Link href="/" aria-label="Dri Valé" className="shrink-0">
+          <Link href="/" aria-label="Luxury Boutique" className="shrink-0">
             <Image
               src="/images/logo/logo.jpeg"
-              alt="Dri Valé"
+              alt="Luxury Boutique"
               height={40}
               width={130}
               className="h-10 w-auto object-contain"
@@ -140,7 +140,7 @@ export function VitrineNav() {
             transition={{ duration: 0.15 }}
           >
             <div className="flex h-16 items-center justify-between px-5">
-              <Image src="/images/logo/logo.jpeg" alt="Dri Valé" height={36} width={120} className="h-9 w-auto object-contain" />
+              <Image src="/images/logo/logo.jpeg" alt="Luxury Boutique" height={36} width={120} className="h-9 w-auto object-contain" />
               <button onClick={() => setOpen(false)} style={{ color: "var(--v-muted)" }}>
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
@@ -175,11 +175,11 @@ export function VitrineNav() {
               <div className="flex items-center gap-2">
                 <span style={{ color: "var(--v-gold)" }}>★</span>
                 <span className="font-[var(--font-display)] text-sm font-black uppercase tracking-wider" style={{ color: "var(--v-gold)" }}>
-                  Sortez toujours bien habillé
+                  Be Luxury
                 </span>
                 <span style={{ color: "var(--v-gold)" }}>★</span>
               </div>
-              <p className="mt-1 text-xs" style={{ color: "var(--v-dim)" }}>Dri Valé · Yopougon · Abidjan · CI</p>
+              <p className="mt-1 text-xs" style={{ color: "var(--v-dim)" }}>Luxury Boutique · Marcory · Abidjan · CI</p>
             </div>
           </motion.div>
         )}

@@ -16,24 +16,13 @@ const SOCIALS = [
     ),
   },
   {
-    name: "Instagram",
-    handle: "@drivaleboutique",
-    color: "#E1306C",
-    href: "https://instagram.com/drivaleboutique",
+    name: "Facebook",
+    handle: "Luxury Boutique",
+    color: "#1877F2",
+    href: "https://web.facebook.com/mirnalmahmoudzorkot1/",
     icon: (
       <svg width="36" height="36" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-      </svg>
-    ),
-  },
-  {
-    name: "TikTok",
-    handle: "@kaypeurbienpaye1",
-    color: "#FAFAFA",
-    href: "https://tiktok.com/@kaypeurbienpaye1",
-    icon: (
-      <svg width="36" height="36" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.32 6.32 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V9.01a8.16 8.16 0 004.77 1.52V7.07a4.85 4.85 0 01-1-.38z" />
+        <path d="M22 12.06C22 6.505 17.523 2 12 2S2 6.505 2 12.06c0 5.02 3.657 9.184 8.438 9.94v-7.03H7.898v-2.91h2.54V9.845c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.459h-1.26c-1.243 0-1.63.771-1.63 1.562v1.875h2.773l-.443 2.91h-2.33V22c4.78-.756 8.437-4.92 8.437-9.94z" />
       </svg>
     ),
   },
@@ -73,11 +62,11 @@ export function MarqueSocial() {
         >
           Follow the
           <br />
-          <span style={{ color: "var(--v-lime)" }}>Dri Valé</span>
+          <span style={{ color: "var(--v-lime)" }}>Luxury Boutique</span>
         </motion.h2>
 
         {/* Socials */}
-        <div className="mb-16 grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div className="mb-16 grid grid-cols-1 gap-4 md:grid-cols-2">
           {SOCIALS.map((social, i) => (
             <motion.a
               key={social.name}
@@ -126,7 +115,7 @@ export function MarqueSocial() {
             Nouveautés en avant-première
           </h3>
           <p className="mb-8 text-sm" style={{ color: "var(--v-muted)" }}>
-            Inscris-toi pour recevoir les drops exclusifs, les nouvelles collections et les offres avant tout le monde.
+            Inscris-toi pour recevoir les nouveautés exclusives, les nouvelles collections et les offres avant tout le monde.
           </p>
 
           {submitted ? (
@@ -137,7 +126,7 @@ export function MarqueSocial() {
               style={{ backgroundColor: "rgba(200,118,44,0.1)", border: "1px solid var(--v-lime)" }}
             >
               <p className="text-sm font-black" style={{ color: "var(--v-lime)" }}>
-                Bienvenue dans la famille Dri Valé ✓
+                Bienvenue dans la famille Luxury Boutique ✓
               </p>
             </motion.div>
           ) : (

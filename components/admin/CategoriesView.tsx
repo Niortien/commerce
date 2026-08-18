@@ -113,7 +113,7 @@ export function CategoriesView() {
     <div className="p-6">
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-bold text-text">Catégories</h1>
-        <Button className="bg-accent text-white" onPress={openCreate}>
+        <Button className="bg-accent text-black" onPress={openCreate}>
           + Nouvelle catégorie
         </Button>
       </div>
@@ -209,7 +209,7 @@ export function CategoriesView() {
               Annuler
             </Button>
             <Button
-              className="bg-accent text-white"
+              className="bg-accent text-black"
               isLoading={isPending}
               onPress={() => void onSubmit()}
             >

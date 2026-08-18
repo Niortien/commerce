@@ -35,11 +35,11 @@ export function LookbookEditorial() {
           </h2>
           <p className="mb-5 text-sm leading-relaxed" style={{ color: "var(--v-muted)" }}>
             Quand la chaleur du jour laisse place &agrave; l&rsquo;&eacute;lectricit&eacute; de la nuit, Abidjan r&eacute;v&egrave;le
-            une autre dimension. Yopougon, Cocody, le Plateau &mdash; des spots o&ugrave; la mode se vit
+            une autre dimension. Marcory, Cocody, le Plateau &mdash; des spots o&ugrave; la mode se vit
             sans codes impos&eacute;s, o&ugrave; chaque look est une d&eacute;claration d&rsquo;identit&eacute;.
           </p>
           <p className="text-sm leading-relaxed" style={{ color: "var(--v-muted)" }}>
-            Dri Val&eacute; a shoot&eacute; cette collection l&agrave; o&ugrave; la ville respire : dans les ruelles de Yop,
+            Luxury Boutique a shoot&eacute; cette collection l&agrave; o&ugrave; la ville respire : dans les rues d&rsquo;Abidjan,
             sous les n&eacute;ons, au bord de la lagune. Des pi&egrave;ces pens&eacute;es pour habiter ces moments.
           </p>
 
@@ -75,7 +75,7 @@ export function LookbookEditorial() {
           >
             <img
               src="/images/dri_style/boutique-interieur-2.jpg"
-              alt="Boutique Dri Valé — collection"
+              alt="Boutique Luxury Boutique — collection"
               className="h-full w-full object-cover"
               onError={(e) => {
                 (e.target as HTMLImageElement).style.display = "none";

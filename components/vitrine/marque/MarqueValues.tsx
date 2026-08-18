@@ -19,7 +19,7 @@ const VALUES = [
     num: "03",
     title: "Communauté",
     description:
-      "Dri Valé, c'est avant tout un lieu de vie. Des gens de Yopougon qui comprennent la mode, qui s'entraident. La boutique est un point de rencontre du quartier, pas juste un commerce.",
+      "Luxury Boutique, c'est avant tout un lieu de vie. Des gens qui comprennent la mode, qui s'entraident. La boutique est un point de rencontre à Marcory, pas juste un commerce.",
   },
 ];
 

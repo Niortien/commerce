@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { getWhatsappUrl } from "@/lib/whatsapp";
 
 export function HomeWhatsappCta() {
-  const waUrl = getWhatsappUrl("Bonjour Dri Valé ! Je veux passer une commande 🛒");
+  const waUrl = getWhatsappUrl("Bonjour Luxury Boutique ! Je veux passer une commande 🛒");
 
   return (
     <section

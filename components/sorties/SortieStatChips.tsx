@@ -16,7 +16,7 @@ export function SortieStatChips({ selected, onSelect }: SortieStatChipsProps) {
         <Chip
           key={period}
           variant="flat"
-          className={period === selected ? "bg-accent text-white" : "bg-[var(--color-surface-high)]"}
+          className={period === selected ? "bg-accent text-black" : "bg-[var(--color-surface-high)]"}
           onClick={() => onSelect(period)}
         >
           {period}

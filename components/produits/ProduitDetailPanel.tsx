@@ -495,7 +495,7 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
               <Button
                 size="sm"
                 variant="flat"
-                className="bg-accent text-white"
+                className="bg-accent text-black"
                 isLoading={reassignMutation.isPending}
                 onPress={handleReassignBoutique}
               >
@@ -641,7 +641,7 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
                         variant="flat"
                         className={
                           selectedCategorieId === cat.id
-                            ? "cursor-pointer bg-accent text-white"
+                            ? "cursor-pointer bg-accent text-black"
                             : "cursor-pointer bg-[var(--color-surface-high)] text-text"
                         }
                         onClick={() => setValue("categorieId", cat.id, { shouldValidate: true })}
@@ -709,7 +709,7 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
                     <Chip
                       key={t}
                       variant="flat"
-                      className="bg-accent text-white"
+                      className="bg-accent text-black"
                       onClose={() => {
                         setVarianteError(null);
                         setSelectedTailles((cur) => cur.filter((x) => x !== t));
@@ -734,7 +734,7 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
                     inputWrapper: "border-2 border-[var(--color-border-active)]/50 bg-[var(--color-surface)] data-[hover=true]:border-[var(--color-border-active)]",
                   }}
                 />
-                <Button variant="flat" className="shrink-0 bg-accent text-white" onPress={addTaille} size="sm">+</Button>
+                <Button variant="flat" className="shrink-0 bg-accent text-black" onPress={addTaille} size="sm">+</Button>
               </div>
             </div>
           ) : (
@@ -747,7 +747,7 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
                     variant="flat"
                     className={
                       selectedTailles.includes(t)
-                        ? "cursor-pointer bg-accent text-white"
+                        ? "cursor-pointer bg-accent text-black"
                         : "cursor-pointer bg-[var(--color-surface-high)] text-text"
                     }
                     onClick={() => toggleTaille(t)}
@@ -770,7 +770,7 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
                     inputWrapper: "border-2 border-[var(--color-border-active)]/50 bg-[var(--color-surface)] data-[hover=true]:border-[var(--color-border-active)]",
                   }}
                 />
-                <Button variant="flat" className="shrink-0 bg-accent text-white" onPress={addTaille} size="sm">+</Button>
+                <Button variant="flat" className="shrink-0 bg-accent text-black" onPress={addTaille} size="sm">+</Button>
               </div>
               {selectedTailles.filter((t) => !taillePresets.includes(t)).length > 0 && (
                 <div className="flex flex-wrap gap-1.5">
@@ -780,7 +780,7 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
                       <Chip
                         key={t}
                         variant="flat"
-                        className="bg-accent text-white"
+                        className="bg-accent text-black"
                         onClose={() => {
                           setVarianteError(null);
                           setSelectedTailles((cur) => cur.filter((x) => x !== t));
@@ -806,7 +806,7 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
                   variant="flat"
                   className={
                     selectedCouleurs.includes(c)
-                      ? "cursor-pointer bg-accent text-white"
+                      ? "cursor-pointer bg-accent text-black"
                       : "cursor-pointer bg-[var(--color-surface-high)] text-text"
                   }
                   onClick={() => toggleCouleur(c)}
@@ -854,7 +854,7 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
                 inputWrapper: "border-2 border-[var(--color-border-active)]/50 bg-[var(--color-surface)] data-[hover=true]:border-[var(--color-border-active)]",
               }}
             />
-            <Button variant="flat" className="shrink-0 bg-accent text-white" onPress={addColor} size="sm">+</Button>
+            <Button variant="flat" className="shrink-0 bg-accent text-black" onPress={addColor} size="sm">+</Button>
           </div>
 
           {varianteError && (

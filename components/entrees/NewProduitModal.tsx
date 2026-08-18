@@ -289,7 +289,7 @@ export function NewProduitModal({ isOpen, defaultValues, onClose, onAdd }: NewPr
                           variant="flat"
                           className={
                             watchedCouleur === c
-                              ? "cursor-pointer bg-accent text-white"
+                              ? "cursor-pointer bg-accent text-black"
                               : "cursor-pointer bg-[var(--color-surface-high)] text-text"
                           }
                           onClick={() => setValue("couleur", c, { shouldValidate: true })}

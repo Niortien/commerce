@@ -28,17 +28,17 @@ export function MarqueManifesto() {
           style={{ color: "var(--v-muted)" }}
         >
           <p>
-            Dri Val&eacute;, c&rsquo;est n&eacute; d&rsquo;un constat simple : &agrave; Yopougon, trouver des v&ecirc;tements
-            de qualit&eacute; &agrave; prix juste relevait du parcours du combattant. On importait de loin, on payait
-            des interm&eacute;diaires, on recevait des produits qui ne ressemblaient pas aux photos.
+            Luxury Boutique, c&rsquo;est n&eacute; d&rsquo;un constat simple : &agrave; Abidjan, trouver des pi&egrave;ces
+            de luxe authentiques, multi-marques, &agrave; prix juste relevait du parcours du combattant. On importait
+            de loin, on payait des interm&eacute;diaires, on recevait des produits qui ne ressemblaient pas aux photos.
           </p>
           <p>
             On a d&eacute;cid&eacute; de changer &ccedil;a. Apporter directement des pi&egrave;ces authentiques &mdash;
-            ensembles, casquettes, maroquinerie, parfumerie &mdash; import&eacute;es et soigneusement
-            s&eacute;lectionn&eacute;es. Un rapport direct entre la boutique et ceux qui portent.
+            v&ecirc;tements, maroquinerie, chaussures, accessoires &mdash; s&eacute;lectionn&eacute;es avec exigence.
+            Un rapport direct entre la boutique et ceux qui portent.
           </p>
           <p>
-            Dri Val&eacute;, c&rsquo;est Yopougon. Notre quartier, notre terrain, notre inspiration premi&egrave;re.
+            Luxury Boutique, c&rsquo;est Marcory. Notre quartier, notre terrain, notre inspiration premi&egrave;re.
             On livre &agrave; Abidjan et partout en C&ocirc;te d&rsquo;Ivoire.
           </p>
         </motion.div>
@@ -58,10 +58,10 @@ export function MarqueManifesto() {
           >
             &ldquo;La mode est un langage.
             <br />
-            Dri Val&eacute; te donne les mots.&rdquo;
+            Luxury Boutique te donne les mots.&rdquo;
           </p>
           <footer className="mt-4 text-sm font-bold" style={{ color: "var(--v-gold)" }}>
-            &mdash; Dri Val&eacute; Boutique, Yopougon Abidjan
+            &mdash; Luxury Boutique, Marcory Abidjan
           </footer>
         </motion.blockquote>
       </div>

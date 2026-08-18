@@ -22,8 +22,8 @@ const monoFont = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Dri Valé — Gestion Boutique",
-  description: "Gestion de stock et de caisse pour Dri Valé Boutique, Yopougon Abidjan",
+  title: "Luxury Boutique — Gestion Boutique",
+  description: "Gestion de stock et de caisse pour Luxury Boutique, Marcory Abidjan",
 };
 
 export default function RootLayout({

@@ -117,7 +117,7 @@ export function MobileNav() {
         <div className="flex items-center gap-2.5">
           <Image
             src="/images/logo/logo.jpeg"
-            alt="Dri Valé"
+            alt="Luxury Boutique"
             height={36}
             width={120}
             className="h-9 w-auto object-contain"
@@ -157,7 +157,7 @@ export function MobileNav() {
               <div className="flex items-center justify-between">
                 <Image
                   src="/images/logo/logo.jpeg"
-                  alt="Dri Valé"
+                  alt="Luxury Boutique"
                   height={36}
                   width={120}
                   className="h-9 w-auto object-contain"

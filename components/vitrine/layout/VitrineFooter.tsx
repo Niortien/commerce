@@ -27,7 +27,7 @@ const WA_ICON = (
 );
 
 export function VitrineFooter() {
-  const waUrl = getWhatsappUrl("Bonjour Dri Valé, j'ai une question !");
+  const waUrl = getWhatsappUrl("Bonjour Luxury Boutique, j'ai une question !");
 
   return (
     <footer
@@ -43,16 +43,16 @@ export function VitrineFooter() {
           className="font-[var(--font-display)] font-black uppercase leading-none tracking-tight"
           style={{ fontSize: "clamp(28px, 6vw, 64px)", color: "var(--v-text)" }}
         >
-          Yop City.{" "}
-          <span style={{ color: "var(--v-gold)" }}>On est l&agrave;.</span>
+          Be{" "}
+          <span style={{ color: "var(--v-gold)" }}>Luxury.</span>
         </p>
         <p className="mt-3 flex items-center justify-center gap-2 text-sm font-bold" style={{ color: "var(--v-gold)" }}>
           <span>★</span>
-          <span>Sortez toujours bien habill&eacute;</span>
+          <span>Vêtements, maroquineries &amp; accessoires de luxe</span>
           <span>★</span>
         </p>
         <p className="mt-1 text-xs" style={{ color: "var(--v-muted)" }}>
-          Dri Val&eacute; &mdash; La boutique des jeunes class&eacute;s de Yopougon.
+          Luxury Boutique &mdash; Homme &amp; Femme, multi-marques.
         </p>
       </div>
 
@@ -64,12 +64,12 @@ export function VitrineFooter() {
               className="font-[var(--font-display)] text-xl font-black tracking-[0.18em]"
               style={{ color: "var(--v-text)" }}
             >
-              DRI VAL&Eacute;
+              LUXURY BOUTIQUE
             </p>
             <p className="mt-3 text-sm leading-relaxed" style={{ color: "var(--v-muted)" }}>
-              V&ecirc;tements et accessoires import&eacute;s.
+              V&ecirc;tements, maroquineries, chaussures et accessoires de luxe.
               <br />
-              Yopougon &middot; Abidjan &mdash; C&ocirc;te d&rsquo;Ivoire.
+              Marcory &middot; Abidjan &mdash; C&ocirc;te d&rsquo;Ivoire.
             </p>
             <a
               href={waUrl}
@@ -121,24 +121,7 @@ export function VitrineFooter() {
             </p>
             <ul className="space-y-3 text-sm" style={{ color: "var(--v-muted)" }}>
               <li>
-                <p>Oasis Ananeraie, Yopougon</p>
-                <a
-                  href="tel:+2250710444625"
-                  className="text-xs font-bold transition-colors hover:text-[#25D366]"
-                  style={{ color: "var(--v-dim)" }}
-                >
-                  07 10 44 46 25
-                </a>
-              </li>
-              <li>
-                <p>Toit rouge, Yopougon</p>
-                <a
-                  href="tel:+2250767602389"
-                  className="text-xs font-bold transition-colors hover:text-[#25D366]"
-                  style={{ color: "var(--v-dim)" }}
-                >
-                  07 67 60 23 89
-                </a>
+                <p>Marcory Bd VGE, Abidjan</p>
               </li>
               <li className="pt-2" style={{ color: "var(--v-dim)", fontSize: "11px" }}>
                 24h/24 &bull; 7j/7
@@ -182,9 +165,9 @@ export function VitrineFooter() {
           className="mt-12 flex flex-wrap items-center justify-between gap-4 border-t pt-8 text-xs"
           style={{ borderColor: "var(--v-border)", color: "var(--v-dim)" }}
         >
-          <span>&copy; 2026 Dri Val&eacute; Boutique. Tous droits r&eacute;serv&eacute;s.</span>
+          <span>&copy; 2026 Luxury Boutique. Tous droits r&eacute;serv&eacute;s.</span>
           <span className="font-bold tracking-wider" style={{ color: "var(--v-gold)" }}>
-            YOP CITY &hearts;
+            BE LUXURY &hearts;
           </span>
         </div>
       </div>

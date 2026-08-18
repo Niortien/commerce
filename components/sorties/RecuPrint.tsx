@@ -101,7 +101,7 @@ export function RecuPrint({
       {/* Zone d'impression — hors modal, visible uniquement @media print */}
       <div id="recu-print-root" aria-hidden="true" style={{ display: "none" }}>
         <div style={{ textAlign: "center", marginBottom: 4 }}>
-          <div style={{ fontSize: 15, fontWeight: "bold", letterSpacing: 3 }}>DRI VALÉ</div>
+          <div style={{ fontSize: 15, fontWeight: "bold", letterSpacing: 3 }}>LUXURY BOUTIQUE</div>
           {boutiqueName && (
             <div style={{ fontSize: 10, fontWeight: "bold", marginTop: 1 }}>{boutiqueName}</div>
           )}
@@ -109,7 +109,7 @@ export function RecuPrint({
             <div style={{ fontSize: 9, marginTop: 1 }}>{contact.telephones.join(" / ")}</div>
           )}
           {!boutiqueName && (
-            <div style={{ fontSize: 9 }}>Dri Valé — Gestion Boutique</div>
+            <div style={{ fontSize: 9 }}>Luxury Boutique — Gestion Boutique</div>
           )}
         </div>
         <div style={{ borderTop: "1px dashed #000", margin: "4px 0" }} />
@@ -177,7 +177,7 @@ export function RecuPrint({
           color: "#bbb",
           lineHeight: 1,
         }}>
-          Dri Valé
+          Luxury Boutique
         </div>
       </div>
 
@@ -201,7 +201,7 @@ export function RecuPrint({
             <div className="rounded-lg border border-border/60 bg-white p-4 text-black">
               {/* En-tête */}
               <div className="mb-2 text-center">
-                <p className="text-base font-bold tracking-[0.25em]">DRI VALÉ</p>
+                <p className="text-base font-bold tracking-[0.25em]">LUXURY BOUTIQUE</p>
                 {boutiqueName && (
                   <p className="text-[11px] font-semibold text-gray-800">{boutiqueName}</p>
                 )}
@@ -288,7 +288,7 @@ export function RecuPrint({
                 </p>
               )}
               <p className="mt-3 text-center text-lg font-bold italic tracking-[0.3em] text-gray-300">
-                Dri Valé
+                Luxury Boutique
               </p>
             </div>
           </ModalBody>
@@ -297,7 +297,7 @@ export function RecuPrint({
               Fermer
             </Button>
             <Button
-              className="flex-1 bg-accent font-semibold text-white"
+              className="flex-1 bg-accent font-semibold text-black"
               onPress={printRecu}
             >
               🖨 Imprimer

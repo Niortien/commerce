@@ -141,7 +141,7 @@ export function SortiesView() {
               variant="flat"
               className={
                 typeFilter === f.key
-                  ? "cursor-pointer bg-accent font-semibold text-white"
+                  ? "cursor-pointer bg-accent font-semibold text-black"
                   : "cursor-pointer bg-[var(--color-surface-high)] text-text-muted"
               }
               onClick={() => setTypeFilter(f.key)}

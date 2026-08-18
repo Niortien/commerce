@@ -3,12 +3,12 @@
 import { motion } from "framer-motion";
 
 const GRID_ITEMS = [
-  { id: 1, src: "/images/dri_style/boutique-interieur-1.jpg", alt: "L'ambiance du shop — Dri Valé", tall: true },
-  { id: 2, src: "/images/dri_style/boutique-interieur-3.jpg", alt: "Pièces en boutique — Dri Valé", tall: false },
-  { id: 3, src: "/images/dri_style/client-sacs-drivale.jpg", alt: "Client Dri Valé — sortie boutique", tall: false },
+  { id: 1, src: "/images/dri_style/boutique-interieur-1.jpg", alt: "L'ambiance du shop — Luxury Boutique", tall: true },
+  { id: 2, src: "/images/dri_style/boutique-interieur-3.jpg", alt: "Pièces en boutique — Luxury Boutique", tall: false },
+  { id: 3, src: "/images/dri_style/client-sacs-drivale.jpg", alt: "Client Luxury Boutique — sortie boutique", tall: false },
   { id: 4, src: "/images/dri_style/look-selfie-lacoste.jpg", alt: "Look du jour — Lacoste x DSQUARED2", tall: false },
-  { id: 5, src: "/images/dri_style/boutique-sneakers.jpg", alt: "Boutique Dri Valé — mur sneakers", tall: true },
-  { id: 6, src: "/images/dri_style/dri_style6.jpeg", alt: "Style Dri Valé", tall: false },
+  { id: 5, src: "/images/dri_style/boutique-sneakers.jpg", alt: "Boutique Luxury Boutique — collection", tall: true },
+  { id: 6, src: "/images/dri_style/dri_style6.jpeg", alt: "Style Luxury Boutique", tall: false },
 ];
 
 function GridCell({
@@ -62,7 +62,7 @@ export function LookbookGrid() {
             <span style={{ color: "var(--v-lime)" }}>Shooting</span>
           </h2>
           <p className="max-w-xs text-right text-sm" style={{ color: "var(--v-muted)" }}>
-            Shot à Abidjan — Yopougon, Cocody, Plateau
+            Shot à Abidjan — Marcory, Cocody, Plateau
           </p>
         </div>
 

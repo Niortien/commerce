@@ -3,13 +3,13 @@
 import { motion } from "framer-motion";
 
 const WORDS = [
-  { text: "Classé.", gold: false },
-  { text: "Stylé.", gold: true },
-  { text: "De Yop.", gold: false },
+  { text: "Élégant.", gold: false },
+  { text: "Luxe.", gold: true },
+  { text: "Toujours.", gold: false },
 ];
 
 const STATS = [
-  { value: "200+", label: "Clients à Yop" },
+  { value: "4.6K", label: "Followers" },
   { value: "100+", label: "Références" },
   { value: "4.9★", label: "Note client" },
 ];
@@ -29,7 +29,7 @@ export function HomeBrandStatement() {
           className="font-[var(--font-display)] font-black uppercase leading-none"
           style={{ fontSize: "25vw", color: "rgba(240,180,41,0.04)" }}
         >
-          YOP
+          LUXURY
         </span>
       </div>
 
@@ -81,9 +81,9 @@ export function HomeBrandStatement() {
           viewport={{ once: true }}
           transition={{ delay: 0.45, duration: 0.6 }}
         >
-          Dri Val&eacute;, c&rsquo;est Yopougon qui s&rsquo;habille bien. Des fringues import&eacute;es, s&eacute;lectionn&eacute;es pour les vrais.
-          T-shirts, kicks, polos, cargos &mdash; tout ce qu&rsquo;il faut pour &ecirc;tre le plus class&eacute; de la commune.
-          On ne fait pas dans le g&eacute;n&eacute;rique.
+          Luxury Boutique, c&rsquo;est l&rsquo;&eacute;l&eacute;gance multi-marques &agrave; Marcory. V&ecirc;tements, maroquinerie,
+          chaussures et accessoires s&eacute;lectionn&eacute;s avec exigence, pour homme et femme &mdash; tout ce qu&rsquo;il faut
+          pour s&rsquo;habiller avec caract&egrave;re. On ne fait pas dans le g&eacute;n&eacute;rique.
         </motion.p>
 
         {/* Slogan officiel */}
@@ -113,7 +113,7 @@ export function HomeBrandStatement() {
           viewport={{ once: true }}
           transition={{ delay: 0.6 }}
         >
-          &ldquo;On est l&agrave;, fr&egrave;re. Yop City represent.&rdquo;
+          &ldquo;Be Luxury. Ici, on ne fait pas dans le compromis.&rdquo;
         </motion.blockquote>
 
         {/* Stats */}

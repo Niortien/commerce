@@ -7,14 +7,14 @@ const LOOKS = [
   {
     id: 1,
     src: "/images/dri_style/look-selfie-lacoste.jpg",
-    alt: "Client Dri Valé — look Lacoste",
+    alt: "Client Luxury Boutique — look Lacoste",
     pieces: ["T-shirt Lacoste", "Short DSQUARED2", "Sandales à carreaux"],
     tag: "Look du jour",
   },
   {
     id: 2,
     src: "/images/dri_style/client-sacs-drivale.jpg",
-    alt: "Client Dri Valé — sortie boutique",
+    alt: "Client Luxury Boutique — sortie boutique",
     pieces: ["Débardeur Off-White", "Cargo tie-dye"],
     tag: "Fresh out the shop",
   },
@@ -50,7 +50,7 @@ export function LookbookBehindScenes() {
           >
             Ils portent
             <br />
-            <span style={{ color: "var(--v-hot)" }}>Dri Valé</span>
+            <span style={{ color: "var(--v-hot)" }}>Luxury Boutique</span>
           </h2>
         </motion.div>
       </div>
@@ -134,7 +134,7 @@ export function LookbookBehindScenes() {
             >
               <img
                 src={photo.url}
-                alt={photo.nom ? `${photo.nom} — client Dri Valé` : "Client Dri Valé"}
+                alt={photo.nom ? `${photo.nom} — client Luxury Boutique` : "Client Luxury Boutique"}
                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
               {/* Gradient bas */}
@@ -151,7 +151,7 @@ export function LookbookBehindScenes() {
                 style={{ backgroundColor: "var(--v-gold)" }}
               >
                 <p className="text-[9px] font-black uppercase tracking-widest text-black">
-                  Client Dri Valé
+                  Client Luxury Boutique
                 </p>
               </div>
             </div>

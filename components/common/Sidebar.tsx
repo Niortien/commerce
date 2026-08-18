@@ -105,7 +105,7 @@ export function Sidebar() {
         <Link href="/" tabIndex={-1}>
           <Image
             src="/images/logo/logo.jpeg"
-            alt="Dri Valé"
+            alt="Luxury Boutique"
             height={48}
             width={160}
             className="h-12 w-auto object-contain"

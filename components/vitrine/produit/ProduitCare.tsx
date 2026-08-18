@@ -17,7 +17,7 @@ const CARE_SECTIONS = [
   {
     title: "Origine",
     content:
-      "Produits importés et sélectionnés avec soin par l'équipe Dri Valé. Chaque pièce est vérifiée pour son authenticité avant d'être mise en vente.",
+      "Produits importés et sélectionnés avec soin par l'équipe Luxury Boutique. Chaque pièce est vérifiée pour son authenticité avant d'être mise en vente.",
   },
   {
     title: "Retours",

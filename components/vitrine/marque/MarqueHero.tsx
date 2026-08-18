@@ -3,10 +3,10 @@
 import { motion } from "framer-motion";
 
 const WORDS = [
-  { text: "DRI VALÉ", size: "clamp(52px,10vw,120px)", accent: false },
+  { text: "LUXURY BOUTIQUE", size: "clamp(52px,10vw,120px)", accent: false },
   { text: "C'EST", size: "clamp(28px,5vw,56px)", accent: false },
-  { text: "YOP", size: "clamp(64px,12vw,140px)", accent: true },
-  { text: "CITY.", size: "clamp(64px,12vw,140px)", accent: false },
+  { text: "BE", size: "clamp(64px,12vw,140px)", accent: true },
+  { text: "LUXURY.", size: "clamp(64px,12vw,140px)", accent: false },
 ];
 
 export function MarqueHero() {
@@ -58,8 +58,8 @@ export function MarqueHero() {
           className="mt-8 max-w-sm text-base leading-relaxed"
           style={{ color: "var(--v-muted)" }}
         >
-          La boutique des jeunes class&eacute;s de Yopougon.
-          Fringues import&eacute;es, style garanti.
+          La boutique multi-marques de Marcory.
+          V&ecirc;tements et accessoires de luxe, authenticit&eacute; garantie.
         </motion.p>
       </div>
 
@@ -72,7 +72,7 @@ export function MarqueHero() {
         style={{ fontSize: "200px", color: "var(--v-s2)", userSelect: "none" }}
         aria-hidden
       >
-        Y
+        L
       </motion.p>
     </section>
   );

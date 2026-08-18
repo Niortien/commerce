@@ -4,7 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { getWhatsappUrl } from "@/lib/whatsapp";
 
-const waUrl = getWhatsappUrl("Allo Dri Valé, je veux voir vos nouveautés 🔥");
+const waUrl = getWhatsappUrl("Allo Luxury Boutique, je veux voir vos nouveautés ✨");
 
 export function HomeHero() {
   return (
@@ -43,7 +43,7 @@ export function HomeHero() {
                 className="h-1.5 w-1.5 rounded-full animate-pulse"
                 style={{ backgroundColor: "var(--v-hot)" }}
               />
-              Nouveaux drops disponibles
+              Nouvelles pièces disponibles
             </span>
           </motion.div>
 
@@ -61,7 +61,7 @@ export function HomeHero() {
                 color: "var(--v-text)",
               }}
             >
-              SOIS LE
+              BE
             </span>
             <span
               className="block"
@@ -71,7 +71,7 @@ export function HomeHero() {
                 textShadow: "0 0 60px rgba(240,180,41,0.3)",
               }}
             >
-              PLUS STYLÉ
+              LUXURY
             </span>
             <span
               className="block"
@@ -80,7 +80,7 @@ export function HomeHero() {
                 color: "var(--v-text)",
               }}
             >
-              DE YOP.
+              SANS COMPROMIS.
             </span>
           </motion.h1>
 
@@ -109,8 +109,8 @@ export function HomeHero() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
-            Vêtements, sneakers et accessoires importés. Directo depuis
-            Yopougon — <span style={{ color: "var(--v-text)", fontWeight: 600 }}>100% authentique.</span>
+            Vêtements, maroquineries, chaussures et accessoires de luxe. Multi-marques
+            à Marcory — <span style={{ color: "var(--v-text)", fontWeight: 600 }}>100% authentique.</span>
           </motion.p>
 
           {/* CTAs */}
@@ -152,7 +152,7 @@ export function HomeHero() {
             transition={{ delay: 0.75 }}
           >
             {[
-              { val: "200+", label: "clients à Yop" },
+              { val: "4.6K", label: "followers" },
               { val: "4.9★", label: "satisfaction" },
               { val: "24h",  label: "livraison locale" },
             ].map((s) => (
