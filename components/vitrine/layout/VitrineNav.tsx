@@ -1,16 +1,16 @@
-﻿"use client";
+"use client";
 
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useVitrineStore } from "@/stores/vitrineStore";
 
 const NAV_LINKS = [
-  { href: "/catalogue", label: "Catalogue" },
-  { href: "/lookbook",  label: "Le Style" },
-  { href: "/marque",    label: "La Marque" },
+  { href: "/catalogue", label: "Collection" },
+  { href: "/lookbook",  label: "Univers" },
+  { href: "/marque",    label: "Maison" },
 ];
 
 export function VitrineNav() {
@@ -20,114 +20,109 @@ export function VitrineNav() {
   const setCartOpen = useVitrineStore((s) => s.setCartOpen);
   const theme       = useVitrineStore((s) => s.theme);
   const toggleTheme = useVitrineStore((s) => s.toggleTheme);
-  const { scrollY } = useScroll();
-  const navBg = useTransform(scrollY, [0, 60], [0, 1]);
   const cartCount = cart.reduce((sum, i) => sum + i.quantite, 0);
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50">
-        <motion.div
-          className="absolute inset-0 border-b"
-          style={{
-            opacity: navBg,
-            backgroundColor: "var(--v-nav-bg)",
-            borderColor: "var(--v-nav-border)",
-            backdropFilter: "blur(16px)",
-          }}
+      {/* Logo — flottant en haut à gauche, pas de bandeau plein largeur */}
+      <Link
+        href="/"
+        aria-label="Luxury Boutique"
+        className="fixed left-5 top-5 z-50 flex h-11 items-center rounded-full border px-3 backdrop-blur-md md:left-6 md:top-6"
+        style={{ borderColor: "var(--v-nav-border)", backgroundColor: "var(--v-nav-bg)" }}
+      >
+        <Image
+          src="/images/logo/logo.jpeg"
+          alt="Luxury Boutique"
+          height={32}
+          width={104}
+          className="h-8 w-auto object-contain"
+          priority
         />
-        <div className="relative mx-auto flex h-16 max-w-7xl items-center justify-between px-5">
-          <Link href="/" aria-label="Luxury Boutique" className="shrink-0">
-            <Image
-              src="/images/logo/logo.jpeg"
-              alt="Luxury Boutique"
-              height={40}
-              width={130}
-              className="h-10 w-auto object-contain"
-              priority
-            />
-          </Link>
+      </Link>
 
-          <nav className="hidden items-center gap-8 md:flex">
-            {NAV_LINKS.map((l) => {
-              const active = pathname === l.href || (l.href !== "/" && pathname.startsWith(l.href));
-              return (
-                <Link
-                  key={l.href}
-                  href={l.href}
-                  className="relative text-[11px] font-bold uppercase tracking-[0.18em] transition-colors"
-                  style={{ color: active ? "var(--v-gold)" : "var(--v-muted)" }}
-                >
-                  {l.label}
-                  {active && (
-                    <motion.span
-                      layoutId="nav-indicator"
-                      className="absolute -bottom-1 left-0 right-0 h-px"
-                      style={{ backgroundColor: "var(--v-gold)" }}
-                    />
-                  )}
-                </Link>
-              );
-            })}
-          </nav>
-
-          <div className="flex items-center gap-1.5">
-
-            <button
-              onClick={toggleTheme}
-              className="flex h-9 w-9 items-center justify-center rounded-lg"
-              style={{ color: "var(--v-muted)" }}
-              aria-label="Thème"
+      {/* Nav desktop — capsule verticale flottante, superposée à droite */}
+      <nav
+        className="fixed right-6 top-1/2 z-50 hidden -translate-y-1/2 flex-col items-end gap-5 rounded-2xl border px-5 py-7 backdrop-blur-md md:flex"
+        style={{ borderColor: "var(--v-nav-border)", backgroundColor: "var(--v-nav-bg)" }}
+      >
+        {NAV_LINKS.map((l) => {
+          const active = pathname === l.href || (l.href !== "/" && pathname.startsWith(l.href));
+          return (
+            <Link
+              key={l.href}
+              href={l.href}
+              className="relative text-[11px] font-bold uppercase tracking-[0.18em] transition-colors"
+              style={{ color: active ? "var(--v-gold)" : "var(--v-muted)" }}
             >
-              {theme === "dark" ? (
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                  <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/>
-                  <line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-                  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/>
-                  <line x1="21" y1="12" x2="23" y2="12"/>
-                </svg>
-              ) : (
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-                </svg>
+              {l.label}
+              {active && (
+                <motion.span
+                  layoutId="nav-indicator"
+                  className="absolute -right-3 top-1/2 h-1 w-1 -translate-y-1/2 rounded-full"
+                  style={{ backgroundColor: "var(--v-gold)" }}
+                />
               )}
-            </button>
+            </Link>
+          );
+        })}
 
-            <button
-              onClick={() => setCartOpen(true)}
-              className="relative flex h-9 w-9 items-center justify-center rounded-lg"
-              style={{ color: "var(--v-muted)" }}
-              aria-label="Panier"
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
-                <line x1="3" y1="6" x2="21" y2="6"/>
-                <path d="M16 10a4 4 0 01-8 0"/>
-              </svg>
-              {cartCount > 0 && (
-                <span
-                  className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-black"
-                  style={{ backgroundColor: "var(--v-hot)", color: "#fff" }}
-                >
-                  {cartCount}
-                </span>
-              )}
-            </button>
+        <div className="h-px w-full" style={{ backgroundColor: "var(--v-nav-border)" }} />
 
-            <button
-              onClick={() => setOpen(true)}
-              className="flex h-9 w-9 items-center justify-center md:hidden"
-              style={{ color: "var(--v-muted)" }}
-              aria-label="Menu"
+        <button
+          onClick={toggleTheme}
+          className="flex h-8 w-8 items-center justify-center rounded-lg"
+          style={{ color: "var(--v-muted)" }}
+          aria-label="Thème"
+        >
+          {theme === "dark" ? (
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+              <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/>
+              <line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/>
+              <line x1="21" y1="12" x2="23" y2="12"/>
+            </svg>
+          ) : (
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          )}
+        </button>
+
+        <button
+          onClick={() => setCartOpen(true)}
+          className="relative flex h-8 w-8 items-center justify-center rounded-lg"
+          style={{ color: "var(--v-muted)" }}
+          aria-label="Panier"
+        >
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 01-8 0"/>
+          </svg>
+          {cartCount > 0 && (
+            <span
+              className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-black"
+              style={{ backgroundColor: "var(--v-hot)", color: "#fff" }}
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/>
-                <line x1="9" y1="18" x2="21" y2="18"/>
-              </svg>
-            </button>
-          </div>
-        </div>
-      </header>
+              {cartCount}
+            </span>
+          )}
+        </button>
+      </nav>
+
+      {/* Bouton menu mobile — flottant en haut à droite */}
+      <button
+        onClick={() => setOpen(true)}
+        className="fixed right-5 top-5 z-50 flex h-11 w-11 items-center justify-center rounded-full border backdrop-blur-md md:hidden"
+        style={{ borderColor: "var(--v-nav-border)", backgroundColor: "var(--v-nav-bg)", color: "var(--v-muted)" }}
+        aria-label="Menu"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="9" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
 
       <AnimatePresence>
         {open && (
