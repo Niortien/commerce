@@ -9,7 +9,6 @@ import {
   createProduit,
   deleteVariante,
   deleteProduit,
-  reassignProduitBoutique,
   removeProduitImage,
   updateProduit,
   updateVariante,
@@ -23,8 +22,7 @@ import { produitKeys } from "../query/produits-queries";
 export function useCreateProduit() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ body, boutiqueIds }: { body: CreateProduitBody; boutiqueIds?: string[] }) =>
-      createProduit(body, boutiqueIds),
+    mutationFn: (body: CreateProduitBody) => createProduit(body),
     onSuccess: async () => {
       await qc.invalidateQueries({ queryKey: produitKeys.all });
     },
@@ -39,17 +37,6 @@ export function useUpdateProduit(id: string) {
       await qc.invalidateQueries({ queryKey: produitKeys.all });
     },
     onError: (err) => toast.error((err as unknown as AppError).message ?? "Erreur lors de la mise à jour"),
-  });
-}
-
-export function useReassignProduitBoutique(id: string) {
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: (boutiqueId: string | null) => reassignProduitBoutique(id, boutiqueId),
-    onSuccess: async () => {
-      await qc.invalidateQueries({ queryKey: produitKeys.all });
-    },
-    onError: (err) => toast.error((err as unknown as AppError).message ?? "Erreur lors de la réattribution"),
   });
 }
 

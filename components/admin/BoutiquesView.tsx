@@ -1,144 +1,118 @@
 "use client";
 
-import { useState } from "react";
-import {
-  Button,
-  Input,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
-  useDisclosure,
-} from "@heroui/react";
+import { useEffect } from "react";
+import { Button, Chip, Input, Skeleton } from "@heroui/react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useBoutiques } from "@/features/boutiques/query/boutiques-queries";
-import {
-  useCreateBoutique,
-  useDeleteBoutique,
-  useUpdateBoutique,
-} from "@/features/boutiques/mutation/boutiques-mutations";
-import type { Boutique } from "@/types";
+import { useMyBoutique } from "@/features/boutiques/query/boutiques-queries";
+import { useUpdateMyBoutique } from "@/features/boutiques/mutation/boutiques-mutations";
+import { StatutAbonnement, StatutBoutique } from "@/types";
 
 const schema = z.object({
   nom: z.string().min(1, "Requis"),
-  adresse: z.string().optional(),
   ville: z.string().optional(),
+  adresse: z.string().optional(),
   whatsapp: z.string().optional(),
+  email: z.string().email("Email invalide").optional().or(z.literal("")),
+  telephone: z.string().optional(),
 });
 type FormData = z.infer<typeof schema>;
 
-export function BoutiquesView() {
-  const { data: res, isLoading } = useBoutiques();
-  const boutiques = res?.data ?? [];
-  const createMutation = useCreateBoutique();
-  const updateMutation = useUpdateBoutique();
-  const deleteMutation = useDeleteBoutique();
+const STATUT_LABELS: Record<StatutBoutique, { label: string; color: "success" | "warning" | "danger" | "default" }> = {
+  [StatutBoutique.EN_ATTENTE]: { label: "En attente", color: "default" },
+  [StatutBoutique.ESSAI]: { label: "Essai gratuit", color: "warning" },
+  [StatutBoutique.ACTIF]: { label: "Actif", color: "success" },
+  [StatutBoutique.SUSPENDU]: { label: "Suspendu", color: "danger" },
+  [StatutBoutique.ARCHIVE]: { label: "Archivé", color: "default" },
+};
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [editing, setEditing] = useState<Boutique | null>(null);
+/**
+ * Profil de SA boutique, pour l'ADMIN. La gestion transverse de toutes les
+ * boutiques (créer un tenant, changer son abonnement) appartient
+ * exclusivement au Super Admin (/super-admin/boutiques).
+ */
+export function BoutiquesView() {
+  const { data: res, isLoading } = useMyBoutique();
+  const boutique = res?.data;
+  const updateMutation = useUpdateMyBoutique();
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
   });
 
-  function openCreate() {
-    setEditing(null);
-    reset({ nom: "", adresse: "", ville: "", whatsapp: "" });
-    onOpen();
-  }
-
-  function openEdit(b: Boutique) {
-    setEditing(b);
-    reset({ nom: b.nom, adresse: b.adresse ?? "", ville: b.ville ?? "", whatsapp: b.whatsapp ?? "" });
-    onOpen();
-  }
+  useEffect(() => {
+    if (boutique) {
+      reset({
+        nom: boutique.nom,
+        ville: boutique.ville ?? "",
+        adresse: boutique.adresse ?? "",
+        whatsapp: boutique.whatsapp ?? "",
+        email: boutique.email ?? "",
+        telephone: boutique.telephone ?? "",
+      });
+    }
+  }, [boutique, reset]);
 
   const onSubmit = handleSubmit(async (data) => {
-    if (editing) {
-      await updateMutation.mutateAsync({ id: editing.id, body: data });
-    } else {
-      await createMutation.mutateAsync(data);
-    }
-    onClose();
+    await updateMutation.mutateAsync({
+      ...data,
+      email: data.email || undefined,
+    });
   });
+
+  if (isLoading || !boutique) {
+    return (
+      <div className="p-6">
+        <Skeleton className="mb-4 h-8 w-48 rounded-lg" />
+        <Skeleton className="h-64 w-full max-w-xl rounded-lg" />
+      </div>
+    );
+  }
+
+  const statut = STATUT_LABELS[boutique.statut];
+  const abonnement = boutique.abonnementActif;
 
   return (
     <div className="p-6">
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-text">Boutiques</h1>
-        <Button className="bg-accent text-black" onPress={openCreate}>
-          + Nouvelle boutique
-        </Button>
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-text">Ma boutique</h1>
+        <p className="text-sm text-text-muted">
+          Informations de votre boutique et statut de votre abonnement à la plateforme.
+        </p>
       </div>
 
-      <Table aria-label="Liste des boutiques">
-        <TableHeader>
-          <TableColumn>Nom</TableColumn>
-          <TableColumn>Ville</TableColumn>
-          <TableColumn>Adresse</TableColumn>
-          <TableColumn>WhatsApp</TableColumn>
-          <TableColumn>Actions</TableColumn>
-        </TableHeader>
-        <TableBody isLoading={isLoading} emptyContent="Aucune boutique">
-          {boutiques.map((b) => (
-            <TableRow key={b.id}>
-              <TableCell className="font-medium">{b.nom}</TableCell>
-              <TableCell>{b.ville ?? "—"}</TableCell>
-              <TableCell>{b.adresse ?? "—"}</TableCell>
-              <TableCell>{b.whatsapp ?? "—"}</TableCell>
-              <TableCell>
-                <div className="flex gap-2">
-                  <Button size="sm" variant="flat" onPress={() => openEdit(b)}>
-                    Modifier
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="flat"
-                    color="danger"
-                    isLoading={deleteMutation.isPending}
-                    onPress={() => deleteMutation.mutate(b.id)}
-                  >
-                    Supprimer
-                  </Button>
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      <div className="mb-6 flex flex-wrap items-center gap-3 rounded-lg border border-border bg-surface p-4">
+        <Chip color={statut.color} variant="flat">{statut.label}</Chip>
+        {abonnement && (
+          <span className="text-sm text-text-muted">
+            Plan <strong className="text-text">{abonnement.plan}</strong> — expire le{" "}
+            <strong className="text-text">
+              {new Date(abonnement.dateFin).toLocaleDateString("fr-FR")}
+            </strong>
+            {abonnement.statut !== StatutAbonnement.ACTIF && (
+              <Chip size="sm" color="danger" variant="flat" className="ml-2">
+                {abonnement.statut}
+              </Chip>
+            )}
+          </span>
+        )}
+        {!abonnement && (
+          <span className="text-sm text-text-muted">Aucun abonnement enregistré — contactez le support.</span>
+        )}
+      </div>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalContent>
-          <ModalHeader>{editing ? "Modifier la boutique" : "Nouvelle boutique"}</ModalHeader>
-          <ModalBody>
-            <div className="flex flex-col gap-3">
-              <Input label="Nom" variant="bordered" isInvalid={!!errors.nom} errorMessage={errors.nom?.message} {...register("nom")} />
-              <Input label="Ville" variant="bordered" {...register("ville")} />
-              <Input label="Adresse" variant="bordered" {...register("adresse")} />
-              <Input label="WhatsApp" variant="bordered" placeholder="+221 77 000 00 00" {...register("whatsapp")} />
-            </div>
-          </ModalBody>
-          <ModalFooter>
-            <Button variant="light" onPress={onClose}>Annuler</Button>
-            <Button
-              className="bg-accent text-black"
-              isLoading={createMutation.isPending || updateMutation.isPending}
-              onPress={() => void onSubmit()}
-            >
-              {editing ? "Enregistrer" : "Créer"}
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <form onSubmit={(e) => void onSubmit(e)} className="flex max-w-xl flex-col gap-3 rounded-lg border border-border bg-surface p-4">
+        <Input label="Nom de la boutique" variant="bordered" isInvalid={!!errors.nom} errorMessage={errors.nom?.message} {...register("nom")} />
+        <Input label="Ville" variant="bordered" {...register("ville")} />
+        <Input label="Adresse" variant="bordered" {...register("adresse")} />
+        <Input label="WhatsApp" variant="bordered" placeholder="+225 07 00 00 00 00" {...register("whatsapp")} />
+        <Input label="Email de contact" variant="bordered" isInvalid={!!errors.email} errorMessage={errors.email?.message} {...register("email")} />
+        <Input label="Téléphone" variant="bordered" {...register("telephone")} />
+        <Button type="submit" className="mt-2 w-fit bg-accent text-black" isLoading={updateMutation.isPending}>
+          Enregistrer
+        </Button>
+      </form>
     </div>
   );
 }

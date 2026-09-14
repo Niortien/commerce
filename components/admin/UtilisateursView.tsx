@@ -10,8 +10,6 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-  Select,
-  SelectItem,
   Table,
   TableBody,
   TableCell,
@@ -20,7 +18,7 @@ import {
   TableRow,
   useDisclosure,
 } from "@heroui/react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useUsers } from "@/features/users/query/users-queries";
@@ -29,31 +27,29 @@ import {
   useDeleteUser,
   useUpdateUser,
 } from "@/features/users/mutation/users-mutations";
-import { useBoutiques } from "@/features/boutiques/query/boutiques-queries";
 import type { AppUser } from "@/features/users/api/users-api";
 
 const createSchema = z.object({
   email: z.string().email("Email invalide"),
-  password: z.string().min(6, "6 caractères minimum"),
-  role: z.enum(["ADMIN", "VENDEUR"]),
-  boutiqueId: z.string().nullable().optional(),
+  password: z.string().min(8, "8 caractères minimum"),
 });
 
 const updateSchema = z.object({
   email: z.string().email("Email invalide").optional(),
-  password: z.string().min(6).optional().or(z.literal("")),
-  role: z.enum(["ADMIN", "VENDEUR"]).optional(),
-  boutiqueId: z.string().nullable().optional(),
+  password: z.string().min(8).optional().or(z.literal("")),
 });
 
 type CreateFormData = z.infer<typeof createSchema>;
 type UpdateFormData = z.infer<typeof updateSchema>;
 
+/**
+ * Gestion des caissiers de SA boutique par l'ADMIN. Le rôle est toujours
+ * CAISSIER — seul le Super Admin peut créer un compte ADMIN (voir la
+ * plateforme Super Admin, /super-admin/utilisateurs).
+ */
 export function UtilisateursView() {
   const { data: usersRes, isLoading } = useUsers();
-  const users = usersRes?.data ?? [];
-  const { data: boutiquesRes } = useBoutiques();
-  const boutiques = boutiquesRes?.data ?? [];
+  const users = (usersRes?.data ?? []).filter((u) => u.role === "CAISSIER");
 
   const createMutation = useCreateUser();
   const updateMutation = useUpdateUser();
@@ -67,21 +63,18 @@ export function UtilisateursView() {
 
   function openCreate() {
     setEditing(null);
-    createForm.reset({ email: "", password: "", role: "VENDEUR", boutiqueId: null });
+    createForm.reset({ email: "", password: "" });
     onOpen();
   }
 
   function openEdit(u: AppUser) {
     setEditing(u);
-    updateForm.reset({ email: u.email, password: "", role: u.role, boutiqueId: u.boutiqueId });
+    updateForm.reset({ email: u.email, password: "" });
     onOpen();
   }
 
   const onSubmitCreate = createForm.handleSubmit(async (data) => {
-    await createMutation.mutateAsync({
-      ...data,
-      boutiqueId: data.boutiqueId || null,
-    });
+    await createMutation.mutateAsync(data);
     onClose();
   });
 
@@ -90,8 +83,6 @@ export function UtilisateursView() {
     const body = {
       ...(data.email ? { email: data.email } : {}),
       ...(data.password ? { password: data.password } : {}),
-      ...(data.role ? { role: data.role } : {}),
-      boutiqueId: data.boutiqueId || null,
     };
     await updateMutation.mutateAsync({ id: editing.id, body });
     onClose();
@@ -100,29 +91,34 @@ export function UtilisateursView() {
   return (
     <div className="p-6">
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-text">Utilisateurs</h1>
+        <div>
+          <h1 className="text-2xl font-bold text-text">Caissiers</h1>
+          <p className="text-sm text-text-muted">
+            Créez des accès pour votre équipe de caisse. Chaque caissier n&apos;a accès qu&apos;à votre boutique.
+          </p>
+        </div>
         <Button className="bg-accent text-black" onPress={openCreate}>
-          + Nouvel utilisateur
+          + Nouveau caissier
         </Button>
       </div>
 
-      <Table aria-label="Liste des utilisateurs">
+      <Table aria-label="Liste des caissiers">
         <TableHeader>
           <TableColumn>Email</TableColumn>
           <TableColumn>Rôle</TableColumn>
-          <TableColumn>Boutique</TableColumn>
+          <TableColumn>Créé le</TableColumn>
           <TableColumn>Actions</TableColumn>
         </TableHeader>
-        <TableBody isLoading={isLoading} emptyContent="Aucun utilisateur">
+        <TableBody isLoading={isLoading} emptyContent="Aucun caissier pour l'instant">
           {users.map((u) => (
             <TableRow key={u.id}>
               <TableCell>{u.email}</TableCell>
               <TableCell>
-                <Chip size="sm" color={u.role === "ADMIN" ? "warning" : "default"} variant="flat">
-                  {u.role}
+                <Chip size="sm" color="default" variant="flat">
+                  Caissier
                 </Chip>
               </TableCell>
-              <TableCell>{u.boutique?.nom ?? "—"}</TableCell>
+              <TableCell>{new Date(u.createdAt).toLocaleDateString("fr-FR")}</TableCell>
               <TableCell>
                 <div className="flex gap-2">
                   <Button size="sm" variant="flat" onPress={() => openEdit(u)}>
@@ -135,7 +131,7 @@ export function UtilisateursView() {
                     isLoading={deleteMutation.isPending}
                     onPress={() => deleteMutation.mutate(u.id)}
                   >
-                    Supprimer
+                    Retirer l&apos;accès
                   </Button>
                 </div>
               </TableCell>
@@ -148,34 +144,24 @@ export function UtilisateursView() {
         <ModalContent>
           {editing ? (
             <>
-              <ModalHeader>Modifier l&apos;utilisateur</ModalHeader>
+              <ModalHeader>Modifier le caissier</ModalHeader>
               <ModalBody>
                 <div className="flex flex-col gap-3">
-                  <Input label="Email" variant="bordered" isInvalid={!!updateForm.formState.errors.email} errorMessage={updateForm.formState.errors.email?.message} {...updateForm.register("email")} />
-                  <Input label="Nouveau mot de passe" type="password" variant="bordered" placeholder="Laisser vide pour ne pas changer" {...updateForm.register("password")} />
-                  <Controller
-                    name="role"
-                    control={updateForm.control}
-                    render={({ field }) => (
-                      <Select label="Rôle" variant="bordered" selectedKeys={field.value ? [field.value] : []} onSelectionChange={(keys) => field.onChange(Array.from(keys)[0])}>
-                        <SelectItem key="ADMIN">ADMIN</SelectItem>
-                        <SelectItem key="VENDEUR">VENDEUR</SelectItem>
-                      </Select>
-                    )}
+                  <Input
+                    label="Email"
+                    variant="bordered"
+                    isInvalid={!!updateForm.formState.errors.email}
+                    errorMessage={updateForm.formState.errors.email?.message}
+                    {...updateForm.register("email")}
                   />
-                  <Controller
-                    name="boutiqueId"
-                    control={updateForm.control}
-                    render={({ field }) => (
-                      <Select label="Boutique" variant="bordered" selectedKeys={field.value ? [field.value] : []} onSelectionChange={(keys) => field.onChange(Array.from(keys)[0] ?? null)}>
-                        <>
-                          <SelectItem key="">Aucune boutique</SelectItem>
-                          {boutiques.map((b) => (
-                            <SelectItem key={b.id}>{b.nom}</SelectItem>
-                          ))}
-                        </>
-                      </Select>
-                    )}
+                  <Input
+                    label="Nouveau mot de passe"
+                    type="password"
+                    variant="bordered"
+                    placeholder="Laisser vide pour ne pas changer"
+                    isInvalid={!!updateForm.formState.errors.password}
+                    errorMessage={updateForm.formState.errors.password?.message}
+                    {...updateForm.register("password")}
                   />
                 </div>
               </ModalBody>
@@ -188,34 +174,23 @@ export function UtilisateursView() {
             </>
           ) : (
             <>
-              <ModalHeader>Nouvel utilisateur</ModalHeader>
+              <ModalHeader>Nouveau caissier</ModalHeader>
               <ModalBody>
                 <div className="flex flex-col gap-3">
-                  <Input label="Email" variant="bordered" isInvalid={!!createForm.formState.errors.email} errorMessage={createForm.formState.errors.email?.message} {...createForm.register("email")} />
-                  <Input label="Mot de passe" type="password" variant="bordered" isInvalid={!!createForm.formState.errors.password} errorMessage={createForm.formState.errors.password?.message} {...createForm.register("password")} />
-                  <Controller
-                    name="role"
-                    control={createForm.control}
-                    render={({ field }) => (
-                      <Select label="Rôle" variant="bordered" selectedKeys={field.value ? [field.value] : []} onSelectionChange={(keys) => field.onChange(Array.from(keys)[0])}>
-                        <SelectItem key="ADMIN">ADMIN</SelectItem>
-                        <SelectItem key="VENDEUR">VENDEUR</SelectItem>
-                      </Select>
-                    )}
+                  <Input
+                    label="Email"
+                    variant="bordered"
+                    isInvalid={!!createForm.formState.errors.email}
+                    errorMessage={createForm.formState.errors.email?.message}
+                    {...createForm.register("email")}
                   />
-                  <Controller
-                    name="boutiqueId"
-                    control={createForm.control}
-                    render={({ field }) => (
-                      <Select label="Boutique" variant="bordered" selectedKeys={field.value ? [field.value] : []} onSelectionChange={(keys) => field.onChange(Array.from(keys)[0] ?? null)}>
-                        <>
-                          <SelectItem key="">Aucune boutique</SelectItem>
-                          {boutiques.map((b) => (
-                            <SelectItem key={b.id}>{b.nom}</SelectItem>
-                          ))}
-                        </>
-                      </Select>
-                    )}
+                  <Input
+                    label="Mot de passe"
+                    type="password"
+                    variant="bordered"
+                    isInvalid={!!createForm.formState.errors.password}
+                    errorMessage={createForm.formState.errors.password?.message}
+                    {...createForm.register("password")}
                   />
                 </div>
               </ModalBody>

@@ -10,7 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 import { apiPost } from "@/lib/api";
 import { loginSchema, type LoginInput } from "@/lib/validators/auth.schema";
-import { useAuthStore } from "@/stores/authStore";
+import { useAuthStore, type AuthUser } from "@/stores/authStore";
 import type { AppError } from "@/types";
 import { Role } from "@/types";
 
@@ -22,9 +22,11 @@ export function LoginView() {
   const setUser = useAuthStore((state) => state.setUser);
   const token = useAuthStore((state) => state.accessToken);
 
+  const user = useAuthStore((state) => state.user);
+
   useEffect(() => {
-    if (token) router.replace("/stock");
-  }, [token, router]);
+    if (token) router.replace(user?.role === Role.SUPER_ADMIN ? "/super-admin/boutiques" : "/stock");
+  }, [token, user?.role, router]);
   const {
     register,
     handleSubmit,
@@ -40,16 +42,30 @@ export function LoginView() {
       const response = await apiPost<{
         accessToken: string;
         refreshToken: string;
-        user: { id: string; email: string; role: string; boutiqueId?: string | null; boutiqueName?: string | null };
+        user: {
+          id: string;
+          email: string;
+          role: string;
+          boutiqueId?: string | null;
+          boutiqueName?: string | null;
+          boutiqueStatut?: string | null;
+        };
       }, LoginInput>("/auth/login", values);
 
-      const { accessToken, refreshToken, user } = response.data;
-      const role = user.role as Role;
+      const { accessToken, refreshToken, user: loggedInUser } = response.data;
+      const role = loggedInUser.role as Role;
 
       setTokens(accessToken, refreshToken);
-      setUser({ id: user.id, email: user.email, role, boutiqueId: user.boutiqueId ?? null, boutiqueName: user.boutiqueName ?? null });
+      setUser({
+        id: loggedInUser.id,
+        email: loggedInUser.email,
+        role,
+        boutiqueId: loggedInUser.boutiqueId ?? null,
+        boutiqueName: loggedInUser.boutiqueName ?? null,
+        boutiqueStatut: (loggedInUser.boutiqueStatut as AuthUser["boutiqueStatut"]) ?? null,
+      });
       toast.success("Connexion réussie");
-      router.push("/stock");
+      router.push(role === Role.SUPER_ADMIN ? "/super-admin/boutiques" : "/stock");
     } catch (error) {
       const message = (error as AppError)?.message ?? "Connexion impossible";
       toast.error(message);
@@ -98,6 +114,12 @@ export function LoginView() {
         <Link href="/forgot-password" className="block text-center text-sm text-default-500 hover:underline">
           Mot de passe oublié ?
         </Link>
+        <p className="text-center text-sm text-default-500">
+          Votre boutique n&apos;a pas encore de compte ?{" "}
+          <Link href="/inscription" className="font-semibold text-accent hover:underline">
+            Inscrivez-la
+          </Link>
+        </p>
       </div>
     </section>
   );

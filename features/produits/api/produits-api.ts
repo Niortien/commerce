@@ -52,26 +52,12 @@ export interface AddVarianteBody {
   couleur: string;
   quantiteStock?: number;
   seuilAlerte?: number;
-  boutiqueId?: string;
 }
 
 export interface UpdateVarianteBody {
   taille?: string;
   couleur?: string;
   seuilAlerte?: number;
-  boutiqueId?: string | null;
-}
-
-export interface ReassignBoutiqueConflict {
-  varianteId: string;
-  taille: string;
-  couleur: string;
-}
-
-export interface ReassignBoutiqueResult {
-  movedCount: number;
-  conflicts: ReassignBoutiqueConflict[];
-  produit: Produit;
 }
 
 export interface AdjustStockBody {
@@ -89,19 +75,13 @@ export const getProduitById = (id: string) =>
 export const getProduitMouvements = (id: string, params?: ProduitMouvementsParams) =>
   apiGet<MouvementStock[]>(`/produits/${id}/mouvements`, params as Record<string, unknown> | undefined);
 
-export const createProduit = (body: CreateProduitBody, boutiqueIds?: string[]) =>
-  apiPost<Produit, CreateProduitBody>(
-    "/produits",
-    body,
-    boutiqueIds && boutiqueIds.length > 0 ? { boutiqueIds: boutiqueIds.join(",") } : undefined,
-  );
+// Le produit est toujours créé dans la boutique de l'utilisateur connecté
+// (isolation stricte par tenant côté backend — plus de catalogue partagé).
+export const createProduit = (body: CreateProduitBody) =>
+  apiPost<Produit, CreateProduitBody>("/produits", body);
 
 export const updateProduit = (id: string, body: UpdateProduitBody) =>
   apiPatch<Produit, UpdateProduitBody>(`/produits/${id}`, body);
-
-// Réattribue toutes les variantes du produit à une boutique (ou null = catalogue global)
-export const reassignProduitBoutique = (id: string, boutiqueId: string | null) =>
-  apiPatch<ReassignBoutiqueResult, { boutiqueId: string | null }>(`/produits/${id}/boutique`, { boutiqueId });
 
 export const addVarianteToProduit = (produitId: string, body: AddVarianteBody) =>
   apiPost<Variante, AddVarianteBody>(`/produits/${produitId}/variantes`, body);

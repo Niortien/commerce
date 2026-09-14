@@ -24,7 +24,6 @@ import {
 import { cn } from "@/lib/utils";
 import { useLogout } from "@/features/auth/mutation/auth-mutations";
 import { useAuthStore } from "@/stores/authStore";
-import { AdminBoutiqueSelect } from "./AdminBoutiqueSelect";
 import type { ComponentType } from "react";
 import type { IconProps } from "@tabler/icons-react";
 
@@ -47,8 +46,8 @@ const ITEMS: NavItem[] = [
 ];
 
 const ADMIN_ITEMS: NavItem[] = [
-  { href: "/admin/boutiques",      label: "Boutiques",     icon: IconBuildingStore },
-  { href: "/admin/utilisateurs",   label: "Utilisateurs",  icon: IconUsers },
+  { href: "/admin/boutiques",      label: "Ma boutique",   icon: IconBuildingStore },
+  { href: "/admin/utilisateurs",   label: "Caissiers",     icon: IconUsers },
   { href: "/admin/categories",     label: "Catégories",    icon: IconCategory2 },
   { href: "/admin/photos-clients", label: "Photos clients", icon: IconPhoto },
 ];
@@ -117,13 +116,10 @@ export function Sidebar() {
         <StarMotif />
       </div>
 
-      {/* Sélecteur boutique admin */}
-      {isAdmin && <AdminBoutiqueSelect />}
-
-      {/* Badge boutique vendeur */}
-      {!isAdmin && user?.boutiqueId && (
-        <div className="rounded-md border border-[var(--color-border-active)]/40 bg-white/[0.07] px-3 py-1.5 text-xs font-semibold text-white">
-          Ma boutique
+      {/* Nom de la boutique du compte connecté */}
+      {user?.boutiqueName && (
+        <div className="truncate rounded-md border border-[var(--color-border-active)]/40 bg-white/[0.07] px-3 py-1.5 text-xs font-semibold text-white">
+          {user.boutiqueName}
         </div>
       )}
 

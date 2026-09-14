@@ -1,15 +1,13 @@
 "use client";
 
 import { useAuthStore } from "@/stores/authStore";
-import { useAdminStore } from "@/stores/adminStore";
 
+/**
+ * Chaque ADMIN et CAISSIER appartient désormais à une seule boutique
+ * (modèle multi-tenant) : il n'existe plus de vue "toutes les boutiques"
+ * — le backend force de toute façon la boutique du JWT sur ces endpoints.
+ */
 export function useBoutiqueId(): string | undefined {
   const user = useAuthStore((s) => s.user);
-  const adminBoutiqueId = useAdminStore((s) => s.currentBoutiqueId);
-
-  if (!user) return undefined;
-  if (user.role === "ADMIN") {
-    return adminBoutiqueId === "all" ? undefined : adminBoutiqueId;
-  }
-  return user.boutiqueId ?? undefined;
+  return user?.boutiqueId ?? undefined;
 }

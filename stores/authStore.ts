@@ -1,13 +1,14 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import type { Role } from "@/types";
+import type { Role, StatutBoutique } from "@/types";
 
-interface AuthUser {
+export interface AuthUser {
   id: string;
   email: string;
   role: Role;
   boutiqueId: string | null;
   boutiqueName: string | null;
+  boutiqueStatut?: StatutBoutique | null;
 }
 
 interface AuthState {

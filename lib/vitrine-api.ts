@@ -22,6 +22,14 @@ export interface VitrineProduitParams {
   enPromo?: boolean;
 }
 
+/**
+ * Chaque boutique a désormais son propre catalogue isolé (modèle
+ * multi-tenant) : la vitrine publique doit préciser QUELLE boutique elle
+ * montre. Configurez NEXT_PUBLIC_VITRINE_BOUTIQUE_SLUG avec le slug de la
+ * boutique à afficher (voir /super-admin/boutiques pour le retrouver).
+ */
+const VITRINE_BOUTIQUE_SLUG = process.env.NEXT_PUBLIC_VITRINE_BOUTIQUE_SLUG?.trim() || undefined;
+
 // Forme réelle de l'enveloppe backend (TransformInterceptor)
 export interface VitrinePageResponse<T> {
   data: T[];
@@ -45,7 +53,7 @@ export const getVitrineProduits = (
 ): Promise<VitrinePageResponse<Produit>> =>
   publicApi
     .get<VitrinePageResponse<Produit>>("/produits", {
-      params: { ...params, isActif: true },
+      params: { ...params, isActif: true, boutiqueSlug: VITRINE_BOUTIQUE_SLUG },
     })
     .then((r) => r.data);
 
@@ -53,7 +61,11 @@ export const getVitrineProduit = (id: string): Promise<VitrineSingleResponse<Pro
   publicApi.get<VitrineSingleResponse<Produit>>(`/produits/${id}`).then((r) => r.data);
 
 export const getVitrineCategories = (): Promise<VitrineSingleResponse<Categorie[]>> =>
-  publicApi.get<VitrineSingleResponse<Categorie[]>>("/produits/categories").then((r) => r.data);
+  publicApi
+    .get<VitrineSingleResponse<Categorie[]>>("/produits/categories", {
+      params: { boutiqueSlug: VITRINE_BOUTIQUE_SLUG },
+    })
+    .then((r) => r.data);
 
 export interface UploadLookbookPhotoBody {
   photo: string; // data URL base64

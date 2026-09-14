@@ -1,24 +1,19 @@
-import { apiDelete, apiGet, apiPatch, apiPost } from "@/lib/api";
+import { apiGet, apiPatch } from "@/lib/api";
 import type { Boutique } from "@/types";
 
-export interface CreateBoutiqueBody {
-  nom: string;
+export interface UpdateMyBoutiqueBody {
+  nom?: string;
   adresse?: string;
   ville?: string;
   whatsapp?: string;
+  email?: string;
+  telephone?: string;
+  logoUrl?: string;
 }
 
-export const getBoutiques = () =>
-  apiGet<Boutique[]>("/boutiques");
+/** Profil de la boutique de l'ADMIN/CAISSIER connecté. */
+export const getMyBoutique = () =>
+  apiGet<Boutique>("/boutiques/me");
 
-export const getBoutiqueById = (id: string) =>
-  apiGet<Boutique>(`/boutiques/${id}`);
-
-export const createBoutique = (body: CreateBoutiqueBody) =>
-  apiPost<Boutique, CreateBoutiqueBody>("/boutiques", body);
-
-export const updateBoutique = (id: string, body: Partial<CreateBoutiqueBody>) =>
-  apiPatch<Boutique, Partial<CreateBoutiqueBody>>(`/boutiques/${id}`, body);
-
-export const deleteBoutique = (id: string) =>
-  apiDelete<void>(`/boutiques/${id}`);
+export const updateMyBoutique = (body: UpdateMyBoutiqueBody) =>
+  apiPatch<Boutique, UpdateMyBoutiqueBody>("/boutiques/me", body);

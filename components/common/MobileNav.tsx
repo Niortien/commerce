@@ -28,9 +28,6 @@ import {
 import { cn } from "@/lib/utils";
 import { useLogout } from "@/features/auth/mutation/auth-mutations";
 import { useAuthStore } from "@/stores/authStore";
-import { useAdminStore } from "@/stores/adminStore";
-import { useBoutiques } from "@/features/boutiques/query/boutiques-queries";
-import { AdminBoutiqueSelect } from "./AdminBoutiqueSelect";
 import type { ComponentType } from "react";
 import type { IconProps } from "@tabler/icons-react";
 
@@ -53,25 +50,19 @@ const ITEMS: NavItem[] = [
 ];
 
 const ADMIN_ITEMS: NavItem[] = [
-  { href: "/admin/boutiques",      label: "Boutiques",     icon: IconBuildingStore },
-  { href: "/admin/utilisateurs",   label: "Utilisateurs",  icon: IconUsers },
+  { href: "/admin/boutiques",      label: "Ma boutique",   icon: IconBuildingStore },
+  { href: "/admin/utilisateurs",   label: "Caissiers",     icon: IconUsers },
   { href: "/admin/categories",     label: "Catégories",    icon: IconCategory2 },
   { href: "/admin/photos-clients", label: "Photos clients", icon: IconPhoto },
 ];
 
-function AdminBoutiqueBadge() {
-  const { currentBoutiqueId } = useAdminStore();
-  const { data: boutiquesRes } = useBoutiques();
-  const boutiques = boutiquesRes?.data ?? [];
-
-  const label =
-    currentBoutiqueId === "all"
-      ? "Toutes"
-      : (boutiques.find((b) => b.id === currentBoutiqueId)?.nom ?? "...");
+function BoutiqueBadge() {
+  const boutiqueName = useAuthStore((s) => s.user?.boutiqueName);
+  if (!boutiqueName) return null;
 
   return (
     <span className="max-w-[120px] truncate rounded-full border border-accent/40 bg-accent/10 px-2.5 py-0.5 text-[11px] font-bold text-accent">
-      {label}
+      {boutiqueName}
     </span>
   );
 }
@@ -125,7 +116,7 @@ export function MobileNav() {
               priority
             />
           </div>
-          {isAdmin && <AdminBoutiqueBadge />}
+          <BoutiqueBadge />
         </div>
         <button
           type="button"
@@ -176,11 +167,9 @@ export function MobileNav() {
                 </button>
               </div>
 
-              {isAdmin && <AdminBoutiqueSelect />}
-
-              {!isAdmin && user?.boutiqueId && (
-                <div className="rounded-md border border-accent/30 bg-accent/[0.07] px-3 py-1.5 text-xs font-semibold text-accent">
-                  Ma boutique
+              {user?.boutiqueName && (
+                <div className="truncate rounded-md border border-accent/30 bg-accent/[0.07] px-3 py-1.5 text-xs font-semibold text-accent">
+                  {user.boutiqueName}
                 </div>
               )}
 

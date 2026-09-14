@@ -6,12 +6,8 @@ import { Spinner } from "@heroui/react";
 import { useAuthStore } from "@/stores/authStore";
 import { Role } from "@/types";
 
-/**
- * Protège la plateforme boutique (ADMIN/CAISSIER). Un SUPER_ADMIN n'a pas
- * de boutique et est redirigé vers sa propre plateforme (/super-admin) —
- * voir SuperAdminGuard pour l'inverse.
- */
-export function AuthGuard({ children }: { children: React.ReactNode }) {
+/** Protège la plateforme Super Admin : réservée au rôle SUPER_ADMIN. */
+export function SuperAdminGuard({ children }: { children: React.ReactNode }) {
   const token = useAuthStore((s) => s.accessToken);
   const role = useAuthStore((s) => s.user?.role);
   const router = useRouter();
@@ -19,11 +15,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     setHydrated(useAuthStore.persist.hasHydrated());
-
-    const unsub = useAuthStore.persist.onFinishHydration(() => {
-      setHydrated(true);
-    });
-
+    const unsub = useAuthStore.persist.onFinishHydration(() => setHydrated(true));
     return unsub;
   }, []);
 
@@ -33,12 +25,12 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
       router.replace("/login");
       return;
     }
-    if (role === Role.SUPER_ADMIN) {
-      router.replace("/super-admin/boutiques");
+    if (role !== Role.SUPER_ADMIN) {
+      router.replace("/stock");
     }
   }, [hydrated, token, role, router]);
 
-  if (!hydrated || !token || role === Role.SUPER_ADMIN) {
+  if (!hydrated || !token || role !== Role.SUPER_ADMIN) {
     return (
       <div className="flex h-screen items-center justify-center">
         <Spinner size="lg" color="warning" />
