@@ -101,7 +101,7 @@ export function RegisterBoutiqueView() {
           }
           {...register("password")}
         />
-        <Button className="w-full bg-accent text-black" onPress={() => void onSubmit()} isLoading={isSubmitting}>
+        <Button className="w-full bg-accent text-white" onPress={() => void onSubmit()} isLoading={isSubmitting}>
           Créer ma boutique
         </Button>
         <p className="text-center text-sm text-default-500">

@@ -24,22 +24,22 @@ interface KpiCardProps {
 const TONE_CLASSES: Record<KpiCardProps["tone"], { border: string; bg: string; text: string }> = {
   accent: {
     border: "border-accent/35",
-    bg: "bg-[color:rgba(74,122,255,0.07)]",
+    bg: "bg-[var(--color-accent-dim)]",
     text: "text-accent",
   },
   in: {
     border: "border-[var(--color-in)]/40",
-    bg: "bg-[color:rgba(57,211,83,0.08)]",
+    bg: "bg-[var(--color-in-dim)]",
     text: "text-[var(--color-in)]",
   },
   out: {
     border: "border-[var(--color-out)]/40",
-    bg: "bg-[color:rgba(255,77,109,0.08)]",
+    bg: "bg-[var(--color-out-dim)]",
     text: "text-[var(--color-out)]",
   },
   cash: {
     border: "border-[var(--color-cash)]/40",
-    bg: "bg-[color:rgba(143,126,245,0.08)]",
+    bg: "bg-[var(--color-cash-dim)]",
     text: "text-[var(--color-cash)]",
   },
 };
@@ -142,7 +142,7 @@ export function DashboardKpiGrid({
 
       {/* Bannière perte si bénéfice négatif */}
       {!isBenefice && parseFloat(beneficeNet) !== 0 && (
-        <div className="flex items-center gap-2 rounded-lg border border-[var(--color-out)]/50 bg-[color:rgba(255,77,109,0.10)] px-4 py-2">
+        <div className="flex items-center gap-2 rounded-lg border border-[var(--color-out)]/50 bg-[var(--color-out-dim)] px-4 py-2">
           <span className="text-sm font-semibold text-[var(--color-out)]">⚠ Perte nette aujourd&apos;hui</span>
           <span className="text-sm text-text-muted">
             Tes achats ({Number(resume?.totalAchats ?? 0).toLocaleString("fr-FR")} FCFA) dépassent tes ventes ({Number(totalVentes).toLocaleString("fr-FR")} FCFA).

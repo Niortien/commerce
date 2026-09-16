@@ -36,8 +36,8 @@ function NavLink({ item, active }: { item: NavItem; active: boolean }) {
         "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium",
         "border-l-2 transition-all duration-150",
         active
-          ? "border-accent bg-white/[0.10] text-white"
-          : "border-transparent text-text-muted hover:border-accent/40 hover:bg-white/[0.05] hover:text-white"
+          ? "border-accent bg-accent/[0.08] text-accent"
+          : "border-transparent text-text-muted hover:border-accent/25 hover:bg-surface-high/60 hover:text-text"
       )}
     >
       <Icon size={16} className="shrink-0" />
@@ -54,7 +54,7 @@ export function SuperAdminShell({ children }: { children: ReactNode }) {
 
   return (
     <div className="relative flex h-screen flex-col overflow-hidden bg-base lg:flex-row">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(900px_500px_at_10%_-5%,rgba(99,241,123,0.14),transparent_62%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(900px_500px_at_10%_-5%,rgba(34,197,94,0.08),transparent_62%)]" />
 
       <aside className="flex h-full w-full flex-col gap-3 border-b border-border bg-surface p-4 lg:w-60 lg:border-b-0 lg:border-r">
         <div className="flex flex-col gap-1">
@@ -74,7 +74,7 @@ export function SuperAdminShell({ children }: { children: ReactNode }) {
             href="/"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2.5 rounded-md border border-accent/35 bg-white/[0.07] px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-white/[0.12]"
+            className="flex items-center gap-2.5 rounded-md border border-accent/25 bg-accent/[0.07] px-3 py-2 text-sm font-medium text-accent transition-colors hover:bg-accent/[0.12]"
           >
             <IconWorld size={15} className="shrink-0" />
             Voir le site

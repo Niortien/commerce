@@ -23,7 +23,7 @@ export function Timeline({ children, className, density = "cozy" }: TimelineProp
       initial="hidden"
       animate="visible"
       variants={getMotionVariant(riverContainer, reduced)}
-      className={`rounded-lg border border-border/80 bg-[color:rgba(45,69,103,0.22)] p-3 md:p-4 flex flex-col ${gapClass} ${className || ""}`}
+      className={`rounded-lg border border-border/80 bg-[var(--color-surface-high)] p-3 md:p-4 flex flex-col ${gapClass} ${className || ""}`}
     >
       {items.map((child, index) => (
         <motion.div key={index} variants={getMotionVariant(riverItem, reduced)}>

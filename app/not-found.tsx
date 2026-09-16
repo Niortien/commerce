@@ -8,7 +8,7 @@ export default function NotFound() {
       <h1 className="font-[var(--font-display)] text-4xl">Page introuvable</h1>
       <p className="text-sm text-text-muted">Cette ressource n existe pas ou a ete deplacee.</p>
       <Link href="/stock">
-        <Button className="bg-accent text-black">Retour au dashboard</Button>
+        <Button className="bg-accent text-white">Retour au dashboard</Button>
       </Link>
     </main>
   );

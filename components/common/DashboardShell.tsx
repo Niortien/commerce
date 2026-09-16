@@ -13,7 +13,7 @@ interface DashboardShellProps {
 export function DashboardShell({ children }: DashboardShellProps) {
   return (
     <div className="relative flex h-screen flex-col overflow-hidden bg-base lg:flex-row">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(900px_500px_at_90%_-5%,rgba(143,126,245,0.16),transparent_62%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(900px_500px_at_90%_-5%,rgba(37,99,235,0.07),transparent_62%)]" />
       <MobileNav />
       <Sidebar />
       <div className="relative flex flex-1 flex-col overflow-hidden">

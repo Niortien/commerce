@@ -101,7 +101,7 @@ export function BoutiquesView() {
             Toutes les boutiques-locataires de la plateforme, leur statut et leur abonnement.
           </p>
         </div>
-        <Button className="bg-accent text-black" onPress={openRegister}>
+        <Button className="bg-accent text-white" onPress={openRegister}>
           + Inscrire une boutique
         </Button>
       </div>
@@ -190,7 +190,7 @@ export function BoutiquesView() {
           </ModalBody>
           <ModalFooter>
             <Button variant="light" onPress={registerModal.onClose}>Annuler</Button>
-            <Button className="bg-accent text-black" isLoading={registerMutation.isPending} onPress={() => void onSubmitRegister()}>
+            <Button className="bg-accent text-white" isLoading={registerMutation.isPending} onPress={() => void onSubmitRegister()}>
               Inscrire
             </Button>
           </ModalFooter>
@@ -226,7 +226,7 @@ export function BoutiquesView() {
           </ModalBody>
           <ModalFooter>
             <Button variant="light" onPress={abonnementModal.onClose}>Annuler</Button>
-            <Button className="bg-accent text-black" isLoading={abonnementMutation.isPending} onPress={() => void onSubmitAbonnement()}>
+            <Button className="bg-accent text-white" isLoading={abonnementMutation.isPending} onPress={() => void onSubmitAbonnement()}>
               Enregistrer
             </Button>
           </ModalFooter>

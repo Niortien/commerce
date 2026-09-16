@@ -34,7 +34,7 @@ export default function RootLayout({
   return (
     <html
       lang="fr"
-      className={`${displayFont.variable} ${bodyFont.variable} ${monoFont.variable} h-full antialiased dark`}
+      className={`${displayFont.variable} ${bodyFont.variable} ${monoFont.variable} h-full antialiased light`}
     >
       <head>
         <link rel="preconnect" href="https://res.cloudinary.com" />

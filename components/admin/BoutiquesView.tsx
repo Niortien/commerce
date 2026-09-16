@@ -109,7 +109,7 @@ export function BoutiquesView() {
         <Input label="WhatsApp" variant="bordered" placeholder="+225 07 00 00 00 00" {...register("whatsapp")} />
         <Input label="Email de contact" variant="bordered" isInvalid={!!errors.email} errorMessage={errors.email?.message} {...register("email")} />
         <Input label="Téléphone" variant="bordered" {...register("telephone")} />
-        <Button type="submit" className="mt-2 w-fit bg-accent text-black" isLoading={updateMutation.isPending}>
+        <Button type="submit" className="mt-2 w-fit bg-accent text-white" isLoading={updateMutation.isPending}>
           Enregistrer
         </Button>
       </form>

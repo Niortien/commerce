@@ -72,7 +72,7 @@ export function UtilisateursView() {
           <h1 className="text-2xl font-bold text-text">Utilisateurs</h1>
           <p className="text-sm text-text-muted">Tous les acteurs de la plateforme, toutes boutiques confondues.</p>
         </div>
-        <Button className="bg-accent text-black" onPress={openCreate}>
+        <Button className="bg-accent text-white" onPress={openCreate}>
           + Nouvel utilisateur
         </Button>
       </div>
@@ -148,7 +148,7 @@ export function UtilisateursView() {
           </ModalBody>
           <ModalFooter>
             <Button variant="light" onPress={onClose}>Annuler</Button>
-            <Button className="bg-accent text-black" isLoading={createMutation.isPending} onPress={() => void onSubmit()}>
+            <Button className="bg-accent text-white" isLoading={createMutation.isPending} onPress={() => void onSubmit()}>
               Créer
             </Button>
           </ModalFooter>

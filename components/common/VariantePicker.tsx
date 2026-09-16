@@ -134,7 +134,7 @@ export function VariantePicker({ isOpen, onClose, onSelect, onDone, excludedVari
                                   "flex h-auto flex-col items-start gap-0.5 px-3 py-2",
                                   disabled
                                     ? "opacity-40 cursor-not-allowed"
-                                    : "bg-[color:rgba(45,69,103,0.6)] hover:bg-accent/20",
+                                    : "bg-[var(--color-surface)] hover:bg-accent/10",
                                 ].join(" ")}
                                 onPress={() =>
                                   handleSelect({

@@ -81,8 +81,8 @@ function NavLink({ item, active }: { item: NavItem; active: boolean }) {
         "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium",
         "border-l-2 transition-all duration-150",
         active
-          ? "border-[var(--color-border-active)] bg-white/[0.10] text-white"
-          : "border-transparent text-text-muted hover:border-[var(--color-border-active)]/40 hover:bg-white/[0.05] hover:text-white"
+          ? "border-accent bg-accent/[0.08] text-accent"
+          : "border-transparent text-text-muted hover:border-accent/25 hover:bg-surface-high/60 hover:text-text"
       )}
     >
       <Icon size={15} className="shrink-0" />
@@ -118,7 +118,7 @@ export function Sidebar() {
 
       {/* Nom de la boutique du compte connecté */}
       {user?.boutiqueName && (
-        <div className="truncate rounded-md border border-[var(--color-border-active)]/40 bg-white/[0.07] px-3 py-1.5 text-xs font-semibold text-white">
+        <div className="truncate rounded-md border border-accent/30 bg-accent/[0.07] px-3 py-1.5 text-xs font-semibold text-accent">
           {user.boutiqueName}
         </div>
       )}
@@ -146,7 +146,7 @@ export function Sidebar() {
           href="/"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-2.5 rounded-md border border-[var(--color-border-active)]/35 bg-white/[0.07] px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-white/[0.12]"
+          className="flex items-center gap-2.5 rounded-md border border-accent/25 bg-accent/[0.07] px-3 py-2 text-sm font-medium text-accent transition-colors hover:bg-accent/[0.12]"
         >
           <IconWorld size={15} className="shrink-0" />
           Voir le site

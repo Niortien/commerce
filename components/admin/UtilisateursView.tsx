@@ -97,7 +97,7 @@ export function UtilisateursView() {
             Créez des accès pour votre équipe de caisse. Chaque caissier n&apos;a accès qu&apos;à votre boutique.
           </p>
         </div>
-        <Button className="bg-accent text-black" onPress={openCreate}>
+        <Button className="bg-accent text-white" onPress={openCreate}>
           + Nouveau caissier
         </Button>
       </div>
@@ -167,7 +167,7 @@ export function UtilisateursView() {
               </ModalBody>
               <ModalFooter>
                 <Button variant="light" onPress={onClose}>Annuler</Button>
-                <Button className="bg-accent text-black" isLoading={updateMutation.isPending} onPress={() => void onSubmitUpdate()}>
+                <Button className="bg-accent text-white" isLoading={updateMutation.isPending} onPress={() => void onSubmitUpdate()}>
                   Enregistrer
                 </Button>
               </ModalFooter>
@@ -196,7 +196,7 @@ export function UtilisateursView() {
               </ModalBody>
               <ModalFooter>
                 <Button variant="light" onPress={onClose}>Annuler</Button>
-                <Button className="bg-accent text-black" isLoading={createMutation.isPending} onPress={() => void onSubmitCreate()}>
+                <Button className="bg-accent text-white" isLoading={createMutation.isPending} onPress={() => void onSubmitCreate()}>
                   Créer
                 </Button>
               </ModalFooter>
