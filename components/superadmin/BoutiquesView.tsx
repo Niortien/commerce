@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import {
   Button,
   Chip,
@@ -20,6 +21,7 @@ import {
   TableRow,
   useDisclosure,
 } from "@heroui/react";
+import { IconChartLine } from "@tabler/icons-react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSuperAdminBoutiques } from "@/features/super-admin/query/superadmin-queries";
@@ -153,9 +155,21 @@ export function BoutiquesView() {
               </TableCell>
               <TableCell>{b.usersCount ?? "—"}</TableCell>
               <TableCell>
-                <Button size="sm" variant="flat" onPress={() => openAbonnement(b)}>
-                  Renouveler / changer plan
-                </Button>
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                    size="sm"
+                    variant="flat"
+                    as={Link}
+                    href={`/super-admin/boutiques/${b.id}/activite`}
+                    className="bg-[var(--color-accent-dim)] text-accent"
+                    startContent={<IconChartLine size={14} />}
+                  >
+                    Activité
+                  </Button>
+                  <Button size="sm" variant="flat" onPress={() => openAbonnement(b)}>
+                    Renouveler / changer plan
+                  </Button>
+                </div>
               </TableCell>
             </TableRow>
           ))}
