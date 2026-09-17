@@ -1,7 +1,23 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono, Playfair_Display, Inter } from "next/font/google";
 import { Providers } from "@/providers";
+import { ThemeInit } from "@/components/common/ThemeInit";
 import "./globals.css";
+
+// Applique le thème persisté avant le premier paint pour éviter un flash
+// (le storefront [data-vitrine] a son propre thème indépendant, non concerné).
+const THEME_INIT_SCRIPT = `
+(function () {
+  try {
+    var raw = localStorage.getItem('backoffice-theme');
+    var theme = raw ? JSON.parse(raw).state.theme : 'light';
+    if (theme === 'dark') {
+      document.documentElement.classList.remove('light');
+      document.documentElement.classList.add('dark');
+    }
+  } catch (e) {}
+})();
+`;
 
 const displayFont = Playfair_Display({
   variable: "--font-display",
@@ -39,8 +55,10 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://res.cloudinary.com" />
         <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
       </head>
       <body className="min-h-full bg-base text-text font-[var(--font-body)] flex flex-col">
+        <ThemeInit />
         <Providers>{children}</Providers>
       </body>
     </html>

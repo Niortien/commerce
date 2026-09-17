@@ -24,6 +24,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useLogout } from "@/features/auth/mutation/auth-mutations";
 import { useAuthStore } from "@/stores/authStore";
+import { ThemeToggle } from "@/components/common/ThemeToggle";
 import type { ComponentType } from "react";
 import type { IconProps } from "@tabler/icons-react";
 
@@ -142,6 +143,7 @@ export function Sidebar() {
       </nav>
 
       <div className="mt-auto flex flex-col gap-1.5">
+        <ThemeToggle />
         <Link
           href="/"
           target="_blank"

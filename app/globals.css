@@ -206,6 +206,51 @@
   --z-tooltip:  1000;
 }
 
+/* ════════════════════════════════════════════════════════════
+   Thème sombre du back-office — activé par la classe .dark sur
+   <html> (voir stores/themeStore.ts + components/common/ThemeInit.tsx).
+   Même identité bleu azur, adaptée à un fond sombre. Le storefront
+   public ([data-vitrine]) n'est pas concerné, il garde sa propre
+   palette noir + or indépendante de cette classe.
+   ════════════════════════════════════════════════════════════ */
+:root.dark {
+  --color-base:         #0B1220;
+  --color-surface:      #111A2E;
+  --color-surface-high: #182338;
+  --color-border:       rgba(255, 255, 255, 0.08);
+  --color-border-active:#3B82F6;
+
+  --color-accent:     #3B82F6;
+  --color-accent-dim: rgba(59, 130, 246, 0.16);
+
+  --color-in:         #34D399;
+  --color-in-dim:     rgba(52, 211, 153, 0.16);
+  --color-out:        #FB7185;
+  --color-out-dim:    rgba(251, 113, 133, 0.14);
+  --color-return:     #FBBF24;
+  --color-return-dim: rgba(251, 191, 36, 0.16);
+  --color-cash:       #A78BFA;
+  --color-cash-dim:   rgba(167, 139, 250, 0.16);
+
+  --color-text:       #E2E8F0;
+  --color-text-muted: #94A3B8;
+  --color-text-dim:   #64748B;
+
+  --shadow-sm:   0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md:   0 4px 18px rgba(0, 0, 0, 0.5);
+  --shadow-lg:   0 12px 36px rgba(0, 0, 0, 0.6);
+  --shadow-card:
+    0 1px 0 rgba(255, 255, 255, 0.04),
+    0 4px 22px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(255, 255, 255, 0.03);
+
+  --shadow-glow-yellow: 0 0 16px rgba(59, 130, 246, 0.40);
+  --shadow-glow-green:  0 0 12px rgba(52, 211, 153, 0.28);
+  --shadow-glow-red:    0 0 12px rgba(251, 113, 133, 0.26);
+  --shadow-glow-purple: 0 0 16px rgba(167, 139, 250, 0.28);
+  --shadow-glow-orange: 0 0 16px rgba(251, 191, 36, 0.28);
+}
+
 html,
 body {
   min-height: 100%;
@@ -216,6 +261,14 @@ body {
   background:
     radial-gradient(1000px 480px at 50% -10%, rgba(37, 99, 235, 0.06), transparent 55%),
     linear-gradient(180deg, #F8FAFC 0%, #F1F5F9 100%);
+  color: var(--color-text);
+}
+
+:root.dark body {
+  /* Fond sombre, avec un halo bleu discret en haut. */
+  background:
+    radial-gradient(1000px 480px at 50% -10%, rgba(59, 130, 246, 0.10), transparent 55%),
+    linear-gradient(180deg, #0B1220 0%, #080D18 100%);
   color: var(--color-text);
 }
 
