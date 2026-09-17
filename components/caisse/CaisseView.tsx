@@ -3,6 +3,7 @@
 import { Chip, useDisclosure } from "@heroui/react";
 import { useEffect } from "react";
 import { Button } from "@heroui/react";
+import { IconFlag } from "@tabler/icons-react";
 import { CurrencyDisplay } from "@/components/common/CurrencyDisplay";
 import { FeedDensityToggle } from "@/components/common/FeedDensityToggle";
 import { PageWrapper } from "@/components/common/PageWrapper";
@@ -37,7 +38,7 @@ export function CaisseView() {
       {/* Caisse active */}
       <SessionGuard>
         {/* Header recettes + bouton terminer */}
-        <div className="rounded-xl border border-border/80 bg-[linear-gradient(145deg,rgba(143,126,245,0.18),rgba(74,122,255,0.10))] p-4 md:p-5">
+        <div className="rounded-xl border border-border/80 bg-[linear-gradient(145deg,var(--color-cash-dim),var(--color-accent-dim))] p-4 md:p-5">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div className="flex flex-wrap gap-6">
               <div>
@@ -52,12 +53,13 @@ export function CaisseView() {
             <Button
               size="sm"
               variant="flat"
-              className="w-full sm:w-auto shrink-0 border border-out/40 bg-out/10 text-out"
+              startContent={!closeSession.isPending && <IconFlag size={15} />}
+              className="w-full sm:w-auto shrink-0 border border-accent/40 bg-accent/10 text-accent"
               isDisabled={!sessionId || closeSession.isPending}
               isLoading={closeSession.isPending}
               onPress={onOpen}
             >
-              🔒 Terminer la journée
+              Terminer la journée
             </Button>
           </div>
         </div>
@@ -67,7 +69,7 @@ export function CaisseView() {
             <Chip
               key={mode}
               variant="flat"
-              className="border border-border/70 bg-[color:rgba(45,69,103,0.55)] text-text"
+              className="border border-border/70 bg-[var(--color-surface-high)] text-text"
             >
               {mode}: {montant}
             </Chip>

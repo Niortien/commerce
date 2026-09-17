@@ -55,7 +55,7 @@ export function SortiePaiementStep({
   return (
     <div className="space-y-4">
       {/* Total — avec ou sans remise */}
-      <div className="rounded-xl border border-[var(--color-cash)]/40 bg-[color:rgba(143,126,245,0.10)] p-4 text-center">
+      <div className="rounded-xl border border-[var(--color-cash)]/40 bg-[var(--color-cash-dim)] p-4 text-center">
         {showRemise ? (
           <>
             <p className="text-xs text-text-dim line-through">
@@ -91,7 +91,7 @@ export function SortiePaiementStep({
               className={[
                 "flex flex-col items-center gap-1.5 rounded-xl border-2 px-1 py-2.5 transition-all",
                 selected === card.mode
-                  ? "border-accent bg-[color:rgba(74,122,255,0.15)] ring-2 ring-accent ring-offset-1 ring-offset-[var(--color-surface)]"
+                  ? "border-accent bg-[var(--color-accent-dim)] ring-2 ring-accent ring-offset-1 ring-offset-[var(--color-surface)]"
                   : "border-border/60 bg-[var(--color-surface-high)] hover:border-accent/40",
               ].join(" ")}
               aria-pressed={selected === card.mode}

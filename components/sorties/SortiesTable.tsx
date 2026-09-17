@@ -32,12 +32,13 @@ const TYPE_LABELS: Record<TypeSortie, string> = {
   DEPENSE: "Dépense",
 };
 
+// Alignées sur les couleurs de SortieTypeStep (même type = même couleur partout).
 const TYPE_COLORS: Record<TypeSortie, string> = {
-  VENTE: "bg-[color:rgba(74,122,255,0.15)] text-accent",
-  PERTE: "bg-[color:rgba(255,77,109,0.15)] text-[var(--color-out)]",
-  DON: "bg-[color:rgba(143,126,245,0.15)] text-purple-400",
-  RETOUR_FOURNISSEUR: "bg-[color:rgba(100,160,255,0.15)] text-blue-400",
-  DEPENSE: "bg-[color:rgba(255,154,60,0.15)] text-[var(--color-return)]",
+  VENTE: "bg-[var(--color-cash-dim)] text-[var(--color-cash)]",
+  PERTE: "bg-[var(--color-out-dim)] text-[var(--color-out)]",
+  DON: "bg-[var(--color-return-dim)] text-[var(--color-return)]",
+  RETOUR_FOURNISSEUR: "bg-[var(--color-in-dim)] text-[var(--color-in)]",
+  DEPENSE: "bg-[var(--color-out-dim)] text-[var(--color-out)]",
 };
 
 function ReprintButton({ sortieId }: { sortieId: string }) {
@@ -83,7 +84,7 @@ function ReprintButton({ sortieId }: { sortieId: string }) {
       <Button
         size="sm"
         variant="flat"
-        className="min-w-0 bg-[color:rgba(74,122,255,0.12)] text-accent"
+        className="min-w-0 bg-[var(--color-accent-dim)] text-accent"
         isLoading={isLoading && fetchRecu}
         onPress={() => {
           if (!fetchRecu) setFetchRecu(true);
@@ -162,7 +163,7 @@ export function SortiesTable({ data }: SortiesTableProps) {
           const notes = info.getValue();
           if (notes?.includes("[ANNULEE]")) {
             return (
-              <span className="rounded bg-[color:rgba(255,77,109,0.15)] px-1.5 py-0.5 text-[10px] font-semibold uppercase text-[var(--color-out)]">
+              <span className="rounded bg-[var(--color-out-dim)] px-1.5 py-0.5 text-[10px] font-semibold uppercase text-[var(--color-out)]">
                 Annulée
               </span>
             );
@@ -183,7 +184,7 @@ export function SortiesTable({ data }: SortiesTableProps) {
                   <Button
                     size="sm"
                     variant="flat"
-                    className="min-w-0 bg-[color:rgba(143,126,245,0.12)] text-purple-400"
+                    className="min-w-0 bg-[var(--color-cash-dim)] text-[var(--color-cash)]"
                     onPress={() => setEditSortie(sortie)}
                   >
                     ✏️
@@ -191,7 +192,7 @@ export function SortiesTable({ data }: SortiesTableProps) {
                   <Button
                     size="sm"
                     variant="flat"
-                    className="min-w-0 bg-[color:rgba(255,77,109,0.10)] text-[var(--color-out)]"
+                    className="min-w-0 bg-[var(--color-out-dim)] text-[var(--color-out)]"
                     onPress={() => annulerMutation.mutate(sortie.id)}
                     isLoading={annulerMutation.isPending && annulerMutation.variables === sortie.id}
                     aria-label="Annuler la sortie"
@@ -207,7 +208,7 @@ export function SortiesTable({ data }: SortiesTableProps) {
               <Button
                 size="sm"
                 variant="flat"
-                className="min-w-0 bg-[color:rgba(255,77,109,0.06)] text-[var(--color-out)]"
+                className="min-w-0 bg-[var(--color-out-dim)] text-[var(--color-out)]"
                 onPress={() => setDeleteTarget(sortie)}
               >
                 🗑️
@@ -290,7 +291,7 @@ export function SortiesTable({ data }: SortiesTableProps) {
                     key={row.id}
                     className={[
                       "border-b border-border/30 transition-colors last:border-0",
-                      isAnnulee ? "opacity-40" : "hover:bg-[color:rgba(255,77,109,0.04)]",
+                      isAnnulee ? "opacity-40" : "hover:bg-[var(--color-surface-high)]",
                     ].join(" ")}
                   >
                     {row.getVisibleCells().map((cell) => (

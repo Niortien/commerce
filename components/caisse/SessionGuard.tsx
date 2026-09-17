@@ -24,8 +24,8 @@ export function SessionGuard({ children }: SessionGuardProps) {
 
   if (!activeSession) {
     return (
-      <div className="flex flex-col items-center justify-center gap-4 rounded-xl border border-in/30 bg-[color:rgba(57,211,83,0.06)] py-8 px-4 text-center sm:py-12 sm:px-6">
-        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[color:rgba(57,211,83,0.12)] text-3xl">
+      <div className="flex flex-col items-center justify-center gap-4 rounded-xl border border-in/30 bg-[var(--color-in-dim)] py-8 px-4 text-center sm:py-12 sm:px-6">
+        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-in-dim)] text-3xl">
           ☀️
         </div>
         <div>

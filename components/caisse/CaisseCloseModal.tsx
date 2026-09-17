@@ -1,6 +1,7 @@
 "use client";
 
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@heroui/react";
+import { IconFlag } from "@tabler/icons-react";
 
 interface CaisseCloseModalProps {
   isOpen: boolean;
@@ -23,7 +24,7 @@ export function CaisseCloseModal({ isOpen, onOpenChange, onConfirm }: CaisseClos
           <Button variant="light" onPress={() => onOpenChange(false)}>
             Annuler
           </Button>
-          <Button color="danger" onPress={onConfirm}>
+          <Button className="bg-accent text-white" startContent={<IconFlag size={15} />} onPress={onConfirm}>
             Oui, terminer la journée
           </Button>
         </ModalFooter>

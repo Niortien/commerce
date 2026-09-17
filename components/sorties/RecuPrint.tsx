@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@heroui/react";
+import { IconCircleCheck } from "@tabler/icons-react";
 import { ModePaiement } from "@/types";
 import { formatDateFr } from "@/lib/dateUtils";
 import { useAuthStore } from "@/stores/authStore";
@@ -196,7 +197,15 @@ export function RecuPrint({
         }}
       >
         <ModalContent>
-          <ModalHeader className="text-base font-semibold">Reçu client</ModalHeader>
+          <ModalHeader className="flex flex-col items-start gap-0.5">
+            <span className="flex items-center gap-1.5 text-base font-semibold text-in">
+              <IconCircleCheck size={18} />
+              Vente enregistrée
+            </span>
+            <span className="text-xs font-normal text-text-muted">
+              {Number(totalMontant).toLocaleString("fr-FR")} FCFA encaissés
+            </span>
+          </ModalHeader>
           <ModalBody>
             <div className="rounded-lg border border-border/60 bg-white p-4 text-black">
               {/* En-tête */}

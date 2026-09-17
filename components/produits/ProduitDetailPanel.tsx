@@ -406,7 +406,7 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
               errorMessage={errors.nom?.message}
               classNames={{
                 label: "text-text-muted",
-                input: "text-xl font-[var(--font-display)] text-white",
+                input: "text-xl font-[var(--font-display)] text-text",
                 inputWrapper: "border-2 border-[var(--color-border-active)]/50 bg-[var(--color-surface)] data-[hover=true]:border-[var(--color-border-active)]",
               }}
               {...register("nom")}
@@ -418,7 +418,7 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
               isInvalid={!!errors.sku}
               classNames={{
                 label: "text-text-muted",
-                input: "font-[var(--font-mono)] text-sm text-white",
+                input: "font-[var(--font-mono)] text-sm text-text",
                 inputWrapper: "border-2 border-[var(--color-border-active)]/50 bg-[var(--color-surface)] data-[hover=true]:border-[var(--color-border-active)]",
               }}
               {...register("sku")}
@@ -429,7 +429,7 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
               placeholder="Optionnel"
               classNames={{
                 label: "text-text-muted",
-                input: "text-sm text-white",
+                input: "text-sm text-text",
                 inputWrapper: "border-2 border-[var(--color-border-active)]/50 bg-[var(--color-surface)] data-[hover=true]:border-[var(--color-border-active)]",
               }}
               {...register("description")}
@@ -498,7 +498,7 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
               errorMessage={errors.prixVente?.message}
               classNames={{
                 label: "text-text-muted",
-                input: "text-white",
+                input: "text-text",
                 inputWrapper: "border-2 border-[var(--color-border-active)]/50 bg-[var(--color-surface)] data-[hover=true]:border-[var(--color-border-active)]",
               }}
               {...register("prixVente")}
@@ -512,7 +512,7 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
               errorMessage={errors.prixAchat?.message}
               classNames={{
                 label: "text-text-muted",
-                input: "text-white",
+                input: "text-text",
                 inputWrapper: "border-2 border-[var(--color-border-active)]/50 bg-[var(--color-surface)] data-[hover=true]:border-[var(--color-border-active)]",
               }}
               {...register("prixAchat")}
@@ -556,7 +556,7 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
                   onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addTaille(); } }}
                   size="sm"
                   classNames={{
-                    input: "text-white",
+                    input: "text-text",
                     inputWrapper: "border-2 border-[var(--color-border-active)]/50 bg-[var(--color-surface)] data-[hover=true]:border-[var(--color-border-active)]",
                   }}
                 />
@@ -592,7 +592,7 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
                   onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addTaille(); } }}
                   size="sm"
                   classNames={{
-                    input: "text-white",
+                    input: "text-text",
                     inputWrapper: "border-2 border-[var(--color-border-active)]/50 bg-[var(--color-surface)] data-[hover=true]:border-[var(--color-border-active)]",
                   }}
                 />
@@ -676,7 +676,7 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
               onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addColor(); } }}
               size="sm"
               classNames={{
-                input: "text-white",
+                input: "text-text",
                 inputWrapper: "border-2 border-[var(--color-border-active)]/50 bg-[var(--color-surface)] data-[hover=true]:border-[var(--color-border-active)]",
               }}
             />
@@ -703,7 +703,7 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
                 <tbody>
                   {selectedTailles.map((t) => (
                     <tr key={t}>
-                      <td className="py-1 pr-3 font-[var(--font-mono)] text-white">{t}</td>
+                      <td className="py-1 pr-3 font-[var(--font-mono)] text-text">{t}</td>
                       {selectedCouleurs.map((c) => (
                         <td key={c} className="py-1 pr-2">
                           <Input
@@ -711,7 +711,7 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
                             variant="bordered"
                             size="sm"
                             classNames={{
-                              input: "text-center font-[var(--font-mono)] text-white",
+                              input: "text-center font-[var(--font-mono)] text-text",
                               base: "max-w-[72px]",
                               inputWrapper: "border-2 border-[var(--color-border-active)]/50 bg-[var(--color-surface)] data-[hover=true]:border-[var(--color-border-active)]",
                             }}

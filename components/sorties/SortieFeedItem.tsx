@@ -82,7 +82,7 @@ export function SortieFeedItem({ sortie, onCancel }: SortieFeedItemProps) {
           "rounded-lg border p-3 transition",
           isAnnulee
             ? "border-border/40 bg-[var(--color-surface-high)] opacity-50"
-            : "border-border/80 bg-[linear-gradient(145deg,rgba(255,77,109,0.10),rgba(34,54,81,0.72))] hover:border-[var(--color-out)]/50 hover:shadow-md",
+            : "border-border/80 bg-[linear-gradient(145deg,var(--color-out-dim),var(--color-surface-high))] hover:border-[var(--color-out)]/50 hover:shadow-md",
         ].join(" ")}
       >
         {/* Type + date */}

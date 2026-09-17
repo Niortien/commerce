@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+import { IconCheck, IconCircle } from "@tabler/icons-react";
 import type { ResumeDashboardData } from "@/features/rapports/api/rapports-api";
 
 interface TopProduit {
@@ -14,6 +16,32 @@ interface DashboardTopProduitsProps {
   isLoading: boolean;
   isError?: boolean;
   diagnostic?: ResumeDashboardData["diagnostic"];
+}
+
+/** Étape d'une checklist de démarrage — chaque étape franchie prépare la suivante. */
+function ChecklistStep({ done, label, href }: { done: boolean; label: string; href: string }) {
+  const content = (
+    <>
+      {done ? (
+        <IconCheck size={14} className="shrink-0 text-in" />
+      ) : (
+        <IconCircle size={14} className="shrink-0 text-text-dim" />
+      )}
+      <span className={done ? "text-text-muted line-through" : "text-text"}>{label}</span>
+    </>
+  );
+
+  if (done) {
+    return <li className="flex items-center gap-2 text-xs">{content}</li>;
+  }
+
+  return (
+    <li>
+      <Link href={href} className="group flex items-center gap-2 text-xs font-medium text-text hover:text-accent">
+        {content}
+      </Link>
+    </li>
+  );
 }
 
 export function DashboardTopProduits({ produits, isLoading, isError, diagnostic }: DashboardTopProduitsProps) {
@@ -36,32 +64,28 @@ export function DashboardTopProduits({ produits, isLoading, isError, diagnostic 
         <div className="space-y-2">
           <p className="text-sm text-text-muted">Aucune vente sur les 7 derniers jours</p>
           {diagnostic && (
-            <div className="rounded-md border border-border/40 bg-[var(--color-surface)] px-3 py-2.5 text-[11px]">
-              <div className="flex items-center justify-between">
-                <span className="text-text-muted">Produits catalogue</span>
-                <span className={`font-mono font-semibold ${diagnostic.totalProduits > 0 ? "text-in" : "text-out"}`}>
-                  {diagnostic.totalProduits}
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-text-muted">Entrées de stock</span>
-                <span className={`font-mono font-semibold ${diagnostic.totalEntrees > 0 ? "text-in" : "text-out"}`}>
-                  {diagnostic.totalEntrees}
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-text-muted">Ventes (tous temps)</span>
-                <span className={`font-mono font-semibold ${diagnostic.totalVentesAllTime > 0 ? "text-in" : "text-out"}`}>
-                  {diagnostic.totalVentesAllTime}
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-text-muted">Session caisse ouverte</span>
-                <span className={`font-mono font-semibold ${diagnostic.sessionsOuvertes > 0 ? "text-in" : "text-out"}`}>
-                  {diagnostic.sessionsOuvertes > 0 ? "Oui" : "Non"}
-                </span>
-              </div>
-            </div>
+            <ul className="space-y-1.5 rounded-md border border-border/40 bg-[var(--color-surface)] px-3 py-2.5">
+              <ChecklistStep
+                done={diagnostic.totalProduits > 0}
+                label="Ajouter des produits au catalogue"
+                href="/produits"
+              />
+              <ChecklistStep
+                done={diagnostic.totalEntrees > 0}
+                label="Recevoir une entrée de stock"
+                href="/entrees"
+              />
+              <ChecklistStep
+                done={diagnostic.sessionsOuvertes > 0}
+                label="Ouvrir une session caisse"
+                href="/caisse"
+              />
+              <ChecklistStep
+                done={diagnostic.totalVentesAllTime > 0}
+                label="Enregistrer une première vente"
+                href="/sorties"
+              />
+            </ul>
           )}
         </div>
       ) : (

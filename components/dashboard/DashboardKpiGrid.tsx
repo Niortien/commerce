@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+import { IconArrowRight } from "@tabler/icons-react";
 import { CurrencyDisplay } from "@/components/common/CurrencyDisplay";
 import type { ResumeJour } from "@/types";
 
@@ -18,7 +20,9 @@ interface KpiCardProps {
   sub?: string;
   tone: "accent" | "in" | "out" | "cash";
   isMontant?: boolean;
+  /** Prochaine action suggérée — rendue cliquable si `href` est fourni. */
   hint?: string;
+  href?: string;
 }
 
 const TONE_CLASSES: Record<KpiCardProps["tone"], { border: string; bg: string; text: string }> = {
@@ -44,10 +48,10 @@ const TONE_CLASSES: Record<KpiCardProps["tone"], { border: string; bg: string; t
   },
 };
 
-function KpiCard({ label, value, sub, tone, isMontant = false, hint }: KpiCardProps) {
+function KpiCard({ label, value, sub, tone, isMontant = false, hint, href }: KpiCardProps) {
   const t = TONE_CLASSES[tone];
-  return (
-    <div className={`rounded-xl border ${t.border} ${t.bg} p-4`}>
+  const content = (
+    <>
       <p className="text-xs uppercase tracking-wide text-text-muted">{label}</p>
       {isMontant ? (
         <CurrencyDisplay montant={String(value)} size="lg" tone={tone} className="mt-2" />
@@ -55,9 +59,27 @@ function KpiCard({ label, value, sub, tone, isMontant = false, hint }: KpiCardPr
         <p className={`mt-2 font-[var(--font-display)] text-xl md:text-3xl ${t.text}`}>{value}</p>
       )}
       {sub && <p className="mt-1 text-xs text-text-muted">{sub}</p>}
-      {hint && <p className="mt-1.5 text-[10px] text-text-muted/50 italic">{hint}</p>}
-    </div>
+      {hint && (
+        <p className={`mt-1.5 flex items-center gap-1 text-[11px] font-medium ${href ? t.text : "text-text-muted/60"}`}>
+          {hint}
+          {href && <IconArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />}
+        </p>
+      )}
+    </>
   );
+
+  if (href) {
+    return (
+      <Link
+        href={href}
+        className={`group block rounded-xl border ${t.border} ${t.bg} p-4 transition-transform hover:-translate-y-0.5 hover:shadow-md`}
+      >
+        {content}
+      </Link>
+    );
+  }
+
+  return <div className={`rounded-xl border ${t.border} ${t.bg} p-4`}>{content}</div>;
 }
 
 export function DashboardKpiGrid({
@@ -109,7 +131,8 @@ export function DashboardKpiGrid({
           }
           tone="cash"
           isMontant
-          hint={!hasSession ? "Menu → Caisse → Ouvrir session" : undefined}
+          hint={!hasSession ? "Ouvrir une session" : undefined}
+          href={!hasSession ? "/caisse" : undefined}
         />
         <KpiCard
           label="Valeur stock"
@@ -123,7 +146,8 @@ export function DashboardKpiGrid({
           }
           tone="accent"
           isMontant
-          hint={!hasStock && nombreProduits > 0 ? "Ajoute une entrée de stock → Entrées" : undefined}
+          hint={!hasStock && nombreProduits > 0 ? "Ajouter une entrée de stock" : undefined}
+          href={!hasStock && nombreProduits > 0 ? "/entrees" : undefined}
         />
         <KpiCard
           label={isBenefice ? "Bénéfice net" : "Perte nette"}
@@ -137,6 +161,8 @@ export function DashboardKpiGrid({
           value={alertesCount}
           sub={alertesCount === 0 ? "Tout est OK" : "à réapprovisionner"}
           tone={alertesCount === 0 ? "in" : "out"}
+          hint={alertesCount > 0 ? "Voir le stock" : undefined}
+          href={alertesCount > 0 ? "/stock" : undefined}
         />
       </div>
 

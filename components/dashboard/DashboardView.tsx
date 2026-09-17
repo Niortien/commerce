@@ -8,10 +8,19 @@ import { useResumeDashboard, useStockValeur } from "@/features/rapports/query/ra
 import { useStockAlertes } from "@/features/stock/query/stock-queries";
 import { useEntreesList } from "@/features/entrees/query/entrees-queries";
 import { useSortiesList } from "@/features/sorties/query/sorties-queries";
+import { useAuthStore } from "@/stores/authStore";
 import { getPeriodeRange } from "@/lib/dateUtils";
 import { DashboardKpiGrid } from "./DashboardKpiGrid";
 import { DashboardTopProduits } from "./DashboardTopProduits";
 import { DashboardActivityFeed } from "./DashboardActivityFeed";
+
+function greeting(): string {
+  const h = new Date().getHours();
+  if (h < 5) return "Bonne nuit";
+  if (h < 12) return "Bonjour";
+  if (h < 18) return "Bon après-midi";
+  return "Bonsoir";
+}
 
 const DashboardSparkline = dynamic(
   () => import("./DashboardSparkline").then((m) => m.DashboardSparkline),
@@ -20,6 +29,7 @@ const DashboardSparkline = dynamic(
 
 export function DashboardView() {
   const { dateDebut, dateFin } = useMemo(() => getPeriodeRange("7j"), []);
+  const boutiqueName = useAuthStore((s) => s.user?.boutiqueName);
 
   const { data: resumeData, isLoading: resumeLoading, isError: resumeError } = useResumeJour();
   const { data: stockValeurData, isError: stockValeurError } = useStockValeur();
@@ -50,9 +60,12 @@ export function DashboardView() {
   return (
     <PageWrapper>
       {/* Header */}
-      <div className="rounded-xl border border-border bg-[linear-gradient(135deg,rgba(255,255,255,0.03)_0%,transparent_60%)] p-4 md:p-5" style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)" }}>
-        <h1 className="font-[var(--font-display)] text-2xl font-bold tracking-tight text-text md:text-4xl">Dashboard</h1>
-        <p className="mt-1 text-sm text-text-muted">Vue d&apos;ensemble · Luxury <span className="text-accent font-semibold">Boutique</span></p>
+      <div className="rounded-xl border border-border bg-[linear-gradient(135deg,var(--color-accent-dim)_0%,transparent_60%)] p-4 md:p-5">
+        <h1 className="font-[var(--font-display)] text-2xl font-bold tracking-tight text-text md:text-4xl">
+          {greeting()}
+          {boutiqueName ? <>, <span className="text-accent">{boutiqueName}</span></> : null}
+        </h1>
+        <p className="mt-1 text-sm text-text-muted">Voici où en est ta boutique aujourd&apos;hui.</p>
       </div>
 
       {/* KPIs */}

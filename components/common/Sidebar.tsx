@@ -42,14 +42,14 @@ const ITEMS: NavItem[] = [
   { href: "/caisse",     label: "Caisse",       icon: IconCoin },
   { href: "/entrees",    label: "Entrées",      icon: IconPackageImport },
   { href: "/sorties",    label: "Sorties",      icon: IconPackageExport },
-  { href: "/produits",   label: "Produits",     icon: IconHanger },
-  { href: "/promotions", label: "Promotions",   icon: IconRosetteDiscount },
+  { href: "/produits",           label: "Produits",   icon: IconHanger },
+  { href: "/admin/categories",   label: "Catégories", icon: IconCategory2 },
+  { href: "/promotions",         label: "Promotions", icon: IconRosetteDiscount },
 ];
 
 const ADMIN_ITEMS: NavItem[] = [
   { href: "/admin/boutiques",      label: "Ma boutique",   icon: IconBuildingStore },
   { href: "/admin/utilisateurs",   label: "Caissiers",     icon: IconUsers },
-  { href: "/admin/categories",     label: "Catégories",    icon: IconCategory2 },
   { href: "/admin/photos-clients", label: "Photos clients", icon: IconPhoto },
 ];
 

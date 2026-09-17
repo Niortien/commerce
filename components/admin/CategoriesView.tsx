@@ -29,9 +29,16 @@ import {
   useDeleteCategorie,
   useUpdateCategorie,
 } from "@/features/categories/mutation/categories-mutations";
+import { useAuthStore } from "@/stores/authStore";
 import type { Categorie } from "@/types";
 
 const GROUPES = CATEGORY_GROUPS.map((g) => g.label);
+
+const COLUMNS_READONLY = [
+  { key: "nom", label: "Nom" },
+  { key: "slug", label: "Slug" },
+];
+const COLUMNS_ADMIN = [...COLUMNS_READONLY, { key: "actions", label: "Actions" }];
 
 function slugify(str: string) {
   return str
@@ -50,6 +57,7 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 export function CategoriesView() {
+  const isAdmin = useAuthStore((s) => s.user?.role === "ADMIN");
   const { data: res, isLoading } = useAdminCategories();
   const categories = res?.data ?? [];
 
@@ -112,10 +120,17 @@ export function CategoriesView() {
   return (
     <div className="p-6">
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-text">Catégories</h1>
-        <Button className="bg-accent text-white" onPress={openCreate}>
-          + Nouvelle catégorie
-        </Button>
+        <div>
+          <h1 className="text-2xl font-bold text-text">Catégories</h1>
+          {!isAdmin && (
+            <p className="text-sm text-text-muted">Consultation seule — réservé à l&apos;administrateur pour la modification.</p>
+          )}
+        </div>
+        {isAdmin && (
+          <Button className="bg-accent text-white" onPress={openCreate}>
+            + Nouvelle catégorie
+          </Button>
+        )}
       </div>
 
       {grouped.map(({ label, items }) => (
@@ -124,38 +139,44 @@ export function CategoriesView() {
             {label}
           </p>
           <Table aria-label={`Catégories ${label}`} removeWrapper>
-            <TableHeader>
-              <TableColumn>Nom</TableColumn>
-              <TableColumn>Slug</TableColumn>
-              <TableColumn>Actions</TableColumn>
+            <TableHeader columns={isAdmin ? COLUMNS_ADMIN : COLUMNS_READONLY}>
+              {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
             </TableHeader>
-            <TableBody isLoading={isLoading} emptyContent="Aucune catégorie">
-              {items.map((c) => (
+            <TableBody items={items} isLoading={isLoading} emptyContent="Aucune catégorie">
+              {(c) => (
                 <TableRow key={c.id}>
-                  <TableCell className="font-medium">{c.nom}</TableCell>
-                  <TableCell>
-                    <code className="rounded bg-surface-high px-1.5 py-0.5 text-xs text-text-muted">
-                      {c.slug}
-                    </code>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex gap-2">
-                      <Button size="sm" variant="flat" onPress={() => openEdit(c)}>
-                        Modifier
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="flat"
-                        color="danger"
-                        isLoading={deleteMutation.isPending}
-                        onPress={() => deleteMutation.mutate(c.id)}
-                      >
-                        Supprimer
-                      </Button>
-                    </div>
-                  </TableCell>
+                  {(columnKey) => {
+                    if (columnKey === "nom") return <TableCell className="font-medium">{c.nom}</TableCell>;
+                    if (columnKey === "slug") {
+                      return (
+                        <TableCell>
+                          <code className="rounded bg-surface-high px-1.5 py-0.5 text-xs text-text-muted">
+                            {c.slug}
+                          </code>
+                        </TableCell>
+                      );
+                    }
+                    return (
+                      <TableCell>
+                        <div className="flex gap-2">
+                          <Button size="sm" variant="flat" onPress={() => openEdit(c)}>
+                            Modifier
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="flat"
+                            color="danger"
+                            isLoading={deleteMutation.isPending}
+                            onPress={() => deleteMutation.mutate(c.id)}
+                          >
+                            Supprimer
+                          </Button>
+                        </div>
+                      </TableCell>
+                    );
+                  }}
                 </TableRow>
-              ))}
+              )}
             </TableBody>
           </Table>
         </div>

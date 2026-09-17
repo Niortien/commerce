@@ -10,6 +10,7 @@ import { StockTimeline } from "./StockTimeline";
 
 export function StockView() {
   const filters = useUiStore((state) => state.stockFiltre);
+  const setStockFiltre = useUiStore((state) => state.setStockFiltre);
   const density = useUiStore((state) => state.feedDensity);
   const { data } = useStockList({
     alerte: filters.alerte,
@@ -20,20 +21,33 @@ export function StockView() {
 
   const items = data?.pages.flatMap((page) => page.data) ?? [];
   const total = items.length;
+  const alertesCount = alertes?.data?.length ?? 0;
 
   return (
     <PageWrapper>
-      <div className="rounded-xl border border-border/80 bg-[linear-gradient(120deg,rgba(74,122,255,0.14),rgba(143,126,245,0.08))] p-4 md:p-5">
+      <div className="rounded-xl border border-border/80 bg-[linear-gradient(120deg,var(--color-accent-dim),var(--color-cash-dim))] p-4 md:p-5">
         <div className="flex items-end justify-between">
-          <h1 className="font-[var(--font-display)] text-2xl md:text-4xl">Stock</h1>
-          <span className="rounded-full border border-accent/40 bg-[color:rgba(74,122,255,0.16)] px-3 py-1 font-[var(--font-mono)] text-accent">
+          <h1 className="font-[var(--font-display)] text-2xl md:text-4xl text-text">Stock</h1>
+          <span className="rounded-full border border-accent/40 bg-[var(--color-accent-dim)] px-3 py-1 font-[var(--font-mono)] text-accent">
             {total} variantes
           </span>
         </div>
       </div>
       <div className="flex gap-2 overflow-auto pb-1">
-        <Chip variant="flat" className="bg-[var(--color-surface-high)] text-text">Tous</Chip>
-        <Chip variant="flat" className="bg-[var(--color-out-dim)] text-out">Alerte</Chip>
+        <Chip
+          variant="flat"
+          className={`cursor-pointer transition-colors ${!filters.alerte ? "bg-accent text-white" : "bg-[var(--color-surface-high)] text-text"}`}
+          onClick={() => setStockFiltre({ ...filters, alerte: undefined })}
+        >
+          Tous
+        </Chip>
+        <Chip
+          variant="flat"
+          className={`cursor-pointer transition-colors ${filters.alerte ? "bg-[var(--color-out)] text-white" : "bg-[var(--color-out-dim)] text-out"}`}
+          onClick={() => setStockFiltre({ ...filters, alerte: true })}
+        >
+          Alerte{alertesCount > 0 ? ` (${alertesCount})` : ""}
+        </Chip>
       </div>
       <StockAlertPanel alertes={alertes?.data ?? []} />
       <FeedDensityToggle />

@@ -11,11 +11,13 @@ export const categorieKeys = {
 
 export function useAdminCategories() {
   const token = useAuthStore((s) => s.accessToken);
-  const user  = useAuthStore((s) => s.user);
+  // Lecture ouverte à ADMIN + CAISSIER côté API (voir routes/api.php côté
+  // backend) — seules les mutations (create/update/delete) sont réservées
+  // à l'ADMIN, voir la vérification de rôle dans CategoriesView.
   return useQuery({
     queryKey: categorieKeys.list(),
     queryFn:  adminGetCategories,
-    enabled:  !!token && user?.role === "ADMIN",
+    enabled:  !!token,
     staleTime: 2 * 60_000,
   });
 }

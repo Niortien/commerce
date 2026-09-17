@@ -358,7 +358,7 @@ export function SortieCreatePanel({ isOpen, onClose }: SortieCreatePanelProps) {
             <>
               <SortieTypeStep selected={selectedType} onSelect={setSelectedType} />
               {selectedType === TypeSortie.VENTE && !hasActiveSession && (
-                <div className="flex items-start gap-3 rounded-lg border border-[var(--color-out)]/50 bg-[color:rgba(255,77,109,0.12)] p-3">
+                <div className="flex items-start gap-3 rounded-lg border border-[var(--color-out)]/50 bg-[var(--color-out-dim)] p-3">
                   <span className="mt-0.5 text-base">⚠</span>
                   <div className="text-sm">
                     <p className="font-semibold text-[var(--color-out)]">Aucune session caisse ouverte</p>
@@ -459,7 +459,7 @@ export function SortieCreatePanel({ isOpen, onClose }: SortieCreatePanelProps) {
                   </div>
                   <Button
                     variant="flat"
-                    className="mt-3 w-full border border-dashed border-[var(--color-out)]/40 bg-[color:rgba(255,77,109,0.08)] text-[var(--color-out)]"
+                    className="mt-3 w-full border border-dashed border-accent/40 bg-[var(--color-accent-dim)] text-accent"
                     onPress={() => { setReplacingIndex(null); setPickerOpen(true); }}
                   >
                     + Ajouter une variante

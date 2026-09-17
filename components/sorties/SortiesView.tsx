@@ -81,7 +81,7 @@ export function SortiesView() {
 
       <PageWrapper>
         {/* En-tête */}
-        <div className="flex flex-wrap items-end justify-between gap-3 rounded-xl border border-border/80 bg-[linear-gradient(120deg,rgba(255,77,109,0.18),rgba(34,54,81,0.42))] p-4 md:p-5">
+        <div className="flex flex-wrap items-end justify-between gap-3 rounded-xl border border-border/80 bg-[linear-gradient(120deg,var(--color-out-dim),var(--color-surface-high))] p-4 md:p-5">
           <div>
             <h1 className="font-[var(--font-display)] text-2xl text-[var(--color-out)] md:text-4xl">
               Sorties
