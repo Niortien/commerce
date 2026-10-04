@@ -27,11 +27,11 @@ export function MarketingPillars() {
         {PILLARS.map(({ verb, icon: Icon, text }, i) => (
           <Reveal key={verb} delay={i * 0.05}>
             <div className="flex items-start gap-4">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-accent-dim text-accent-text">
+              <span className="float-slow flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-accent-dim text-accent-text" style={{ animationDelay: `${i * 0.6}s` }}>
                 <Icon size={22} aria-hidden />
               </span>
               <div>
-                <h2 className="font-display text-2xl font-extrabold tracking-tight text-brand-gradient">{verb}</h2>
+                <h2 className="font-display text-2xl font-extrabold tracking-tight text-shimmer-gradient">{verb}</h2>
                 <p className="mt-1.5 text-sm leading-relaxed text-text-muted">{text}</p>
               </div>
             </div>

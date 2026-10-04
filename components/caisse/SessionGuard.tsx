@@ -1,6 +1,8 @@
 "use client";
 
 import { Button, Spinner } from "@heroui/react";
+import { IconSunHigh } from "@tabler/icons-react";
+import { PageHero } from "@/components/common/PageHero";
 import { useActiveSession } from "@/features/caisse/query/caisse-queries";
 import { useOuvrirSession } from "@/features/caisse/mutation/caisse-mutations";
 
@@ -15,8 +17,8 @@ export function SessionGuard({ children }: SessionGuardProps) {
 
   if (isLoading) {
     return (
-      <div className="flex h-32 items-center justify-center gap-3">
-        <Spinner color="warning" size="sm" />
+      <div role="status" className="flex h-32 items-center justify-center gap-3">
+        <Spinner color="primary" size="sm" />
         <p className="text-sm text-text-muted">Chargement de la caisse…</p>
       </div>
     );
@@ -24,26 +26,29 @@ export function SessionGuard({ children }: SessionGuardProps) {
 
   if (!activeSession) {
     return (
-      <div className="flex flex-col items-center justify-center gap-4 rounded-xl border border-in/30 bg-[var(--color-in-dim)] py-8 px-4 text-center sm:py-12 sm:px-6">
-        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-in-dim)] text-3xl">
-          ☀️
-        </div>
-        <div>
-          <p className="font-display text-xl text-text">Prêt pour la journée ?</p>
-          <p className="mt-1 text-sm text-text-muted">Aucune session caisse n&apos;est ouverte</p>
-        </div>
-        <Button
-          size="lg"
-          className="w-full max-w-xs bg-in font-semibold text-black"
-          isLoading={openMutation.isPending}
-          onPress={() => openMutation.mutate({ montantOuverture: "0" })}
-        >
-          Commencer la journée
-        </Button>
+      <PageHero
+        tone="in"
+        icon={IconSunHigh}
+        eyebrow="Caisse fermée"
+        title="Prêt pour la journée ?"
+        description="Aucune session de caisse n'est ouverte. Ouvrez-la pour enregistrer les ventes de l'équipe."
+        actions={
+          <Button
+            size="lg"
+            className="bg-in font-semibold text-white"
+            isLoading={openMutation.isPending}
+            onPress={() => openMutation.mutate({ montantOuverture: "0" })}
+          >
+            Commencer la journée
+          </Button>
+        }
+      >
         {openMutation.isError && (
-          <p className="text-xs text-out">Impossible d&apos;ouvrir la caisse. Vérifie ta connexion.</p>
+          <p role="alert" className="text-sm text-out-text">
+            Impossible d&apos;ouvrir la caisse. Vérifiez votre connexion puis réessayez.
+          </p>
         )}
-      </div>
+      </PageHero>
     );
   }
 

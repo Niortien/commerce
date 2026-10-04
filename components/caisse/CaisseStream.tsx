@@ -1,3 +1,4 @@
+import { EmptyRiver } from "@/components/common/EmptyRiver";
 import { Timeline } from "@/components/common/Timeline";
 import type { Transaction } from "@/types";
 import { TransactionPulse } from "./TransactionPulse";
@@ -8,8 +9,17 @@ interface CaisseStreamProps {
 }
 
 export function CaisseStream({ transactions, density = "cozy" }: CaisseStreamProps) {
+  if (!transactions.length) {
+    return (
+      <EmptyRiver
+        message="Aucune vente pour l'instant"
+        hint="Les transactions s'afficheront ici dès la première vente de la session."
+      />
+    );
+  }
+
   return (
-    <Timeline density={density} className="max-h-[50vh] overflow-auto pr-1">
+    <Timeline live density={density} className="max-h-[50vh] overflow-auto pr-1">
       {transactions.map((transaction) => (
         <TransactionPulse key={transaction.id} transaction={transaction} />
       ))}

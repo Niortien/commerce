@@ -3,24 +3,35 @@
 import { useState } from "react";
 import {
   Button,
-  Chip,
   Input,
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
   useDisclosure,
 } from "@heroui/react";
+import { motion } from "framer-motion";
+import {
+  IconCashRegister,
+  IconPencil,
+  IconShieldCheck,
+  IconUserOff,
+  IconUserPlus,
+  IconUsersGroup,
+} from "@tabler/icons-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { ConfirmModal } from "@/components/common/ConfirmModal";
+import { CountUp } from "@/components/common/CountUp";
+import { EmptyRiver } from "@/components/common/EmptyRiver";
+import { PageHero } from "@/components/common/PageHero";
+import { PageWrapper } from "@/components/common/PageWrapper";
+import { SpotlightCard } from "@/components/common/SpotlightCard";
+import { StatTile } from "@/components/common/StatTile";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { motionEasing } from "@/lib/motionVariants";
 import { useUsers } from "@/features/users/query/users-queries";
 import {
   useCreateUser,
@@ -57,6 +68,8 @@ export function UtilisateursView() {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [editing, setEditing] = useState<AppUser | null>(null);
+  const [revokeTarget, setRevokeTarget] = useState<AppUser | null>(null);
+  const reduced = useReducedMotion();
 
   const createForm = useForm<CreateFormData>({ resolver: zodResolver(createSchema) });
   const updateForm = useForm<UpdateFormData>({ resolver: zodResolver(updateSchema) });
@@ -89,58 +102,114 @@ export function UtilisateursView() {
   });
 
   return (
-    <div className="p-6">
-      <div className="mb-6 flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-text">Caissiers</h1>
-          <p className="text-sm text-text-muted">
-            Créez des accès pour votre équipe de caisse. Chaque caissier n&apos;a accès qu&apos;à votre boutique.
-          </p>
+    <PageWrapper>
+      <PageHero
+        tone="accent"
+        icon={IconUsersGroup}
+        eyebrow="Équipe"
+        title="Caissiers"
+        description="Créez des accès pour votre équipe de caisse. Chaque caissier n'a accès qu'à votre boutique."
+        actions={
+          <Button
+            className="min-h-11 bg-accent font-semibold text-white"
+            startContent={<IconUserPlus size={18} aria-hidden />}
+            onPress={openCreate}
+          >
+            Nouveau caissier
+          </Button>
+        }
+      >
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <StatTile tone="accent" icon={IconUsersGroup} label="Caissiers actifs" value={isLoading ? "—" : <CountUp value={users.length} />} />
+          <StatTile tone="in" icon={IconShieldCheck} label="Accès" value="Limité à votre boutique" delay={0.05} />
         </div>
-        <Button className="bg-accent text-white" onPress={openCreate}>
-          + Nouveau caissier
-        </Button>
-      </div>
+      </PageHero>
 
-      <Table aria-label="Liste des caissiers">
-        <TableHeader>
-          <TableColumn>Email</TableColumn>
-          <TableColumn>Rôle</TableColumn>
-          <TableColumn>Créé le</TableColumn>
-          <TableColumn>Actions</TableColumn>
-        </TableHeader>
-        <TableBody isLoading={isLoading} emptyContent="Aucun caissier pour l'instant">
-          {users.map((u) => (
-            <TableRow key={u.id}>
-              <TableCell>{u.email}</TableCell>
-              <TableCell>
-                <Chip size="sm" color="default" variant="flat">
-                  Caissier
-                </Chip>
-              </TableCell>
-              <TableCell>{new Date(u.createdAt).toLocaleDateString("fr-FR")}</TableCell>
-              <TableCell>
-                <div className="flex gap-2">
-                  <Button size="sm" variant="flat" onPress={() => openEdit(u)}>
+      {isLoading && (
+        <div role="status" aria-label="Chargement des caissiers" className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className="h-32 animate-pulse rounded-lg border border-border bg-surface" />
+          ))}
+        </div>
+      )}
+
+      {!isLoading && users.length === 0 && (
+        <EmptyRiver
+          message="Aucun caissier pour l'instant"
+          hint="Ajoutez un caissier pour qu'il puisse ouvrir la caisse et enregistrer des ventes."
+          action={
+            <Button size="sm" className="bg-accent font-semibold text-white" onPress={openCreate}>
+              Ajouter un caissier
+            </Button>
+          }
+        />
+      )}
+
+      {users.length > 0 && (
+        <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          {users.map((u, i) => (
+            <motion.li
+              key={u.id}
+              initial={reduced ? false : { opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.38, ease: motionEasing.outExpo, delay: Math.min(i * 0.04, 0.24) }}
+            >
+              <SpotlightCard tone="accent" className="p-4">
+                <div className="flex items-start gap-3">
+                  <span
+                    aria-hidden
+                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-accent-dim font-display text-lg font-extrabold uppercase text-accent-text"
+                  >
+                    {u.email.charAt(0)}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-semibold text-text">{u.email}</p>
+                    <p className="mt-0.5 text-xs text-text-muted">
+                      Ajouté le {new Date(u.createdAt).toLocaleDateString("fr-FR")}
+                    </p>
+                    <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-surface-high px-2 py-0.5 text-xs font-medium text-text-muted">
+                      <IconCashRegister size={12} aria-hidden />
+                      Caissier
+                    </span>
+                  </div>
+                </div>
+                <div className="mt-4 flex items-center gap-2 border-t border-border pt-3">
+                  <Button size="sm" variant="flat" className="min-h-9 flex-1 font-medium" startContent={<IconPencil size={15} aria-hidden />} onPress={() => openEdit(u)}>
                     Modifier
                   </Button>
                   <Button
                     size="sm"
                     variant="flat"
                     color="danger"
-                    isLoading={deleteMutation.isPending}
-                    onPress={() => deleteMutation.mutate(u.id)}
+                    className="min-h-9 flex-1 font-medium"
+                    startContent={<IconUserOff size={15} aria-hidden />}
+                    onPress={() => setRevokeTarget(u)}
                   >
                     Retirer l&apos;accès
                   </Button>
                 </div>
-              </TableCell>
-            </TableRow>
+              </SpotlightCard>
+            </motion.li>
           ))}
-        </TableBody>
-      </Table>
+        </ul>
+      )}
 
-      <Modal isOpen={isOpen} onClose={onClose} size="md">
+      <ConfirmModal
+        isOpen={!!revokeTarget}
+        onClose={() => setRevokeTarget(null)}
+        onConfirm={() => {
+          if (revokeTarget && !deleteMutation.isPending) {
+            deleteMutation.mutate(revokeTarget.id, { onSuccess: () => setRevokeTarget(null) });
+          }
+        }}
+        title="Retirer l'accès"
+        message={`${revokeTarget?.email ?? "Ce caissier"} ne pourra plus se connecter à votre boutique.`}
+        confirmLabel="Retirer l'accès"
+        isLoading={deleteMutation.isPending}
+        danger
+      />
+
+      <Modal isOpen={isOpen} onClose={onClose} size="md" backdrop="blur">
         <ModalContent>
           {editing ? (
             <>
@@ -204,6 +273,6 @@ export function UtilisateursView() {
           )}
         </ModalContent>
       </Modal>
-    </div>
+    </PageWrapper>
   );
 }

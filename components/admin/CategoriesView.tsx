@@ -11,17 +11,22 @@ import {
   ModalHeader,
   Select,
   SelectItem,
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
   useDisclosure,
 } from "@heroui/react";
+import { motion } from "framer-motion";
+import { IconCategory2, IconLayoutGrid, IconPencil, IconPlus, IconTrash } from "@tabler/icons-react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { ConfirmModal } from "@/components/common/ConfirmModal";
+import { CountUp } from "@/components/common/CountUp";
+import { EmptyRiver } from "@/components/common/EmptyRiver";
+import { PageHero } from "@/components/common/PageHero";
+import { PageWrapper } from "@/components/common/PageWrapper";
+import { RowActionButton } from "@/components/common/RowActionButton";
+import { StatTile } from "@/components/common/StatTile";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { motionEasing } from "@/lib/motionVariants";
 import { CATEGORY_GROUPS } from "@/lib/categoryConfig";
 import { useAdminCategories } from "@/features/categories/query/categories-queries";
 import {
@@ -33,12 +38,6 @@ import { useAuthStore } from "@/stores/authStore";
 import type { Categorie } from "@/types";
 
 const GROUPES = CATEGORY_GROUPS.map((g) => g.label);
-
-const COLUMNS_READONLY = [
-  { key: "nom", label: "Nom" },
-  { key: "slug", label: "Slug" },
-];
-const COLUMNS_ADMIN = [...COLUMNS_READONLY, { key: "actions", label: "Actions" }];
 
 function slugify(str: string) {
   return str
@@ -67,6 +66,8 @@ export function CategoriesView() {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [editing, setEditing] = useState<Categorie | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<Categorie | null>(null);
+  const reduced = useReducedMotion();
 
   const {
     register,
@@ -118,71 +119,111 @@ export function CategoriesView() {
   const isPending = createMutation.isPending || updateMutation.isPending;
 
   return (
-    <div className="p-6">
-      <div className="mb-6 flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-text">Catégories</h1>
-          {!isAdmin && (
-            <p className="text-sm text-text-muted">Consultation seule — réservé à l&apos;administrateur pour la modification.</p>
-          )}
+    <PageWrapper>
+      <PageHero
+        tone="cash"
+        icon={IconCategory2}
+        eyebrow="Catalogue"
+        title="Catégories"
+        description={
+          isAdmin
+            ? "Organisez vos produits par groupe. Le slug sert d'adresse dans la vitrine."
+            : "Consultation seule — la modification est réservée à l'administrateur."
+        }
+        actions={
+          isAdmin && (
+            <Button
+              className="min-h-11 bg-cash font-semibold text-white"
+              startContent={<IconPlus size={18} aria-hidden />}
+              onPress={openCreate}
+            >
+              Nouvelle catégorie
+            </Button>
+          )
+        }
+      >
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <StatTile tone="cash" icon={IconCategory2} label="Catégories" value={isLoading ? "—" : <CountUp value={categories.length} />} />
+          <StatTile tone="accent" icon={IconLayoutGrid} label="Groupes" value={isLoading ? "—" : <CountUp value={grouped.length} />} delay={0.05} />
         </div>
-        {isAdmin && (
-          <Button className="bg-accent text-white" onPress={openCreate}>
-            + Nouvelle catégorie
-          </Button>
-        )}
+      </PageHero>
+
+      {isLoading && (
+        <div role="status" aria-label="Chargement des catégories" className="grid gap-4 md:grid-cols-2">
+          {[...Array(2)].map((_, i) => (
+            <div key={i} className="h-40 animate-pulse rounded-lg border border-border bg-surface" />
+          ))}
+        </div>
+      )}
+
+      {!isLoading && grouped.length === 0 && (
+        <EmptyRiver
+          message="Aucune catégorie"
+          hint={isAdmin ? "Créez une première catégorie pour classer vos produits." : "L'administrateur n'en a pas encore créé."}
+          action={
+            isAdmin && (
+              <Button size="sm" className="bg-cash font-semibold text-white" onPress={openCreate}>
+                Créer une catégorie
+              </Button>
+            )
+          }
+        />
+      )}
+
+      <div className="grid gap-4 lg:grid-cols-2">
+        {grouped.map(({ label, items }, gi) => (
+          <motion.section
+            key={label}
+            aria-label={`Catégories ${label}`}
+            initial={reduced ? false : { opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.38, ease: motionEasing.outExpo, delay: gi * 0.05 }}
+            className="overflow-hidden rounded-lg border border-border bg-surface shadow-card"
+          >
+            <header className="flex items-center justify-between gap-2 border-b border-border bg-surface-high px-4 py-2.5">
+              <h2 className="text-xs font-semibold uppercase tracking-wider text-text-muted">{label}</h2>
+              <span className="rounded-full bg-cash-dim px-2 py-0.5 font-mono text-xs font-semibold text-cash-text">{items.length}</span>
+            </header>
+            <ul className="divide-y divide-border">
+              {items.map((c) => (
+                <li key={c.id} className="flex items-center justify-between gap-3 px-4 py-2.5 transition-colors duration-150 hover:bg-surface-high">
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-medium text-text">{c.nom}</p>
+                    <code className="font-mono text-xs text-text-muted">{c.slug}</code>
+                  </div>
+                  {isAdmin && (
+                    <div className="flex shrink-0 items-center gap-1.5">
+                      <RowActionButton label={`Modifier ${c.nom}`} tone="accent" onPress={() => openEdit(c)}>
+                        <IconPencil size={16} aria-hidden />
+                      </RowActionButton>
+                      <RowActionButton label={`Supprimer ${c.nom}`} tone="out" onPress={() => setDeleteTarget(c)}>
+                        <IconTrash size={16} aria-hidden />
+                      </RowActionButton>
+                    </div>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </motion.section>
+        ))}
       </div>
 
-      {grouped.map(({ label, items }) => (
-        <div key={label} className="mb-6">
-          <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-text-muted">
-            {label}
-          </p>
-          <Table aria-label={`Catégories ${label}`} removeWrapper>
-            <TableHeader columns={isAdmin ? COLUMNS_ADMIN : COLUMNS_READONLY}>
-              {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
-            </TableHeader>
-            <TableBody items={items} isLoading={isLoading} emptyContent="Aucune catégorie">
-              {(c) => (
-                <TableRow key={c.id}>
-                  {(columnKey) => {
-                    if (columnKey === "nom") return <TableCell className="font-medium">{c.nom}</TableCell>;
-                    if (columnKey === "slug") {
-                      return (
-                        <TableCell>
-                          <code className="rounded bg-surface-high px-1.5 py-0.5 text-xs text-text-muted">
-                            {c.slug}
-                          </code>
-                        </TableCell>
-                      );
-                    }
-                    return (
-                      <TableCell>
-                        <div className="flex gap-2">
-                          <Button size="sm" variant="flat" onPress={() => openEdit(c)}>
-                            Modifier
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="flat"
-                            color="danger"
-                            isLoading={deleteMutation.isPending}
-                            onPress={() => deleteMutation.mutate(c.id)}
-                          >
-                            Supprimer
-                          </Button>
-                        </div>
-                      </TableCell>
-                    );
-                  }}
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
-      ))}
+      <ConfirmModal
+        isOpen={!!deleteTarget}
+        onClose={() => setDeleteTarget(null)}
+        onConfirm={() => {
+          if (deleteTarget && !deleteMutation.isPending) {
+            deleteMutation.mutate(deleteTarget.id, { onSuccess: () => setDeleteTarget(null) });
+          }
+        }}
+        title="Supprimer la catégorie"
+        message={`Supprimer « ${deleteTarget?.nom ?? ""} » ? Les produits qui l'utilisent devront être reclassés.`}
+        confirmLabel="Supprimer"
+        isLoading={deleteMutation.isPending}
+        danger
+      />
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} backdrop="blur">
         <ModalContent>
           <ModalHeader>
             {editing ? "Modifier la catégorie" : "Nouvelle catégorie"}
@@ -230,7 +271,7 @@ export function CategoriesView() {
               Annuler
             </Button>
             <Button
-              className="bg-accent text-white"
+              className="bg-cash font-semibold text-white"
               isLoading={isPending}
               onPress={() => void onSubmit()}
             >
@@ -239,6 +280,6 @@ export function CategoriesView() {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </div>
+    </PageWrapper>
   );
 }

@@ -10,7 +10,11 @@ export function MarketingCta() {
     <section className="bg-surface py-16 md:py-20">
       <div className="mx-auto max-w-6xl px-4 md:px-6">
         <Reveal>
-          <div className="rounded-xl bg-sidebar px-6 py-12 text-center text-sidebar-text md:px-12">
+          <div className="relative isolate overflow-hidden rounded-xl bg-sidebar px-6 py-12 text-center text-sidebar-text md:px-12">
+            <div aria-hidden className="absolute inset-0 -z-10">
+              <span className="aurora-blob aurora-a -left-10 -top-20 h-64 w-64 bg-[#7c3aed]/35" />
+              <span className="aurora-blob aurora-b -bottom-24 right-0 h-72 w-72 bg-[#2563eb]/35" />
+            </div>
             <h2
               className="mx-auto max-w-2xl font-display text-3xl font-extrabold leading-tight tracking-tight md:text-4xl"
               style={{ textWrap: "balance" }}

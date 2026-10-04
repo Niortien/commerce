@@ -6,8 +6,12 @@ import {
   IconPackageImport,
   IconRosetteDiscount,
 } from "@tabler/icons-react";
+import { SpotlightCard } from "@/components/common/SpotlightCard";
+import type { Tone } from "@/components/common/tone";
 import { Reveal } from "@/components/marketing/Reveal";
 import { SectionHeading } from "@/components/marketing/SectionHeading";
+
+const TONES: Tone[] = ["accent", "cash", "in", "return", "accent", "in"];
 
 const FEATURES = [
   {
@@ -57,13 +61,13 @@ export function MarketingFeatures() {
           {FEATURES.map(({ icon: Icon, title, text }, i) => (
             <li key={title}>
               <Reveal delay={Math.min(i * 0.04, 0.2)} className="h-full">
-                <article className="h-full rounded-lg border border-border bg-surface p-5 shadow-card">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-md bg-accent-dim text-accent-text">
+                <SpotlightCard as="article" tone={TONES[i % TONES.length]} className="group h-full p-5 hover:-translate-y-0.5">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-md bg-[color-mix(in_srgb,var(--tone)_14%,transparent)] text-[var(--tone-text)] transition-transform duration-200 group-hover:scale-110 group-hover:-rotate-3">
                     <Icon size={20} aria-hidden />
                   </span>
                   <h3 className="mt-4 font-display text-lg font-bold text-text">{title}</h3>
                   <p className="mt-1.5 text-sm leading-relaxed text-text-muted">{text}</p>
-                </article>
+                </SpotlightCard>
               </Reveal>
             </li>
           ))}

@@ -19,16 +19,18 @@ export function TransactionPulse({ transaction }: TransactionPulseProps) {
       initial="hidden"
       animate="visible"
       variants={getMotionVariant(newTransaction, reduced)}
-      className="rounded-lg border border-[var(--color-cash)]/30 bg-[linear-gradient(145deg,var(--color-cash-dim),var(--color-accent-dim))] p-3"
+      className="tone-cash flex items-center gap-3 rounded-lg border border-border border-l-[3px] border-l-cash bg-surface p-3"
     >
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-1.5">
-          <IconCircleCheck size={15} className="shrink-0 text-in" />
-          <CurrencyDisplay montant={transaction.montant} size="lg" tone="cash" />
-        </div>
-        <span className="text-xs text-text-muted">{transaction.modePaiement}</span>
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-in-dim text-in-text">
+        <IconCircleCheck size={18} aria-hidden />
+      </span>
+      <div className="min-w-0 flex-1">
+        <CurrencyDisplay montant={transaction.montant} size="lg" tone="cash" className="font-display font-extrabold leading-tight" />
+        <p className="truncate font-mono text-xs text-text-muted">{transaction.reference ?? "Sans référence"}</p>
       </div>
-      <p className="mt-1 text-xs font-mono text-text-muted">{transaction.reference ?? "Sans reference"}</p>
+      <span className="shrink-0 rounded-full bg-surface-high px-2.5 py-1 text-xs font-medium text-text-muted">
+        {transaction.modePaiement}
+      </span>
     </motion.article>
   );
 }

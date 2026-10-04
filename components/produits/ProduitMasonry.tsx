@@ -27,12 +27,12 @@ export function ProduitMasonry({ items, onSelect, grouped = false }: ProduitMaso
           <section key={letter}>
             <div
               id={`alpha-${letter}`}
-              className="sticky top-0 z-10 -mx-1 mb-2 flex items-center gap-2 bg-[var(--color-base)]/90 px-1 py-1 backdrop-blur-sm"
+              className="sticky top-0 z-10 -mx-1 mb-2 flex items-center gap-2 bg-base/90 px-1 py-1 backdrop-blur-sm"
             >
-              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-accent/20 font-mono text-xs font-bold text-accent">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-accent-dim font-mono text-xs font-bold text-accent-text">
                 {letter}
               </span>
-              <span className="text-xs text-text-dim">{produits.length} produit{produits.length > 1 ? "s" : ""}</span>
+              <span className="text-xs text-text-muted">{produits.length} produit{produits.length > 1 ? "s" : ""}</span>
             </div>
             <div className="columns-1 gap-3 md:columns-2 xl:columns-3">
               {produits.map((produit) => (

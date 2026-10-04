@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Card, CardBody } from "@heroui/react";
+import { IconPhoto } from "@tabler/icons-react";
 import { CurrencyDisplay } from "@/components/common/CurrencyDisplay";
-import { StockBadge } from "@/components/common/StockBadge";
+import { SpotlightCard } from "@/components/common/SpotlightCard";
+import { cn } from "@/lib/utils";
 import type { Produit } from "@/types";
 
 interface ProduitCardProps {
@@ -21,52 +22,65 @@ export function ProduitCard({ produit, onPress }: ProduitCardProps) {
   const tauxReduction = isPromo
     ? Math.round(((prixVente - parseFloat(produit.prixPromo!)) / prixVente) * 100)
     : null;
+  const rupture = totalStock <= 0;
 
   return (
-    <Card
-      isPressable
-      onPress={onPress}
-      className="group mb-3 w-full overflow-hidden border border-border/80 bg-[linear-gradient(145deg,rgba(45,69,103,0.32),rgba(34,54,81,0.8))] text-left transition hover:scale-[1.02] hover:border-accent/40 hover:shadow-glow-yellow"
-    >
-      <div className="relative aspect-[3/4] w-full overflow-hidden bg-[color:rgba(20,32,50,0.9)]">
-        {imageUrl && !imgError ? (
-          <Image
-            src={imageUrl}
-            alt={produit.nom}
-            fill
-            sizes="(max-width: 768px) 50vw, (max-width: 1280px) 33vw, 25vw"
-            className="object-contain"
-            onError={() => setImgError(true)}
-          />
-        ) : (
-          <div className="h-full w-full bg-gradient-to-br from-[var(--color-surface-high)] via-[color:rgba(143,126,245,0.22)] to-border" />
-        )}
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(23,38,58,0.75)_0%,transparent_55%)]" />
-        {isPromo && (
-          <div className="absolute left-2 top-2 rounded-full bg-orange-500 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
-            -{tauxReduction}%
-          </div>
-        )}
-      </div>
-      <CardBody className="p-3">
-        <p className="truncate text-sm font-semibold text-text">{produit.nom}</p>
-        <p className="font-mono text-xs text-text-muted">{produit.sku}</p>
-        <div className="mt-2 flex items-center justify-between">
-          <StockBadge value={totalStock} />
-          {isPromo ? (
-            <div className="flex flex-col items-end gap-0.5">
-              <span className="text-[10px] text-text-dim line-through">
-                {prixVente.toLocaleString("fr-FR")} FCFA
-              </span>
-              <span className="[font-family:var(--font-mono)] text-sm font-bold text-orange-400">
-                {Number(produit.prixPromo).toLocaleString("fr-FR")} FCFA
-              </span>
-            </div>
+    <SpotlightCard as="article" tone={isPromo ? "return" : "accent"} className="group mb-3 break-inside-avoid hover:-translate-y-0.5">
+      <button
+        type="button"
+        onClick={onPress}
+        aria-label={`Ouvrir la fiche de ${produit.nom}`}
+        className="block w-full cursor-pointer text-left focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[var(--tone)]"
+      >
+        <div className="relative aspect-[4/5] w-full overflow-hidden bg-surface-high">
+          {imageUrl && !imgError ? (
+            <Image
+              src={imageUrl}
+              alt={produit.nom}
+              fill
+              sizes="(max-width: 768px) 50vw, (max-width: 1280px) 33vw, 25vw"
+              className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+              onError={() => setImgError(true)}
+            />
           ) : (
-            <CurrencyDisplay montant={produit.prixVente} size="sm" />
+            <div className="flex h-full w-full items-center justify-center text-text-muted">
+              <IconPhoto size={36} aria-hidden />
+            </div>
           )}
+          {isPromo && (
+            <span className="absolute left-2.5 top-2.5 rounded-full bg-return px-2.5 py-0.5 text-xs font-bold text-white shadow-sm">
+              -{tauxReduction}%
+            </span>
+          )}
+          <span
+            className={cn(
+              "absolute right-2.5 top-2.5 rounded-full px-2.5 py-0.5 text-xs font-semibold backdrop-blur-sm",
+              rupture ? "bg-out text-white" : "bg-surface/90 text-text"
+            )}
+          >
+            {rupture ? "Rupture" : `${totalStock} en stock`}
+          </span>
         </div>
-      </CardBody>
-    </Card>
+
+        <div className="p-3.5">
+          <p className="truncate text-sm font-semibold text-text">{produit.nom}</p>
+          <p className="truncate font-mono text-xs text-text-muted">{produit.sku}</p>
+          <div className="mt-2.5 flex items-baseline justify-between gap-2">
+            {isPromo ? (
+              <>
+                <span className="font-mono text-sm font-bold text-return-text">
+                  {Number(produit.prixPromo).toLocaleString("fr-FR")} FCFA
+                </span>
+                <span className="font-mono text-xs text-text-muted line-through">
+                  {prixVente.toLocaleString("fr-FR")}
+                </span>
+              </>
+            ) : (
+              <CurrencyDisplay montant={produit.prixVente} size="md" className="font-semibold" />
+            )}
+          </div>
+        </div>
+      </button>
+    </SpotlightCard>
   );
 }

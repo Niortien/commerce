@@ -1,6 +1,7 @@
 "use client";
 
-import { Chip } from "@heroui/react";
+import { IconArrowRight, IconLock } from "@tabler/icons-react";
+import { SpotlightCard } from "@/components/common/SpotlightCard";
 import { CurrencyDisplay } from "@/components/common/CurrencyDisplay";
 import type { Session } from "@/types";
 import { StatutSession } from "@/types";
@@ -33,65 +34,71 @@ export function SessionCard({ session, onClick }: SessionCardProps) {
   const txCount = session.transactions?.length ?? null;
 
   return (
-    <button
-      onClick={() => onClick(session)}
-      className="group w-full rounded-xl border border-border/60 bg-surface p-4 text-left transition-all hover:border-accent/40 hover:bg-surface/80"
-    >
-      <div className="flex items-start justify-between gap-3">
-        {/* Statut + date */}
-        <div className="min-w-0 flex-1">
-          <div className="mb-1.5 flex items-center gap-2">
-            <Chip
-              size="sm"
-              variant="flat"
-              className={
-                isOuverte
-                  ? "border border-in/30 bg-in/10 text-in"
-                  : "border border-border/50 bg-surface text-text-muted"
-              }
-            >
-              {isOuverte ? "● En cours" : "Clôturée"}
-            </Chip>
-            {session.user?.email && (
-              <span className="truncate text-xs text-text-muted">{session.user.email}</span>
+    <SpotlightCard tone={isOuverte ? "in" : "cash"} className="group">
+      <button
+        type="button"
+        onClick={() => onClick(session)}
+        className="w-full cursor-pointer p-4 text-left focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[var(--tone)]"
+      >
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0 flex-1">
+            <div className="mb-1.5 flex flex-wrap items-center gap-2">
+              <span
+                className={
+                  isOuverte
+                    ? "inline-flex items-center gap-1.5 rounded-full bg-in-dim px-2.5 py-0.5 text-xs font-semibold text-in-text"
+                    : "inline-flex items-center gap-1.5 rounded-full bg-surface-high px-2.5 py-0.5 text-xs font-semibold text-text-muted"
+                }
+              >
+                {isOuverte ? (
+                  <span className="relative flex h-2 w-2">
+                    <span aria-hidden className="live-ping absolute inset-0 rounded-full bg-in" />
+                    <span aria-hidden className="relative h-2 w-2 rounded-full bg-in" />
+                  </span>
+                ) : (
+                  <IconLock size={12} aria-hidden />
+                )}
+                {isOuverte ? "En cours" : "Clôturée"}
+              </span>
+              {session.user?.email && <span className="truncate text-xs text-text-muted">{session.user.email}</span>}
+            </div>
+
+            <p className="text-sm font-medium text-text">{fmt(session.dateOuverture)}</p>
+            {session.dateFermeture && (
+              <p className="mt-0.5 text-xs text-text-muted">
+                → {fmt(session.dateFermeture)}
+                <span className="ml-2">({durée(session.dateOuverture, session.dateFermeture)})</span>
+              </p>
             )}
           </div>
 
-          <p className="text-sm font-medium text-text">{fmt(session.dateOuverture)}</p>
-          {session.dateFermeture && (
-            <p className="mt-0.5 text-xs text-text-muted">
-              → {fmt(session.dateFermeture)}
-              <span className="ml-2 text-text-dim">({durée(session.dateOuverture, session.dateFermeture)})</span>
+          <div className="shrink-0 text-right">
+            <CurrencyDisplay
+              montant={session.montantFermeture ?? session.montantOuverture}
+              size="md"
+              tone={isOuverte ? "default" : "cash"}
+              className="font-display font-extrabold"
+            />
+            <p className="mt-0.5 text-[11px] text-text-muted">
+              Ouv. {parseFloat(session.montantOuverture).toLocaleString("fr-FR")} F
             </p>
+          </div>
+        </div>
+
+        <div className="mt-3 flex items-center justify-between border-t border-border pt-3">
+          {txCount !== null ? (
+            <span className="text-xs text-text-muted">
+              <span className="font-semibold text-text">{txCount}</span> transaction{txCount !== 1 ? "s" : ""}
+            </span>
+          ) : (
+            <span className="text-xs text-text-muted">— transactions</span>
           )}
-        </div>
-
-        {/* Montants */}
-        <div className="shrink-0 text-right">
-          <CurrencyDisplay
-            montant={session.montantFermeture ?? session.montantOuverture}
-            size="sm"
-            tone={isOuverte ? "default" : "accent"}
-          />
-          <p className="mt-0.5 text-[11px] text-text-dim">
-            Ouv. <span className="text-text-muted">{parseFloat(session.montantOuverture).toLocaleString("fr-FR")} F</span>
-          </p>
-        </div>
-      </div>
-
-      {/* Footer */}
-      <div className="mt-3 flex items-center justify-between border-t border-border/40 pt-3">
-        {txCount !== null ? (
-          <span className="text-xs text-text-muted">
-            <span className="font-semibold text-text">{txCount}</span> transaction{txCount !== 1 ? "s" : ""}
+          <span className="flex items-center gap-1 text-xs font-semibold text-[var(--tone-text)]">
+            Voir les détails
+            <IconArrowRight size={14} aria-hidden className="transition-transform duration-150 group-hover:translate-x-0.5" />
           </span>
-        ) : (
-          <span className="text-xs text-text-dim">— transactions</span>
-        )}
-        <span className="text-xs font-medium text-accent opacity-0 transition-opacity group-hover:opacity-100">
-          Voir détails →
-        </span>
-      </div>
-    </button>
+        </div>
+      </button>
+    </SpotlightCard>
   );
 }

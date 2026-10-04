@@ -9,11 +9,13 @@ import {
   type SortingState,
 } from "@tanstack/react-table";
 import { useEffect, useMemo, useState } from "react";
-import { Button } from "@heroui/react";
+import { IconArrowBackUp, IconPencil, IconPrinter, IconTrash } from "@tabler/icons-react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { CurrencyDisplay } from "@/components/common/CurrencyDisplay";
 import { ConfirmModal } from "@/components/common/ConfirmModal";
+import { RowActionButton } from "@/components/common/RowActionButton";
+import { StatutPill } from "@/components/common/StatutPill";
 import { useSortie } from "@/features/sorties/query/sorties-queries";
 import {
   useAnnulerSortie,
@@ -34,11 +36,11 @@ const TYPE_LABELS: Record<TypeSortie, string> = {
 
 // Alignées sur les couleurs de SortieTypeStep (même type = même couleur partout).
 const TYPE_COLORS: Record<TypeSortie, string> = {
-  VENTE: "bg-[var(--color-cash-dim)] text-[var(--color-cash)]",
-  PERTE: "bg-[var(--color-out-dim)] text-[var(--color-out)]",
-  DON: "bg-[var(--color-return-dim)] text-[var(--color-return)]",
-  RETOUR_FOURNISSEUR: "bg-[var(--color-in-dim)] text-[var(--color-in)]",
-  DEPENSE: "bg-[var(--color-out-dim)] text-[var(--color-out)]",
+  VENTE: "bg-cash-dim text-cash-text",
+  PERTE: "bg-out-dim text-out-text",
+  DON: "bg-return-dim text-return-text",
+  RETOUR_FOURNISSEUR: "bg-in-dim text-in-text",
+  DEPENSE: "bg-out-dim text-out-text",
 };
 
 function ReprintButton({ sortieId }: { sortieId: string }) {
@@ -81,20 +83,17 @@ function ReprintButton({ sortieId }: { sortieId: string }) {
           transactionReference={recuDetail.transaction?.reference ?? undefined}
         />
       )}
-      <Button
-        size="sm"
-        variant="flat"
-        className="min-w-0 bg-[var(--color-accent-dim)] text-accent"
+      <RowActionButton
+        label="Réimprimer le reçu"
+        tone="cash"
         isLoading={isLoading && fetchRecu}
         onPress={() => {
           if (!fetchRecu) setFetchRecu(true);
           else if (detail?.data) setReprintOpen(true);
         }}
-        aria-label="Réimprimer le reçu"
       >
-        <span className="hidden sm:inline">🖨 Reçu</span>
-        <span className="sm:hidden">🖨</span>
-      </Button>
+        <IconPrinter size={16} aria-hidden />
+      </RowActionButton>
     </>
   );
 }
@@ -137,7 +136,7 @@ export function SortiesTable({ data }: SortiesTableProps) {
         cell: (info) => {
           const type = info.getValue();
           return (
-            <span className={`rounded px-2 py-0.5 text-xs font-semibold ${TYPE_COLORS[type]}`}>
+            <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${TYPE_COLORS[type]}`}>
               {TYPE_LABELS[type]}
             </span>
           );
@@ -159,17 +158,7 @@ export function SortiesTable({ data }: SortiesTableProps) {
       columnHelper.accessor("notes", {
         header: "Statut",
         enableSorting: false,
-        cell: (info) => {
-          const notes = info.getValue();
-          if (notes?.includes("[ANNULEE]")) {
-            return (
-              <span className="rounded bg-[var(--color-out-dim)] px-1.5 py-0.5 text-[10px] font-semibold uppercase text-[var(--color-out)]">
-                Annulée
-              </span>
-            );
-          }
-          return <span className="text-xs text-text-muted">Active</span>;
-        },
+        cell: (info) => <StatutPill annulee={info.getValue()?.includes("[ANNULEE]") ?? false} />,
       }),
       columnHelper.display({
         id: "actions",
@@ -181,38 +170,23 @@ export function SortiesTable({ data }: SortiesTableProps) {
             <div className="flex items-center gap-1.5">
               {!isAnnulee && (
                 <>
-                  <Button
-                    size="sm"
-                    variant="flat"
-                    className="min-w-0 bg-[var(--color-cash-dim)] text-[var(--color-cash)]"
-                    onPress={() => setEditSortie(sortie)}
-                  >
-                    ✏️
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="flat"
-                    className="min-w-0 bg-[var(--color-out-dim)] text-[var(--color-out)]"
-                    onPress={() => annulerMutation.mutate(sortie.id)}
+                  <RowActionButton label="Modifier la sortie" tone="accent" onPress={() => setEditSortie(sortie)}>
+                    <IconPencil size={16} aria-hidden />
+                  </RowActionButton>
+                  <RowActionButton
+                    label="Annuler la sortie"
+                    tone="neutral"
                     isLoading={annulerMutation.isPending && annulerMutation.variables === sortie.id}
-                    aria-label="Annuler la sortie"
+                    onPress={() => annulerMutation.mutate(sortie.id)}
                   >
-                    <span className="hidden sm:inline">Annuler</span>
-                    <span className="sm:hidden">✕</span>
-                  </Button>
-                  {sortie.type === TypeSortie.VENTE && (
-                    <ReprintButton sortieId={sortie.id} />
-                  )}
+                    <IconArrowBackUp size={16} aria-hidden />
+                  </RowActionButton>
+                  {sortie.type === TypeSortie.VENTE && <ReprintButton sortieId={sortie.id} />}
                 </>
               )}
-              <Button
-                size="sm"
-                variant="flat"
-                className="min-w-0 bg-[var(--color-out-dim)] text-[var(--color-out)]"
-                onPress={() => setDeleteTarget(sortie)}
-              >
-                🗑️
-              </Button>
+              <RowActionButton label="Supprimer la sortie" tone="out" onPress={() => setDeleteTarget(sortie)}>
+                <IconTrash size={16} aria-hidden />
+              </RowActionButton>
             </div>
           );
         },
@@ -248,13 +222,13 @@ export function SortiesTable({ data }: SortiesTableProps) {
         danger
       />
 
-      <div className="overflow-x-auto rounded-xl border border-border/60">
+      <div className="overflow-x-auto rounded-xl border border-border bg-surface shadow-card">
         <table className="w-full border-collapse text-sm">
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr
                 key={headerGroup.id}
-                className="border-b border-border/60 bg-[var(--color-surface-high)]"
+                className="border-b border-border bg-surface-high"
               >
                 {headerGroup.headers.map((header) => (
                   <th
@@ -290,8 +264,8 @@ export function SortiesTable({ data }: SortiesTableProps) {
                   <tr
                     key={row.id}
                     className={[
-                      "border-b border-border/30 transition-colors last:border-0",
-                      isAnnulee ? "opacity-40" : "hover:bg-[var(--color-surface-high)]",
+                      "border-b border-border transition-colors last:border-0",
+                      isAnnulee ? "opacity-40" : "hover:bg-out-dim",
                     ].join(" ")}
                   >
                     {row.getVisibleCells().map((cell) => (

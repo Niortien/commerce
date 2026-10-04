@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "@heroui/react";
+import { motion, useScroll, useSpring } from "framer-motion";
 import { IconMenu2, IconX } from "@tabler/icons-react";
 import { BrandMark } from "@/components/common/BrandMark";
 import { ThemeToggle } from "@/components/common/ThemeToggle";
@@ -17,6 +18,8 @@ const LINKS = [
 
 export function MarketingNav() {
   const [open, setOpen] = useState(false);
+  const { scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, { stiffness: 140, damping: 28, mass: 0.3 });
 
   useEffect(() => {
     if (!open) return;
@@ -27,6 +30,11 @@ export function MarketingNav() {
 
   return (
     <header className="sticky top-0 z-sticky border-b border-border bg-surface/90 backdrop-blur">
+      <motion.div
+        aria-hidden
+        style={{ scaleX: progress }}
+        className="absolute inset-x-0 top-0 h-0.5 origin-left bg-gradient-to-r from-[#7c3aed] via-[#2563eb] to-[#06b6d4]"
+      />
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 md:px-6">
         <Link href="/presentation" aria-label="Mon Djossi — accueil" className="rounded-md">
           <BrandMark className="h-11" priority />
