@@ -12,11 +12,11 @@ const MODE_LABELS: Record<ModePaiement, string> = {
 };
 
 const MODE_COLORS: Record<ModePaiement, string> = {
-  CASH: "#4A7AFF",
-  WAVE: "#39d353",
-  ORANGE_MONEY: "#ff9a3c",
-  CARTE: "#8f7ef5",
-  MTN_MONEY: "#64a0ff",
+  CASH: "var(--color-accent)",
+  WAVE: "var(--color-in)",
+  ORANGE_MONEY: "var(--color-return)",
+  CARTE: "var(--color-cash)",
+  MTN_MONEY: "var(--color-out)",
 };
 
 interface ActivitePaiementBreakdownProps {
@@ -42,7 +42,7 @@ export function ActivitePaiementBreakdown({ resume }: ActivitePaiementBreakdownP
   return (
     <div className="space-y-3">
       {/* Barre de répartition */}
-      <div className="flex h-2.5 w-full overflow-hidden rounded-full">
+      <div role="img" aria-label="Répartition des paiements par mode" className="flex h-2.5 w-full gap-0.5 overflow-hidden rounded-full">
         {entries.map(([mode, montant]) => {
           const pct = total > 0 ? (parseFloat(montant) / total) * 100 : 0;
           return (
@@ -65,19 +65,19 @@ export function ActivitePaiementBreakdown({ resume }: ActivitePaiementBreakdownP
           return (
             <div
               key={mode}
-              className="flex items-center gap-2 rounded-lg border border-border/40 bg-[var(--color-surface-high)] px-3 py-2"
+              className="flex items-center gap-2 rounded-lg border border-border bg-surface-high px-3 py-2"
             >
               <span
                 className="h-2 w-2 shrink-0 rounded-full"
                 style={{ backgroundColor: MODE_COLORS[mode] }}
               />
               <div className="min-w-0">
-                <p className="text-[11px] text-text-muted">{MODE_LABELS[mode]}</p>
+                <p className="text-xs text-text-muted">{MODE_LABELS[mode]}</p>
                 <p className="font-mono text-sm font-semibold text-text">
                   {Math.round(parseFloat(montant)).toLocaleString("fr-FR")}
-                  <span className="ml-1 text-[10px] text-text-dim">FCFA</span>
+                  <span className="ml-1 text-[10px] text-text-muted">FCFA</span>
                 </p>
-                <p className="text-[10px] text-text-dim">{pct}%</p>
+                <p className="text-[11px] text-text-muted">{pct}%</p>
               </div>
             </div>
           );

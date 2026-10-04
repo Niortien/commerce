@@ -7,11 +7,11 @@ interface FlowTagProps {
 }
 
 const STYLE_BY_TYPE: Record<FlowTagType, string> = {
-  entree: "bg-[var(--color-in-dim)] text-in",
-  sortie: "bg-[var(--color-out-dim)] text-out",
-  ajustement: "bg-[var(--color-surface-high)] text-[var(--color-text-muted)]",
-  retour: "bg-[var(--color-return-dim)] text-return",
-  vente: "bg-[color:rgba(167,139,250,0.18)] text-cash",
+  entree: "bg-in-dim text-in-text",
+  sortie: "bg-out-dim text-out-text",
+  ajustement: "bg-surface-high text-text-muted",
+  retour: "bg-return-dim text-return-text",
+  vente: "bg-cash-dim text-cash-text",
 };
 
 export function FlowTag({ type }: FlowTagProps) {

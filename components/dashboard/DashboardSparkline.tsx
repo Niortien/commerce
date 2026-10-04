@@ -1,6 +1,7 @@
 "use client";
 
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { Area, AreaChart, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { axisTick, chartColors, tooltipLabelStyle, tooltipStyle } from "@/lib/chartTheme";
 import { formatDateShort } from "@/lib/dateUtils";
 import type { ResumeDashboardData } from "@/features/rapports/api/rapports-api";
 
@@ -18,7 +19,7 @@ interface DashboardSparklineProps {
 export function DashboardSparkline({ data, isError, diagnostic }: DashboardSparklineProps) {
   if (isError) {
     return (
-      <div role="alert" className="flex h-40 flex-col items-center justify-center gap-1 rounded-lg border border-out-line bg-out-dim">
+      <div role="alert" className="flex h-52 flex-col items-center justify-center gap-1 rounded-lg border border-out-line bg-out-dim">
         <p className="text-xs font-semibold text-out-text">Impossible de charger les ventes</p>
         <p className="text-xs text-text-muted">Vérifiez la connexion au serveur</p>
       </div>
@@ -36,8 +37,8 @@ export function DashboardSparkline({ data, isError, diagnostic }: DashboardSpark
     const hasVentesAllTime = (diagnostic?.totalVentesAllTime ?? 0) > 0;
 
     return (
-      <div className="flex min-h-[168px] flex-col justify-between gap-3 rounded-lg border border-border bg-surface p-4 shadow-card">
-        <h2 className="text-xs font-semibold uppercase tracking-wider text-text-muted">Ventes — 7 derniers jours</h2>
+      <div className="flex min-h-[208px] flex-col justify-between gap-3 rounded-lg border border-border bg-surface p-4 shadow-card">
+        <h2 className="text-sm font-semibold text-text">Ventes — 7 derniers jours</h2>
         <div className="space-y-2">
           <p className="text-sm font-medium text-text-muted">Aucune vente sur 7 jours</p>
           {diagnostic && (
@@ -53,37 +54,39 @@ export function DashboardSparkline({ data, isError, diagnostic }: DashboardSpark
     );
   }
 
+  const total = chartData.reduce((sum, d) => sum + d.value, 0);
+
   return (
     <div className="rounded-lg border border-border bg-surface p-4 shadow-card">
-      <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-text-muted">Ventes — 7 derniers jours</h2>
-      <ResponsiveContainer width="100%" height={120}>
-        <LineChart data={chartData} margin={{ top: 4, right: 4, bottom: 0, left: -10 }}>
-          <XAxis
-            dataKey="name"
-            tick={{ fontSize: 11, fill: "var(--color-text-muted)" }}
-            axisLine={false}
-            tickLine={false}
-          />
+      <div className="mb-3 flex items-baseline justify-between gap-2">
+        <h2 className="text-sm font-semibold text-text">Ventes — 7 derniers jours</h2>
+        <p className="font-mono text-xs font-semibold text-cash-text">{total.toLocaleString("fr-FR")} FCFA</p>
+      </div>
+      <ResponsiveContainer width="100%" height={150}>
+        <AreaChart data={chartData} margin={{ top: 6, right: 6, bottom: 0, left: 6 }}>
+          <defs>
+            <linearGradient id="ventes-fill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor={chartColors.cash} stopOpacity={0.35} />
+              <stop offset="100%" stopColor={chartColors.cash} stopOpacity={0} />
+            </linearGradient>
+          </defs>
+          <XAxis dataKey="name" tick={axisTick} axisLine={false} tickLine={false} />
           <YAxis hide />
           <Tooltip
-            contentStyle={{
-              background: "var(--color-surface)",
-              border: "1px solid var(--color-border)",
-              borderRadius: 8,
-              fontSize: 12,
-            }}
+            contentStyle={tooltipStyle}
+            labelStyle={tooltipLabelStyle}
             formatter={(v: number) => [`${v.toLocaleString("fr-FR")} FCFA`, "Ventes"]}
-            labelStyle={{ color: "var(--color-text-muted)" }}
           />
-          <Line
+          <Area
             type="monotone"
             dataKey="value"
-            stroke="var(--color-accent)"
-            strokeWidth={2}
+            stroke={chartColors.cash}
+            strokeWidth={2.5}
+            fill="url(#ventes-fill)"
             dot={false}
-            activeDot={{ r: 4, fill: "var(--color-accent)" }}
+            activeDot={{ r: 4, fill: chartColors.cash, strokeWidth: 0 }}
           />
-        </LineChart>
+        </AreaChart>
       </ResponsiveContainer>
     </div>
   );

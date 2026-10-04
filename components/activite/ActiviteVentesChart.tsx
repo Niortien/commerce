@@ -12,6 +12,7 @@ import {
 } from "recharts";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
+import { axisTick, chartColors, formatAxisAmount, tooltipLabelStyle, tooltipStyle } from "@/lib/chartTheme";
 import type { RapportGroupBy } from "@/stores/uiStore";
 
 interface VentesPoint {
@@ -37,12 +38,6 @@ function formatLabel(iso: string, groupBy: RapportGroupBy): string {
   }
 }
 
-function fmt(v: number): string {
-  if (v >= 1_000_000) return `${(v / 1_000_000).toFixed(1)}M`;
-  if (v >= 1_000) return `${(v / 1_000).toFixed(0)}k`;
-  return String(v);
-}
-
 export function ActiviteVentesChart({ data, groupBy }: ActiviteVentesChartProps) {
   const chartData = data.map((d) => ({
     label: formatLabel(d.periode, groupBy),
@@ -63,28 +58,24 @@ export function ActiviteVentesChart({ data, groupBy }: ActiviteVentesChartProps)
   return (
     <ResponsiveContainer width="100%" height={200}>
       <BarChart data={chartData} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
-        <CartesianGrid strokeDasharray="3 3" stroke="rgba(64,96,138,0.3)" vertical={false} />
+        <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} vertical={false} />
         <XAxis
           dataKey="label"
-          tick={{ fill: "#9A9088", fontSize: 11 }}
+          tick={axisTick}
           axisLine={false}
           tickLine={false}
         />
         <YAxis
-          tickFormatter={fmt}
-          tick={{ fill: "#9A9088", fontSize: 11 }}
+          tickFormatter={formatAxisAmount}
+          tick={axisTick}
           axisLine={false}
           tickLine={false}
           width={44}
         />
         <Tooltip
-          contentStyle={{
-            background: "#0C1628",
-            border: "1px solid #1A2A50",
-            borderRadius: "8px",
-            fontSize: "12px",
-            color: "#FAFAFA",
-          }}
+          contentStyle={tooltipStyle}
+          labelStyle={tooltipLabelStyle}
+          cursor={{ fill: "var(--color-surface-high)" }}
           formatter={(value: number, name: string) => [
             name === "Ventes"
               ? `${value.toLocaleString("fr-FR")} FCFA`
@@ -94,14 +85,7 @@ export function ActiviteVentesChart({ data, groupBy }: ActiviteVentesChartProps)
         />
         <Bar dataKey="Ventes" radius={[4, 4, 0, 0]}>
           {chartData.map((entry, idx) => (
-            <Cell
-              key={idx}
-              fill={
-                entry.Ventes === max
-                  ? "#4A7AFF"
-                  : `rgba(74,122,255,${0.3 + (entry.Ventes / max) * 0.5})`
-              }
-            />
+            <Cell key={idx} fill={chartColors.cash} fillOpacity={entry.Ventes === max ? 1 : 0.35 + (entry.Ventes / max) * 0.45} />
           ))}
         </Bar>
       </BarChart>

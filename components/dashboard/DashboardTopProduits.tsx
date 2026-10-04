@@ -25,7 +25,7 @@ function ChecklistStep({ done, label, href }: { done: boolean; label: string; hr
       {done ? (
         <IconCheck size={14} className="shrink-0 text-in-text" aria-hidden />
       ) : (
-        <IconCircle size={14} className="shrink-0 text-text-dim" aria-hidden />
+        <IconCircle size={14} className="shrink-0 text-text-muted" aria-hidden />
       )}
       <span className={done ? "text-text-muted line-through" : "text-text"}>{label}</span>
     </>
@@ -47,7 +47,7 @@ function ChecklistStep({ done, label, href }: { done: boolean; label: string; hr
 export function DashboardTopProduits({ produits, isLoading, isError, diagnostic }: DashboardTopProduitsProps) {
   return (
     <div className="rounded-lg border border-border bg-surface p-4 shadow-card">
-      <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-text-muted">Top 5 produits — 7 jours</h2>
+      <h2 className="mb-3 text-sm font-semibold text-text">Top 5 produits — 7 jours</h2>
 
       {isLoading ? (
         <div className="space-y-2">
@@ -89,26 +89,39 @@ export function DashboardTopProduits({ produits, isLoading, isError, diagnostic 
           )}
         </div>
       ) : (
-        <ol className="space-y-2">
-          {produits.slice(0, 5).map((p, i) => (
-            <li
-              key={p.produitId}
-              className="flex items-center justify-between gap-3 rounded-md bg-surface-high px-3 py-2"
-            >
-              <div className="flex min-w-0 items-center gap-2">
-                <span className="w-5 shrink-0 text-center font-mono text-xs text-text-muted">
+        <ol className="space-y-3.5">
+          {produits.slice(0, 5).map((p, i) => {
+            const max = Math.max(...produits.slice(0, 5).map((x) => Number(x.montantTotal) || 0), 1);
+            const pct = ((Number(p.montantTotal) || 0) / max) * 100;
+            return (
+              <li key={p.produitId} className="flex items-center gap-3">
+                <span
+                  className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
+                    i === 0 ? "bg-return-dim text-return-text" : "bg-surface-high text-text-muted"
+                  }`}
+                >
                   {i + 1}
                 </span>
-                <span className="truncate text-sm font-medium text-text">{p.nom}</span>
-              </div>
-              <div className="shrink-0 text-right">
-                <p className="tabular font-mono text-xs font-medium text-accent-text">
-                  {Number(p.montantTotal).toLocaleString("fr-FR")} FCFA
-                </p>
-                <p className="text-xs text-text-muted">{p.quantiteTotale} vendus</p>
-              </div>
-            </li>
-          ))}
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-baseline justify-between gap-2">
+                    <span className="truncate text-sm font-medium text-text">{p.nom}</span>
+                    <span className="shrink-0 text-xs text-text-muted">{p.quantiteTotale} vendus</span>
+                  </div>
+                  <div className="mt-1.5 flex items-center gap-2">
+                    <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-surface-high">
+                      <div
+                        className="h-full rounded-full bg-accent transition-[width] duration-700 ease-out"
+                        style={{ width: `${pct}%` }}
+                      />
+                    </div>
+                    <span className="tabular shrink-0 font-mono text-xs font-semibold text-accent-text">
+                      {Number(p.montantTotal).toLocaleString("fr-FR")} FCFA
+                    </span>
+                  </div>
+                </div>
+              </li>
+            );
+          })}
         </ol>
       )}
     </div>
