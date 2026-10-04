@@ -22,7 +22,7 @@ export function MarqueHero() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="mb-5 font-[var(--font-display)] text-sm italic"
+            className="mb-5 font-display text-sm italic"
             style={{ color: "var(--v-gold)" }}
           >
             Notre maison
@@ -31,7 +31,7 @@ export function MarqueHero() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="font-[var(--font-display)] leading-[1.05] tracking-tight"
+            className="font-display leading-[1.05] tracking-tight"
             style={{ fontSize: "clamp(38px,6vw,64px)", color: "var(--v-text)" }}
           >
             Le luxe multi&#8209;marques,{" "}
@@ -60,7 +60,7 @@ export function MarqueHero() {
           style={{ borderColor: "var(--v-gold)" }}
         >
           <p
-            className="font-[var(--font-display)] text-xl italic leading-snug md:text-2xl"
+            className="font-display text-xl italic leading-snug md:text-2xl"
             style={{ color: "var(--v-text)" }}
           >
             &laquo;&nbsp;Be Luxury n&apos;est pas un slogan, c&apos;est une exigence

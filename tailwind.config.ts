@@ -1,6 +1,23 @@
 import type { Config } from "tailwindcss";
 import { heroui } from "@heroui/react";
 
+/**
+ * Couleur sémantique adossée à une variable CSS, compatible avec les modificateurs d'opacité Tailwind
+ * (`border-border/60`, `bg-accent/10`…). Une chaîne `var(--x)` simple ne les supporte pas : la classe n'était alors
+ * jamais générée. `color-mix` accepte n'importe quel format de variable (hex ou rgba).
+ */
+const withAlpha = (variable: string): string => {
+  const fn = ({ opacityValue }: { opacityValue?: string }) => {
+    // Sans modificateur, Tailwind passe `var(--tw-*-opacity)` (non numérique) : on renvoie alors la variable telle quelle.
+    const alpha = Number(opacityValue);
+    return opacityValue === undefined || Number.isNaN(alpha)
+      ? `var(${variable})`
+      : `color-mix(in srgb, var(${variable}) ${Math.round(alpha * 1000) / 10}%, transparent)`;
+  };
+  // Tailwind accepte une fonction ici, mais son typage de `extend.colors` ne l'exprime pas.
+  return fn as unknown as string;
+};
+
 const config: Config = {
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
@@ -33,22 +50,45 @@ const config: Config = {
         "4xl": "var(--text-4xl)",
         "5xl": "var(--text-5xl)",
       },
+      // Bordure par défaut = token du thème (le gris Tailwind par défaut jurait en thème sombre).
+      borderColor: { DEFAULT: withAlpha("--color-border") },
       colors: {
         /* ── Tokens sémantiques existants ── */
-        base:            "var(--color-base)",
-        surface:         "var(--color-surface)",
-        "surface-high":  "var(--color-surface-high)",
-        border:          "var(--color-border)",
-        "border-active": "var(--color-border-active)",
-        accent:          "var(--color-accent)",
-        "accent-dim":    "var(--color-accent-dim)",
-        in:              "var(--color-in)",
-        out:             "var(--color-out)",
-        return:          "var(--color-return)",
-        cash:            "var(--color-cash)",
-        text:            "var(--color-text)",
-        "text-muted":    "var(--color-text-muted)",
-        "text-dim":      "var(--color-text-dim)",
+        base:            withAlpha("--color-base"),
+        surface:         withAlpha("--color-surface"),
+        "surface-high":  withAlpha("--color-surface-high"),
+        border:          withAlpha("--color-border"),
+        "border-active": withAlpha("--color-border-active"),
+        accent:          withAlpha("--color-accent"),
+        "accent-dim":    withAlpha("--color-accent-dim"),
+        in:              withAlpha("--color-in"),
+        out:             withAlpha("--color-out"),
+        return:          withAlpha("--color-return"),
+        cash:            withAlpha("--color-cash"),
+        "in-dim":        withAlpha("--color-in-dim"),
+        "out-dim":       withAlpha("--color-out-dim"),
+        "return-dim":    withAlpha("--color-return-dim"),
+        "cash-dim":      withAlpha("--color-cash-dim"),
+        "in-text":       withAlpha("--color-in-text"),
+        "out-text":      withAlpha("--color-out-text"),
+        "return-text":   withAlpha("--color-return-text"),
+        "cash-text":     withAlpha("--color-cash-text"),
+        "accent-text":   withAlpha("--color-accent-text"),
+        "out-line":      withAlpha("--color-out-line"),
+        "return-line":   withAlpha("--color-return-line"),
+        text:            withAlpha("--color-text"),
+        "text-muted":    withAlpha("--color-text-muted"),
+        "text-dim":      withAlpha("--color-text-dim"),
+
+        sidebar: {
+          DEFAULT: withAlpha("--sidebar-bg"),
+          border:  withAlpha("--sidebar-border"),
+          hover:   withAlpha("--sidebar-hover"),
+          active:  withAlpha("--sidebar-active"),
+          text:    withAlpha("--sidebar-text"),
+          muted:   withAlpha("--sidebar-text-muted"),
+          accent:  withAlpha("--sidebar-accent"),
+        },
 
         /* ── Primary scale (Gold) ── */
         primary: {

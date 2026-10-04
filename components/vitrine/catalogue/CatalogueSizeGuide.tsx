@@ -27,7 +27,7 @@ export function CatalogueSizeGuide() {
           className="flex w-full items-center justify-between py-5"
         >
           <span
-            className="font-[var(--font-display)] text-sm font-black uppercase tracking-widest"
+            className="font-display text-sm font-black uppercase tracking-widest"
             style={{ color: "var(--v-text)" }}
           >
             Guide des tailles
@@ -78,9 +78,9 @@ export function CatalogueSizeGuide() {
                           style={{ borderColor: "var(--v-border)", backgroundColor: i % 2 === 0 ? "transparent" : "var(--v-s1)" }}
                         >
                           <td className="px-4 py-3 font-bold" style={{ color: "var(--v-text)" }}>{row.taille}</td>
-                          <td className="px-4 py-3 font-[var(--font-mono)]" style={{ color: "var(--v-muted)" }}>{row.eu}</td>
-                          <td className="px-4 py-3 font-[var(--font-mono)]" style={{ color: "var(--v-muted)" }}>{row.cm}</td>
-                          <td className="px-4 py-3 font-[var(--font-mono)]" style={{ color: "var(--v-muted)" }}>{row.us}</td>
+                          <td className="px-4 py-3 font-mono" style={{ color: "var(--v-muted)" }}>{row.eu}</td>
+                          <td className="px-4 py-3 font-mono" style={{ color: "var(--v-muted)" }}>{row.cm}</td>
+                          <td className="px-4 py-3 font-mono" style={{ color: "var(--v-muted)" }}>{row.us}</td>
                         </tr>
                       ))}
                     </tbody>

@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import dynamic from "next/dynamic";
+import { PageHeader } from "@/components/common/PageHeader";
 import { PageWrapper } from "@/components/common/PageWrapper";
 import { useResumeJour } from "@/features/caisse/query/caisse-queries";
 import { useResumeDashboard, useStockValeur } from "@/features/rapports/query/rapports-queries";
@@ -59,14 +60,16 @@ export function DashboardView() {
 
   return (
     <PageWrapper>
-      {/* Header */}
-      <div className="rounded-xl border border-border bg-[linear-gradient(135deg,var(--color-accent-dim)_0%,transparent_60%)] p-4 md:p-5">
-        <h1 className="font-[var(--font-display)] text-2xl font-bold tracking-tight text-text md:text-4xl">
-          {greeting()}
-          {boutiqueName ? <>, <span className="text-accent">{boutiqueName}</span></> : null}
-        </h1>
-        <p className="mt-1 text-sm text-text-muted">Voici où en est ta boutique aujourd&apos;hui.</p>
-      </div>
+      <PageHeader
+        eyebrow="Tableau de bord"
+        title={
+          <>
+            {greeting()}
+            {boutiqueName ? <>, <span className="text-accent-text">{boutiqueName}</span></> : null}
+          </>
+        }
+        description="Voici où en est votre boutique aujourd'hui : ventes, stock et dernières opérations."
+      />
 
       {/* KPIs */}
       <DashboardKpiGrid
@@ -88,7 +91,7 @@ export function DashboardView() {
           />
         )}
         {dashboardLoading && (
-          <div className="h-40 animate-pulse rounded-xl border border-border/40 bg-[var(--color-surface-high)]" />
+          <div className="h-40 animate-pulse rounded-lg border border-border bg-surface-high" />
         )}
         <DashboardTopProduits
           produits={topProduits}

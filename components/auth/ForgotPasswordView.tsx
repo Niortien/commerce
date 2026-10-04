@@ -36,8 +36,8 @@ export function ForgotPasswordView() {
   });
 
   return (
-    <section className="mx-auto mt-16 max-w-md rounded-lg border border-border bg-surface p-6">
-      <h1 className="mb-4 font-[var(--font-display)] text-2xl md:text-3xl">Mot de passe oublié</h1>
+    <section className="w-full rounded-lg border border-border bg-surface p-6 shadow-card md:p-8">
+      <h1 className="mb-4 font-display text-2xl md:text-3xl">Mot de passe oublié</h1>
 
       {sent ? (
         <p className="text-sm text-default-600">

@@ -45,7 +45,7 @@ export function EntreeFeedItem({ entree, onCancel }: EntreeFeedItemProps) {
       {/* Fournisseur + référence + nombre d'articles */}
       <p className="text-sm font-semibold text-text">{entree.fournisseur}</p>
       <div className="flex items-center gap-3">
-        <p className="font-[var(--font-mono)] text-xs text-text-muted">
+        <p className="font-mono text-xs text-text-muted">
           {entree.reference}
         </p>
         {entree.lignes !== undefined && (

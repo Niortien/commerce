@@ -33,7 +33,7 @@ export function MarqueValues() {
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="mb-2 font-[var(--font-display)] text-sm italic"
+              className="mb-2 font-display text-sm italic"
               style={{ color: "var(--v-gold)" }}
             >
               Ce en quoi on croit
@@ -43,7 +43,7 @@ export function MarqueValues() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="font-[var(--font-display)] leading-[1.05] tracking-tight"
+              className="font-display leading-[1.05] tracking-tight"
               style={{ fontSize: "clamp(30px,5vw,52px)", color: "var(--v-text)" }}
             >
               Nos valeurs
@@ -63,13 +63,13 @@ export function MarqueValues() {
               style={{ borderColor: "var(--v-border)" }}
             >
               <span
-                className="font-[var(--font-mono)] text-sm font-black"
+                className="font-mono text-sm font-black"
                 style={{ color: "var(--v-gold)" }}
               >
                 {val.num}
               </span>
               <h3
-                className="font-[var(--font-display)] text-2xl leading-snug"
+                className="font-display text-2xl leading-snug"
                 style={{ color: "var(--v-text)" }}
               >
                 {val.title}

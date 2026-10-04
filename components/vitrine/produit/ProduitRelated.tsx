@@ -25,7 +25,7 @@ export function ProduitRelated({ categorieId, excludeId }: ProduitRelatedProps) 
           Tu aimeras aussi
         </p>
         <h2
-          className="mb-8 font-[var(--font-display)] text-2xl font-black uppercase tracking-tight"
+          className="mb-8 font-display text-2xl font-black uppercase tracking-tight"
           style={{ color: "var(--v-text)" }}
         >
           Dans la même veine

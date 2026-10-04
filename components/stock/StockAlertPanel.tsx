@@ -32,7 +32,7 @@ export function StockAlertPanel({ alertes }: StockAlertPanelProps) {
           >
             <span className="font-medium text-text">{item.produit?.nom ?? "—"}</span>
             <span className="text-text-muted">{item.taille} · {item.couleur}</span>
-            <span className="font-[var(--font-mono)] font-bold text-out">{item.quantiteStock}</span>
+            <span className="font-mono font-bold text-out">{item.quantiteStock}</span>
           </li>
         ))}
       </ul>

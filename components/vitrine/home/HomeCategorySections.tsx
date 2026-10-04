@@ -62,7 +62,7 @@ function MiniCard({ produit }: { produit: Produit }) {
             {produit.nom}
           </p>
           <p
-            className="mt-1 font-[var(--font-mono)] text-[11px] font-black"
+            className="mt-1 font-mono text-[11px] font-black"
             style={{ color: "var(--v-gold)" }}
           >
             {(prixPromo ?? prix).toLocaleString("fr-FR")}
@@ -105,13 +105,13 @@ function OneCategorySection({ categorie }: { categorie: Categorie }) {
       <div className="mb-4 flex items-end justify-between px-4">
         <div>
           <p
-            className="font-[var(--font-display)] text-xs italic"
+            className="font-display text-xs italic"
             style={{ color: "var(--v-gold)" }}
           >
             Collection
           </p>
           <h2
-            className="font-[var(--font-display)] text-xl leading-tight"
+            className="font-display text-xl leading-tight"
             style={{ color: "var(--v-text)" }}
           >
             {categorie.nom}
@@ -169,13 +169,13 @@ export function HomeCategorySections() {
       <div className="flex flex-col gap-2 px-4 pt-14 pb-4 md:flex-row md:items-end md:justify-between md:px-16">
         <div>
           <p
-            className="mb-1 font-[var(--font-display)] text-sm italic"
+            className="mb-1 font-display text-sm italic"
             style={{ color: "var(--v-gold)" }}
           >
             Explorer par catégorie
           </p>
           <h2
-            className="font-[var(--font-display)] leading-[1.05] tracking-tight"
+            className="font-display leading-[1.05] tracking-tight"
             style={{ fontSize: "clamp(26px,4.5vw,44px)", color: "var(--v-text)" }}
           >
             Qu&rsquo;est-ce que <span className="italic" style={{ color: "var(--v-gold)" }}>tu cherches&nbsp;?</span>

@@ -22,7 +22,7 @@ export function HomeBestSellers() {
             Incontournables
           </p>
           <h2
-            className="font-[var(--font-display)] text-3xl font-black uppercase tracking-tight md:text-5xl"
+            className="font-display text-3xl font-black uppercase tracking-tight md:text-5xl"
             style={{ color: "var(--v-text)" }}
           >
             Best Sellers

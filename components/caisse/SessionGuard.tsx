@@ -29,7 +29,7 @@ export function SessionGuard({ children }: SessionGuardProps) {
           ☀️
         </div>
         <div>
-          <p className="font-[var(--font-display)] text-xl text-text">Prêt pour la journée ?</p>
+          <p className="font-display text-xl text-text">Prêt pour la journée ?</p>
           <p className="mt-1 text-sm text-text-muted">Aucune session caisse n&apos;est ouverte</p>
         </div>
         <Button

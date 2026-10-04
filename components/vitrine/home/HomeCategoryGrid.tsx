@@ -32,7 +32,7 @@ export function HomeCategoryGrid() {
           Parcourir
         </p>
         <h2
-          className="font-[var(--font-display)] text-3xl font-black uppercase tracking-tight md:text-5xl"
+          className="font-display text-3xl font-black uppercase tracking-tight md:text-5xl"
           style={{ color: "var(--v-text)" }}
         >
           Catégories
@@ -64,7 +64,7 @@ export function HomeCategoryGrid() {
                 transition={{ duration: 0.25 }}
               >
                 <p
-                  className="font-[var(--font-display)] text-4xl font-black uppercase md:text-5xl"
+                  className="font-display text-4xl font-black uppercase md:text-5xl"
                   style={{ color: "var(--v-text)" }}
                 >
                   {items[0].nom}
@@ -104,7 +104,7 @@ export function HomeCategoryGrid() {
             >
               <motion.div whileHover={{ y: -3 }} transition={{ duration: 0.2 }}>
                 <p
-                  className="font-[var(--font-display)] text-2xl font-black uppercase md:text-3xl"
+                  className="font-display text-2xl font-black uppercase md:text-3xl"
                   style={{ color: "var(--v-text)" }}
                 >
                   {cat.nom}

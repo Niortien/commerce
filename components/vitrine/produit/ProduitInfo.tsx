@@ -75,7 +75,7 @@ export function ProduitInfo({ produit, totalStock }: ProduitInfoProps) {
 
       {/* Nom */}
       <h1
-        className="font-[var(--font-display)] font-black leading-tight tracking-tight"
+        className="font-display font-black leading-tight tracking-tight"
         style={{ fontSize: "clamp(28px, 5vw, 48px)", color: "var(--v-text)" }}
       >
         {produit.nom}

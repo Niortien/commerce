@@ -191,7 +191,7 @@ export function EntreeCreatePanel({ isOpen, onClose }: EntreeCreatePanelProps) {
       >
         {/* Header */}
         <div className="flex items-center justify-between border-b border-border/60 px-4 py-3">
-          <h3 className="font-[var(--font-display)] text-xl text-in">Nouvelle entrée</h3>
+          <h3 className="font-display text-xl text-in">Nouvelle entrée</h3>
           <Button isIconOnly variant="light" onPress={onClose} aria-label="Fermer">✕</Button>
         </div>
 
@@ -232,7 +232,7 @@ export function EntreeCreatePanel({ isOpen, onClose }: EntreeCreatePanelProps) {
             <div className="mb-3 flex items-center justify-between">
               <p className="text-xs uppercase tracking-wide text-text-muted">Produits reçus</p>
               {lines.length > 0 && (
-                <span className="font-[var(--font-mono)] text-xs text-in">
+                <span className="font-mono text-xs text-in">
                   Total : {Number(totalCout).toLocaleString("fr-FR")} FCFA
                 </span>
               )}

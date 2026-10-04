@@ -73,7 +73,7 @@ export function ActivitePaiementBreakdown({ resume }: ActivitePaiementBreakdownP
               />
               <div className="min-w-0">
                 <p className="text-[11px] text-text-muted">{MODE_LABELS[mode]}</p>
-                <p className="font-[var(--font-mono)] text-sm font-semibold text-text">
+                <p className="font-mono text-sm font-semibold text-text">
                   {Math.round(parseFloat(montant)).toLocaleString("fr-FR")}
                   <span className="ml-1 text-[10px] text-text-dim">FCFA</span>
                 </p>

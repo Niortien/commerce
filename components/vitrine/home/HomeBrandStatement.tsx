@@ -28,7 +28,7 @@ export function HomeBrandStatement() {
           </motion.p>
 
           <motion.h2
-            className="font-[var(--font-display)] font-medium leading-tight"
+            className="font-display font-medium leading-tight"
             style={{ fontSize: "clamp(32px, 4.5vw, 52px)", color: "var(--v-text)" }}
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -56,7 +56,7 @@ export function HomeBrandStatement() {
           </motion.p>
 
           <motion.blockquote
-            className="mt-8 border-l pl-5 font-[var(--font-display)] text-lg italic"
+            className="mt-8 border-l pl-5 font-display text-lg italic"
             style={{ borderColor: "var(--v-gold)", color: "var(--v-text)" }}
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -79,7 +79,7 @@ export function HomeBrandStatement() {
           {STATS.map((stat) => (
             <div key={stat.label} className="flex items-baseline gap-4">
               <p
-                className="font-[var(--font-display)] font-medium leading-none"
+                className="font-display font-medium leading-none"
                 style={{ fontSize: "clamp(28px,3vw,40px)", color: "var(--v-gold)" }}
               >
                 {stat.value}

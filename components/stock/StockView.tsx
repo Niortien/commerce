@@ -27,8 +27,8 @@ export function StockView() {
     <PageWrapper>
       <div className="rounded-xl border border-border/80 bg-[linear-gradient(120deg,var(--color-accent-dim),var(--color-cash-dim))] p-4 md:p-5">
         <div className="flex items-end justify-between">
-          <h1 className="font-[var(--font-display)] text-2xl md:text-4xl text-text">Stock</h1>
-          <span className="rounded-full border border-accent/40 bg-[var(--color-accent-dim)] px-3 py-1 font-[var(--font-mono)] text-accent">
+          <h1 className="font-display text-2xl md:text-4xl text-text">Stock</h1>
+          <span className="rounded-full border border-accent/40 bg-[var(--color-accent-dim)] px-3 py-1 font-mono text-accent">
             {total} variantes
           </span>
         </div>

@@ -163,10 +163,10 @@ export function ActiviteView() {
       <div className="rounded-xl border border-border/80 bg-[linear-gradient(135deg,rgba(143,126,245,0.20),rgba(34,54,81,0.50))] p-4 md:p-5">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <h1 className="font-[var(--font-display)] text-2xl text-[var(--color-cash)] md:text-4xl">
+            <h1 className="font-display text-2xl text-[var(--color-cash)] md:text-4xl">
               Activité
             </h1>
-            <p className="mt-1 font-[var(--font-mono)] text-xs text-text-muted">{rangeLabel}</p>
+            <p className="mt-1 font-mono text-xs text-text-muted">{rangeLabel}</p>
           </div>
 
           <div className="flex flex-col gap-3">

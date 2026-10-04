@@ -27,13 +27,13 @@ export function DashboardActivityFeed({ entrees, sorties, isLoading }: Dashboard
   ].sort((a, b) => new Date(b.item.createdAt).getTime() - new Date(a.item.createdAt).getTime());
 
   return (
-    <div className="rounded-xl border border-border/60 bg-[var(--color-surface-high)] p-4">
-      <p className="mb-3 text-xs uppercase tracking-wide text-text-muted">Dernière activité</p>
+    <div className="rounded-lg border border-border bg-surface p-4 shadow-card">
+      <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-text-muted">Dernière activité</h2>
 
       {isLoading ? (
         <div className="space-y-2">
           {[...Array(5)].map((_, i) => (
-            <div key={i} className="h-10 animate-pulse rounded-md bg-[var(--color-surface)]" />
+            <div key={i} className="h-12 animate-pulse rounded-md bg-surface-high" />
           ))}
         </div>
       ) : items.length === 0 ? (
@@ -43,9 +43,9 @@ export function DashboardActivityFeed({ entrees, sorties, isLoading }: Dashboard
           {items.map((a) => (
             <li
               key={`${a.kind}-${a.item.id}`}
-              className="flex items-center justify-between rounded-md border border-border/60 bg-[var(--color-surface)] px-3 py-2"
+              className="flex items-center justify-between gap-3 rounded-md bg-surface-high px-3 py-2"
             >
-              <div className="flex items-center gap-2">
+              <div className="flex min-w-0 items-center gap-2">
                 <FlowTag
                   type={
                     a.kind === "entree"
@@ -59,13 +59,13 @@ export function DashboardActivityFeed({ entrees, sorties, isLoading }: Dashboard
                       ? `Entrée — ${(a.item as Entree).fournisseur}`
                       : `Sortie — ${(a.item as Sortie).type}`}
                   </p>
-                  <p className="text-[10px] text-text-muted">
+                  <p className="text-xs text-text-muted">
                     {a.item.reference}
                   </p>
                 </div>
               </div>
-              <div className="text-right">
-                <p className="font-[var(--font-mono)] text-xs text-text">
+              <div className="shrink-0 text-right">
+                <p className="tabular font-mono text-xs font-medium text-text">
                   {Number(
                     a.kind === "entree"
                       ? (a.item as Entree).totalCout
@@ -73,7 +73,7 @@ export function DashboardActivityFeed({ entrees, sorties, isLoading }: Dashboard
                   ).toLocaleString("fr-FR")}{" "}
                   FCFA
                 </p>
-                <p className="text-[10px] text-text-muted">
+                <p className="text-xs text-text-muted">
                   {formatDateFr(a.item.createdAt)}
                 </p>
               </div>

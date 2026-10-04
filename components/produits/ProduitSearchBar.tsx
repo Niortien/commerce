@@ -62,7 +62,7 @@ export function ProduitSearchBar({
         {/* Count + clear */}
         <div className="absolute right-3 flex items-center gap-2">
           {search && (
-            <span className="rounded-full bg-accent/15 px-2 py-0.5 font-[var(--font-mono)] text-[11px] text-accent">
+            <span className="rounded-full bg-accent/15 px-2 py-0.5 font-mono text-[11px] text-accent">
               {count}
             </span>
           )}

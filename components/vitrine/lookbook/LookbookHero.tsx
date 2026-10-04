@@ -38,7 +38,7 @@ function VisualPanel() {
 
       <div className="relative flex h-24 items-end justify-center px-6 pb-4 md:h-full md:min-h-[540px] md:pb-10">
         <p
-          className="font-[var(--font-display)] text-center text-sm italic leading-relaxed md:max-w-[220px] md:text-base"
+          className="font-display text-center text-sm italic leading-relaxed md:max-w-[220px] md:text-base"
           style={{ color: "#fff" }}
         >
           Saison 2025
@@ -66,14 +66,14 @@ export function LookbookHero() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="font-[var(--font-display)] text-sm italic tracking-wide"
+            className="font-display text-sm italic tracking-wide"
             style={{ color: "var(--v-gold)" }}
           >
             Saison 2025 — Collection Abidjan
           </motion.p>
 
           <motion.h1
-            className="mt-6 font-[var(--font-display)] font-semibold leading-[1.02]"
+            className="mt-6 font-display font-semibold leading-[1.02]"
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}

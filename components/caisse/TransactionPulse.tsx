@@ -28,7 +28,7 @@ export function TransactionPulse({ transaction }: TransactionPulseProps) {
         </div>
         <span className="text-xs text-text-muted">{transaction.modePaiement}</span>
       </div>
-      <p className="mt-1 text-xs font-[var(--font-mono)] text-text-muted">{transaction.reference ?? "Sans reference"}</p>
+      <p className="mt-1 text-xs font-mono text-text-muted">{transaction.reference ?? "Sans reference"}</p>
     </motion.article>
   );
 }

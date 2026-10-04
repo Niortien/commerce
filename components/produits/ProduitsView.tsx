@@ -53,9 +53,9 @@ export function ProduitsView() {
       {/* Header */}
       <div className="rounded-xl border border-border/80 bg-[linear-gradient(120deg,rgba(74,122,255,0.14),rgba(143,126,245,0.14))] p-4 md:p-5">
         <div className="flex items-end justify-between">
-          <h1 className="font-[var(--font-display)] text-2xl md:text-4xl">Produits</h1>
+          <h1 className="font-display text-2xl md:text-4xl">Produits</h1>
           {!isLoading && (
-            <span className="rounded-full border border-accent/40 bg-[color:rgba(240,180,41,0.16)] px-3 py-1 font-[var(--font-mono)] text-xs text-accent">
+            <span className="rounded-full border border-accent/40 bg-[color:rgba(240,180,41,0.16)] px-3 py-1 font-mono text-xs text-accent">
               {produits.length} article{produits.length > 1 ? "s" : ""}
             </span>
           )}

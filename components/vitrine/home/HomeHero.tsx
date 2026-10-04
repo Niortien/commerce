@@ -50,7 +50,7 @@ function VisualPanel() {
 
       <div className="relative flex h-24 items-end justify-center px-6 pb-4 md:h-full md:min-h-[560px] md:pb-10">
         <p
-          className="font-[var(--font-display)] text-center text-sm italic leading-relaxed md:max-w-[220px] md:text-base"
+          className="font-display text-center text-sm italic leading-relaxed md:max-w-[220px] md:text-base"
           style={{ color: "#fff" }}
         >
           Marcory Boulevard VGE
@@ -74,14 +74,14 @@ export function HomeHero() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="font-[var(--font-display)] text-sm italic tracking-wide"
+            className="font-display text-sm italic tracking-wide"
             style={{ color: "var(--v-gold)" }}
           >
             Maison multi-marques — Marcory, Abidjan
           </motion.p>
 
           <motion.h1
-            className="mt-6 font-[var(--font-display)] font-semibold leading-[1.02]"
+            className="mt-6 font-display font-semibold leading-[1.02]"
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
@@ -124,7 +124,7 @@ export function HomeHero() {
           >
             <Link
               href="/catalogue"
-              className="inline-flex items-center gap-2 rounded-full border-2 px-9 py-3.5 font-[var(--font-display)] text-sm font-semibold uppercase tracking-[0.15em] transition-all hover:bg-[var(--v-gold)] hover:text-black"
+              className="inline-flex items-center gap-2 rounded-full border-2 px-9 py-3.5 font-display text-sm font-semibold uppercase tracking-[0.15em] transition-all hover:bg-[var(--v-gold)] hover:text-black"
               style={{ borderColor: "var(--v-gold)", color: "var(--v-gold)" }}
             >
               Découvrir la collection
@@ -151,7 +151,7 @@ export function HomeHero() {
               <div key={s.label} className="flex items-center gap-8">
                 {i > 0 && <span style={{ color: "var(--v-border)" }}>·</span>}
                 <div className="flex flex-col items-start">
-                  <span className="font-[var(--font-display)] text-lg font-semibold" style={{ color: "var(--v-text)" }}>
+                  <span className="font-display text-lg font-semibold" style={{ color: "var(--v-text)" }}>
                     {s.val}
                   </span>
                   <span className="mt-0.5 text-[9px] uppercase tracking-wider" style={{ color: "var(--v-dim)" }}>

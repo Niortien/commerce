@@ -69,7 +69,7 @@ export function EntreesView() {
         {/* En-tête */}
         <div className="flex flex-wrap items-end justify-between gap-3 rounded-xl border border-border/80 bg-[linear-gradient(120deg,rgba(57,211,83,0.18),rgba(34,54,81,0.42))] p-4 md:p-5">
           <div>
-            <h1 className="font-[var(--font-display)] text-2xl text-in md:text-4xl">Entrées</h1>
+            <h1 className="font-display text-2xl text-in md:text-4xl">Entrées</h1>
             <p className="mt-1 text-sm text-text-muted">
               {items.length} entrée{items.length !== 1 ? "s" : ""}
             </p>

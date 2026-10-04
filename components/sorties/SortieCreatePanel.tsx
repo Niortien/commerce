@@ -343,7 +343,7 @@ export function SortieCreatePanel({ isOpen, onClose }: SortieCreatePanelProps) {
         {/* Header */}
         <div className="flex shrink-0 items-center justify-between border-b border-border/60 px-4 py-3">
           <div className="flex items-center gap-3">
-            <h3 className="font-[var(--font-display)] text-xl text-[var(--color-out)]">Nouvelle sortie</h3>
+            <h3 className="font-display text-xl text-[var(--color-out)]">Nouvelle sortie</h3>
             <span className="rounded-full bg-[var(--color-surface-high)] px-2 py-0.5 text-[10px] uppercase text-text-muted">
               {STEP_LABELS[step]} {step}/3
             </span>

@@ -52,7 +52,7 @@ export function ActiviteTopProduits({ data, isLoading }: ActiviteTopProduitsProp
                 <div className="min-w-0 flex-1">
                   <div className="flex items-baseline justify-between gap-2">
                     <span className="truncate text-sm font-medium text-text">{produit.nom}</span>
-                    <span className="shrink-0 font-[var(--font-mono)] text-xs text-text-muted">
+                    <span className="shrink-0 font-mono text-xs text-text-muted">
                       ×{produit.quantiteTotale}
                     </span>
                   </div>
@@ -63,7 +63,7 @@ export function ActiviteTopProduits({ data, isLoading }: ActiviteTopProduitsProp
                     />
                   </div>
                 </div>
-                <span className="shrink-0 font-[var(--font-mono)] text-xs font-semibold text-accent">
+                <span className="shrink-0 font-mono text-xs font-semibold text-accent">
                   {Math.round(montant / 1000)}k
                 </span>
               </div>

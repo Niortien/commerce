@@ -88,7 +88,7 @@ export function LookbookPhotoUpload() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.1 }}
-          className="mb-6 font-[var(--font-display)] font-black uppercase leading-tight tracking-tighter"
+          className="mb-6 font-display font-black uppercase leading-tight tracking-tighter"
           style={{ fontSize: "clamp(28px,5vw,52px)", color: "var(--v-text)" }}
         >
           Ta photo, ton style

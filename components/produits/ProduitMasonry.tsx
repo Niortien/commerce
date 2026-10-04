@@ -29,7 +29,7 @@ export function ProduitMasonry({ items, onSelect, grouped = false }: ProduitMaso
               id={`alpha-${letter}`}
               className="sticky top-0 z-10 -mx-1 mb-2 flex items-center gap-2 bg-[var(--color-base)]/90 px-1 py-1 backdrop-blur-sm"
             >
-              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-accent/20 font-[var(--font-mono)] text-xs font-bold text-accent">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-accent/20 font-mono text-xs font-bold text-accent">
                 {letter}
               </span>
               <span className="text-xs text-text-dim">{produits.length} produit{produits.length > 1 ? "s" : ""}</span>

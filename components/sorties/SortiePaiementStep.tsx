@@ -64,7 +64,7 @@ export function SortiePaiementStep({
             <p className="text-xs text-[var(--color-in)]">
               − {Number(remiseMontant).toLocaleString("fr-FR")} FCFA de réduction
             </p>
-            <p className="mt-1 font-[var(--font-display)] text-3xl text-[var(--color-cash)]">
+            <p className="mt-1 font-display text-3xl text-[var(--color-cash)]">
               {Number(totalMontant).toLocaleString("fr-FR")} FCFA
             </p>
             <p className="mt-0.5 text-[10px] uppercase tracking-wide text-text-muted">À encaisser</p>
@@ -72,7 +72,7 @@ export function SortiePaiementStep({
         ) : (
           <>
             <p className="text-xs uppercase tracking-wide text-text-muted">Montant à encaisser</p>
-            <p className="mt-1 font-[var(--font-display)] text-3xl text-[var(--color-cash)]">
+            <p className="mt-1 font-display text-3xl text-[var(--color-cash)]">
               {Number(totalMontant).toLocaleString("fr-FR")} FCFA
             </p>
           </>

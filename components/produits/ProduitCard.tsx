@@ -50,7 +50,7 @@ export function ProduitCard({ produit, onPress }: ProduitCardProps) {
       </div>
       <CardBody className="p-3">
         <p className="truncate text-sm font-semibold text-text">{produit.nom}</p>
-        <p className="font-[var(--font-mono)] text-xs text-text-muted">{produit.sku}</p>
+        <p className="font-mono text-xs text-text-muted">{produit.sku}</p>
         <div className="mt-2 flex items-center justify-between">
           <StockBadge value={totalStock} />
           {isPromo ? (

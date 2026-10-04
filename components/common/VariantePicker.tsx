@@ -72,7 +72,7 @@ export function VariantePicker({ isOpen, onClose, onSelect, onDone, excludedVari
       }}
     >
       <ModalContent>
-        <ModalHeader className="text-base font-semibold">Sélectionner une variante</ModalHeader>
+        <ModalHeader className="text-md font-semibold">Sélectionner une variante</ModalHeader>
         <ModalBody className="pb-4">
           <Input
             autoFocus
@@ -107,7 +107,7 @@ export function VariantePicker({ isOpen, onClose, onSelect, onDone, excludedVari
                   >
                     <div>
                       <span className="text-sm font-medium text-text">{produit.nom}</span>
-                      <span className="ml-2 font-[var(--font-mono)] text-xs text-text-muted">{produit.sku}</span>
+                      <span className="ml-2 font-mono text-xs text-text-muted">{produit.sku}</span>
                     </div>
                     <span className="text-xs text-text-muted">
                       {variantes.length} variante{variantes.length !== 1 ? "s" : ""} {isExpanded ? "▲" : "▼"}
@@ -148,7 +148,7 @@ export function VariantePicker({ isOpen, onClose, onSelect, onDone, excludedVari
                                   })
                                 }
                               >
-                                <span className="font-[var(--font-mono)] text-xs text-accent">{v.taille}</span>
+                                <span className="font-mono text-xs text-accent">{v.taille}</span>
                                 <span className="text-xs text-text">{v.couleur}</span>
                                 {outOfStock ? (
                                   <span className="text-[10px] font-semibold text-out">Rupture</span>
@@ -170,7 +170,7 @@ export function VariantePicker({ isOpen, onClose, onSelect, onDone, excludedVari
 
         <ModalFooter className="border-t border-border/60 pt-3">
           {addedCount > 0 && (
-            <span className="mr-auto font-[var(--font-mono)] text-xs text-in">
+            <span className="mr-auto font-mono text-xs text-in">
               {addedCount} article{addedCount > 1 ? "s" : ""} ajouté{addedCount > 1 ? "s" : ""}
             </span>
           )}

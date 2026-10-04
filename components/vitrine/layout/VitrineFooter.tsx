@@ -40,7 +40,7 @@ export function VitrineFooter() {
         style={{ borderColor: "var(--v-border)" }}
       >
         <p
-          className="font-[var(--font-display)] font-black uppercase leading-none tracking-tight"
+          className="font-display font-black uppercase leading-none tracking-tight"
           style={{ fontSize: "clamp(28px, 6vw, 64px)", color: "var(--v-text)" }}
         >
           Be{" "}
@@ -61,7 +61,7 @@ export function VitrineFooter() {
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <p
-              className="font-[var(--font-display)] text-xl font-black tracking-[0.18em]"
+              className="font-display text-xl font-black tracking-[0.18em]"
               style={{ color: "var(--v-text)" }}
             >
               LUXURY BOUTIQUE

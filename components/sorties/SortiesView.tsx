@@ -83,7 +83,7 @@ export function SortiesView() {
         {/* En-tête */}
         <div className="flex flex-wrap items-end justify-between gap-3 rounded-xl border border-border/80 bg-[linear-gradient(120deg,var(--color-out-dim),var(--color-surface-high))] p-4 md:p-5">
           <div>
-            <h1 className="font-[var(--font-display)] text-2xl text-[var(--color-out)] md:text-4xl">
+            <h1 className="font-display text-2xl text-[var(--color-out)] md:text-4xl">
               Sorties
             </h1>
             <p className="mt-1 text-sm text-text-muted">

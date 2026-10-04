@@ -13,12 +13,11 @@ interface DashboardShellProps {
 export function DashboardShell({ children }: DashboardShellProps) {
   return (
     <div className="relative flex h-screen flex-col overflow-hidden bg-base lg:flex-row">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(900px_500px_at_90%_-5%,rgba(37,99,235,0.07),transparent_62%)]" />
       <MobileNav />
       <Sidebar />
-      <div className="relative flex flex-1 flex-col overflow-hidden">
+      <div className="relative flex min-w-0 flex-1 flex-col overflow-hidden">
         <SubscriptionBanner />
-        <main className="relative flex-1 overflow-x-hidden overflow-y-auto p-4 md:p-6">
+        <main id="contenu" tabIndex={-1} className="relative flex-1 overflow-x-hidden overflow-y-auto p-4 outline-none md:p-6">
           {children}
         </main>
       </div>
