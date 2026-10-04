@@ -54,7 +54,7 @@ export function EntreesTable({ data }: EntreesTableProps) {
         header: "Référence",
         meta: { mobileHidden: true },
         cell: (info) => (
-          <span className="font-[var(--font-mono)] text-xs text-text-muted">
+          <span className="font-mono text-xs text-text-muted">
             {info.getValue()}
           </span>
         ),

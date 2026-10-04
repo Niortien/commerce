@@ -126,10 +126,10 @@ export function RecetteHebdomadaireView() {
         </Link>
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <h1 className="font-[var(--font-display)] text-2xl text-[var(--color-cash)] md:text-3xl">
+            <h1 className="font-display text-2xl text-[var(--color-cash)] md:text-3xl">
               Recettes par semaine
             </h1>
-            <p className="mt-1 font-[var(--font-mono)] text-xs text-text-muted">{rangeLabel}</p>
+            <p className="mt-1 font-mono text-xs text-text-muted">{rangeLabel}</p>
           </div>
 
           <div className="flex flex-col gap-3">

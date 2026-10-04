@@ -74,7 +74,7 @@ export function EntreeFormLine({ line, index, onPickVariante, onEditNew, onChang
             </span>
           )}
         </span>
-        <span className="font-[var(--font-mono)] text-xs text-text-muted">
+        <span className="font-mono text-xs text-text-muted">
           {line.taille} · {line.couleur}
         </span>
       </button>
@@ -87,7 +87,7 @@ export function EntreeFormLine({ line, index, onPickVariante, onEditNew, onChang
         value={qtyInput}
         onValueChange={handleQtyChange}
         onBlur={handleQtyBlur}
-        classNames={{ input: "text-center font-[var(--font-mono)] text-sm" }}
+        classNames={{ input: "text-center font-mono text-sm" }}
         aria-label={`Quantité ligne ${index + 1}`}
       />
 
@@ -99,12 +99,12 @@ export function EntreeFormLine({ line, index, onPickVariante, onEditNew, onChang
         value={line.prixUnitaire}
         onValueChange={(val) => onChange(index, "prixUnitaire", val)}
         endContent={<span className="text-[10px] text-text-muted">FCFA</span>}
-        classNames={{ input: "font-[var(--font-mono)] text-sm" }}
+        classNames={{ input: "font-mono text-sm" }}
         aria-label={`Prix unitaire ligne ${index + 1}`}
       />
 
       {/* Sous-total — masqué sur mobile */}
-      <span className="hidden text-right font-[var(--font-mono)] text-xs text-text-muted sm:block">
+      <span className="hidden text-right font-mono text-xs text-text-muted sm:block">
         {Number(sousTotal).toLocaleString("fr-FR")}
       </span>
 

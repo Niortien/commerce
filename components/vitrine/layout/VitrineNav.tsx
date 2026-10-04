@@ -156,7 +156,7 @@ export function VitrineNav() {
                   <Link
                     href={l.href}
                     onClick={() => setOpen(false)}
-                    className="block border-b py-5 font-[var(--font-display)] text-[42px] font-black leading-tight tracking-tight transition-colors hover:text-[var(--v-gold)]"
+                    className="block border-b py-5 font-display text-[42px] font-black leading-tight tracking-tight transition-colors hover:text-[var(--v-gold)]"
                     style={{
                       borderColor: "var(--v-border)",
                       color: pathname === l.href ? "var(--v-gold)" : "var(--v-text)",
@@ -171,7 +171,7 @@ export function VitrineNav() {
             <div className="border-t px-6 py-6" style={{ borderColor: "var(--v-border)" }}>
               <div className="flex items-center gap-2">
                 <span style={{ color: "var(--v-gold)" }}>★</span>
-                <span className="font-[var(--font-display)] text-sm font-black uppercase tracking-wider" style={{ color: "var(--v-gold)" }}>
+                <span className="font-display text-sm font-black uppercase tracking-wider" style={{ color: "var(--v-gold)" }}>
                   Be Luxury
                 </span>
                 <span style={{ color: "var(--v-gold)" }}>★</span>

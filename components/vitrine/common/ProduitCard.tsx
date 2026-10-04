@@ -100,7 +100,7 @@ export function ProduitCard({ produit, rank, large = false }: ProduitCardProps) 
         {/* Rang */}
         {rank !== undefined && (
           <div
-            className="absolute top-3 right-3 font-[var(--font-display)] text-4xl font-black leading-none opacity-30"
+            className="absolute top-3 right-3 font-display text-4xl font-black leading-none opacity-30"
             style={{ color: "var(--v-text)" }}
           >
             {String(rank).padStart(2, "0")}
@@ -114,7 +114,7 @@ export function ProduitCard({ produit, rank, large = false }: ProduitCardProps) 
             transition={{ duration: 0.25 }}
           >
             <p
-              className="font-[var(--font-display)] text-sm font-bold leading-tight uppercase tracking-wide"
+              className="font-display text-sm font-bold leading-tight uppercase tracking-wide"
               style={{ color: "var(--v-text)" }}
             >
               {produit.nom}

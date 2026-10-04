@@ -39,7 +39,7 @@ function GridCell({
         aria-hidden
       />
       <span
-        className="relative p-4 font-[var(--font-display)] text-sm italic"
+        className="relative p-4 font-display text-sm italic"
         style={{ color: "var(--v-gold)" }}
       >
         {item.label}
@@ -58,13 +58,13 @@ export function LookbookGrid() {
         <div className="mb-10 flex items-end justify-between">
           <div>
             <p
-              className="mb-1 font-[var(--font-display)] text-sm italic"
+              className="mb-1 font-display text-sm italic"
               style={{ color: "var(--v-gold)" }}
             >
               Regard sur la collection
             </p>
             <h2
-              className="font-[var(--font-display)] leading-[1.05] tracking-tight"
+              className="font-display leading-[1.05] tracking-tight"
               style={{ fontSize: "clamp(30px,5vw,52px)", color: "var(--v-text)" }}
             >
               Le shooting

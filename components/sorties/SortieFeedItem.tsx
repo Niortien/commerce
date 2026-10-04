@@ -107,7 +107,7 @@ export function SortieFeedItem({ sortie, onCancel }: SortieFeedItemProps) {
         </div>
 
         {/* Référence + notes */}
-        <p className="font-[var(--font-mono)] text-xs text-text-muted">
+        <p className="font-mono text-xs text-text-muted">
           {sortie.reference}
         </p>
         {sortie.notes && !sortie.notes.includes("[ANNULEE]") && (

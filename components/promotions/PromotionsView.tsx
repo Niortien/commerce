@@ -133,7 +133,7 @@ export function PromotionsView() {
     <PageWrapper>
       {/* En-tête */}
       <div className="rounded-xl border border-border/80 bg-[linear-gradient(120deg,rgba(255,165,0,0.18),rgba(34,54,81,0.42))] p-4 md:p-5">
-        <h1 className="font-[var(--font-display)] text-2xl text-orange-400 md:text-4xl">
+        <h1 className="font-display text-2xl text-orange-400 md:text-4xl">
           Promotions
         </h1>
         <p className="mt-1 text-sm text-text-muted">

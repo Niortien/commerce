@@ -103,7 +103,7 @@ export function CatalogueProductCard({ produit, priority }: CatalogueProductCard
       <div className="mt-3 px-1">
         <Link href={`/boutique/${produit.id}`}>
           <h3
-            className="font-[var(--font-display)] text-sm font-black uppercase leading-tight tracking-wide transition-colors group-hover:text-[var(--v-lime)]"
+            className="font-display text-sm font-black uppercase leading-tight tracking-wide transition-colors group-hover:text-[var(--v-lime)]"
             style={{ color: "var(--v-text)" }}
           >
             {produit.nom}

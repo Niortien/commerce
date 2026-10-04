@@ -13,7 +13,7 @@ export function CatalogueWhatsappBanner() {
       <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-6 px-5">
         <div>
           <p
-            className="font-[var(--font-display)] text-xl font-black uppercase"
+            className="font-display text-xl font-black uppercase"
             style={{ color: "var(--v-text)" }}
           >
             Ta taille n&apos;est pas disponible ?

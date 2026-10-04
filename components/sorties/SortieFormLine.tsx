@@ -57,7 +57,7 @@ export function SortieFormLine({ line, index, onPickVariante, onChange, onRemove
         aria-label="Changer la variante"
       >
         <span className="text-sm font-medium text-text">{line.produitNom}</span>
-        <span className="font-[var(--font-mono)] text-xs text-text-muted">
+        <span className="font-mono text-xs text-text-muted">
           {line.taille} · {line.couleur}
           <span className="ml-2 text-[var(--color-out)]">stock: {line.quantiteStock}</span>
         </span>
@@ -85,12 +85,12 @@ export function SortieFormLine({ line, index, onPickVariante, onChange, onRemove
         value={line.prixUnitaire}
         onChange={(e) => onChange(index, "prixUnitaire", e.target.value)}
         endContent={<span className="text-[10px] text-text-muted">FCFA</span>}
-        classNames={{ input: "font-[var(--font-mono)] text-sm" }}
+        classNames={{ input: "font-mono text-sm" }}
         aria-label={`Prix unitaire ligne ${index + 1}`}
       />
 
       {/* Sous-total — masqué sur mobile */}
-      <span className="hidden text-right font-[var(--font-mono)] text-xs text-text-muted sm:block">
+      <span className="hidden text-right font-mono text-xs text-text-muted sm:block">
         {Number(sousTotal).toLocaleString("fr-FR")}
       </span>
 

@@ -21,7 +21,7 @@ import {
   TableRow,
   useDisclosure,
 } from "@heroui/react";
-import { IconChartLine } from "@tabler/icons-react";
+import { IconChartLine, IconPlus } from "@tabler/icons-react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSuperAdminBoutiques } from "@/features/super-admin/query/superadmin-queries";
@@ -36,6 +36,9 @@ import {
   type CreateAbonnementInput,
   type RegisterBoutiqueInput,
 } from "@/lib/validators/superadmin.schema";
+import { PageHeader } from "@/components/common/PageHeader";
+import { PLAN_LABEL, daysUntil, formatDaysLeft } from "@/lib/subscription";
+import { BoutiquesSummary } from "@/components/superadmin/BoutiquesSummary";
 import { PlanAbonnement, StatutBoutique, type Boutique } from "@/types";
 
 const STATUT_OPTIONS = Object.values(StatutBoutique);
@@ -95,18 +98,19 @@ export function BoutiquesView() {
   });
 
   return (
-    <div className="p-6">
-      <div className="mb-6 flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-text">Boutiques</h1>
-          <p className="text-sm text-text-muted">
-            Toutes les boutiques-locataires de la plateforme, leur statut et leur abonnement.
-          </p>
-        </div>
-        <Button className="bg-accent text-white" onPress={openRegister}>
-          + Inscrire une boutique
-        </Button>
-      </div>
+    <div className="mx-auto flex w-full max-w-7xl flex-col gap-5 p-4 md:p-6">
+      <PageHeader
+        eyebrow="Plateforme"
+        title="Boutiques & abonnements"
+        description="Toutes les boutiques de la plateforme : leur statut, leur plan et leur date d'échéance. Une boutique suspendue ne peut plus utiliser le stock ni la caisse."
+        actions={
+          <Button className="bg-accent font-semibold text-white" onPress={openRegister} startContent={<IconPlus size={16} aria-hidden />}>
+            Inscrire une boutique
+          </Button>
+        }
+      />
+
+      <BoutiquesSummary boutiques={boutiques} isLoading={isLoading} />
 
       <Table aria-label="Liste des boutiques">
         <TableHeader>
@@ -146,8 +150,9 @@ export function BoutiquesView() {
               <TableCell>
                 {b.abonnementActif ? (
                   <div className="text-xs">
-                    <span className="font-semibold text-text">{b.abonnementActif.plan}</span>
-                    <span className="text-text-muted"> · expire le {new Date(b.abonnementActif.dateFin).toLocaleDateString("fr-FR")}</span>
+                    <span className="font-semibold text-text">{PLAN_LABEL[b.abonnementActif.plan]}</span>
+                    <span className="text-text-muted"> · jusqu&apos;au {new Date(b.abonnementActif.dateFin).toLocaleDateString("fr-FR")}</span>
+                    <p className="mt-0.5 text-text-muted">{formatDaysLeft(daysUntil(b.abonnementActif.dateFin))}</p>
                   </div>
                 ) : (
                   <span className="text-xs text-text-muted">Aucun</span>
@@ -161,8 +166,8 @@ export function BoutiquesView() {
                     variant="flat"
                     as={Link}
                     href={`/super-admin/boutiques/${b.id}/activite`}
-                    className="bg-[var(--color-accent-dim)] text-accent"
-                    startContent={<IconChartLine size={14} />}
+                    className="bg-accent-dim font-medium text-accent-text"
+                    startContent={<IconChartLine size={14} aria-hidden />}
                   >
                     Activité
                   </Button>

@@ -116,7 +116,7 @@ export function BoutiqueActiviteView({ boutiqueId }: BoutiqueActiviteViewProps) 
           />
         </Kpi>
         <Kpi label="Alertes stock">
-          <p className={`font-[var(--font-display)] text-xl md:text-3xl ${alertes.length > 0 ? "text-out" : "text-in"}`}>
+          <p className={`font-display text-xl md:text-3xl ${alertes.length > 0 ? "text-out" : "text-in"}`}>
             {alertes.length}
           </p>
           <p className="mt-1 text-xs text-text-muted">{alertes.length === 0 ? "Tout est OK" : "à réapprovisionner"}</p>
@@ -153,11 +153,11 @@ export function BoutiqueActiviteView({ boutiqueId }: BoutiqueActiviteViewProps) 
                 className="flex items-center justify-between rounded-md border border-border/60 bg-[var(--color-surface)] px-3 py-2"
               >
                 <div className="flex items-center gap-2">
-                  <span className="w-5 text-center font-[var(--font-mono)] text-xs text-text-muted">{i + 1}</span>
+                  <span className="w-5 text-center font-mono text-xs text-text-muted">{i + 1}</span>
                   <span className="text-sm font-medium text-text">{p.nom}</span>
                 </div>
                 <div className="text-right">
-                  <p className="font-[var(--font-mono)] text-xs text-accent">
+                  <p className="font-mono text-xs text-accent">
                     {Number(p.montantTotal).toLocaleString("fr-FR")} FCFA
                   </p>
                   <p className="text-[10px] text-text-muted">{p.quantiteTotale} vendus</p>

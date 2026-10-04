@@ -65,7 +65,7 @@ export function CartDrawer() {
               style={{ borderColor: "var(--v-border)" }}
             >
               <h2
-                className="font-[var(--font-display)] text-base font-black tracking-widest uppercase"
+                className="font-display text-base font-black tracking-widest uppercase"
                 style={{ color: "var(--v-text)" }}
               >
                 Panier{" "}
@@ -153,7 +153,7 @@ export function CartDrawer() {
                               +
                             </button>
                             <span
-                              className="ml-auto font-[var(--font-mono)] text-sm font-bold"
+                              className="ml-auto font-mono text-sm font-bold"
                               style={{ color: "var(--v-lime)" }}
                             >
                               {(prix * item.quantite).toLocaleString("fr-FR")}
@@ -186,7 +186,7 @@ export function CartDrawer() {
                 <div className="flex items-center justify-between">
                   <span className="text-sm" style={{ color: "var(--v-muted)" }}>Total</span>
                   <span
-                    className="font-[var(--font-mono)] text-lg font-black"
+                    className="font-mono text-lg font-black"
                     style={{ color: "var(--v-text)" }}
                   >
                     {total.toLocaleString("fr-FR")} <span className="text-xs">FCFA</span>

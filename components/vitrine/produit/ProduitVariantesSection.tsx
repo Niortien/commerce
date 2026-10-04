@@ -179,7 +179,7 @@ export function ProduitVariantesSection({
                             >
                               <StockDot stock={stock} />
                               <span
-                                className="font-[var(--font-mono)] font-black"
+                                className="font-mono font-black"
                                 style={{
                                   color: stock === 0 ? "var(--v-dim)" : "var(--v-text)",
                                   textDecoration: stock === 0 ? "line-through" : undefined,

@@ -36,13 +36,13 @@ export function HomeWhatsappCta() {
           transition={{ duration: 0.6 }}
         >
           <p
-            className="mb-3 font-[var(--font-display)] text-sm italic"
+            className="mb-3 font-display text-sm italic"
             style={{ color: "var(--v-gold)" }}
           >
             Commande directe
           </p>
           <h2
-            className="font-[var(--font-display)] leading-[1.05] tracking-tight"
+            className="font-display leading-[1.05] tracking-tight"
             style={{ fontSize: "clamp(32px, 5vw, 56px)", color: "var(--v-text)" }}
           >
             Commander sur{" "}
@@ -76,7 +76,7 @@ export function HomeWhatsappCta() {
               <p className="text-xs font-bold uppercase tracking-widest" style={{ color: "var(--v-dim)" }}>
                 Luxury Boutique
               </p>
-              <p className="font-[var(--font-mono)] text-lg font-bold" style={{ color: "var(--v-text)" }}>
+              <p className="font-mono text-lg font-bold" style={{ color: "var(--v-text)" }}>
                 +225 07 09 29 44 68
               </p>
             </div>
@@ -86,7 +86,7 @@ export function HomeWhatsappCta() {
             href={waUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-7 flex w-full items-center justify-center gap-2 rounded-xl py-3.5 font-[var(--font-display)] text-sm font-semibold uppercase tracking-widest transition-all hover:opacity-90 active:scale-[0.98]"
+            className="mt-7 flex w-full items-center justify-center gap-2 rounded-xl py-3.5 font-display text-sm font-semibold uppercase tracking-widest transition-all hover:opacity-90 active:scale-[0.98]"
             style={{ backgroundColor: "var(--v-gold)", color: "#0d0d0d" }}
           >
             Ouvrir WhatsApp

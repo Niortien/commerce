@@ -68,7 +68,7 @@ export function ActiviteKpiCards({
       />
       <KpiCard
         label="Transactions"
-        value={<span className="font-[var(--font-mono)] text-accent">{totalTransactions}</span>}
+        value={<span className="font-mono text-accent">{totalTransactions}</span>}
         accent="before:bg-accent"
         isLoading={isLoading}
       />

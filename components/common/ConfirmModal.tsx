@@ -45,7 +45,7 @@ export function ConfirmModal({
       }}
     >
       <ModalContent>
-        <ModalHeader className="text-base font-semibold">{title}</ModalHeader>
+        <ModalHeader className="text-md font-semibold">{title}</ModalHeader>
         <ModalBody>
           <p className="text-sm text-text-muted">{message}</p>
         </ModalBody>

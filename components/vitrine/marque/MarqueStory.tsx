@@ -40,7 +40,7 @@ export function MarqueStory() {
         initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="mb-2 font-[var(--font-display)] text-sm italic"
+        className="mb-2 font-display text-sm italic"
         style={{ color: "var(--v-gold)" }}
       >
         Notre histoire
@@ -50,7 +50,7 @@ export function MarqueStory() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ delay: 0.1 }}
-        className="mb-16 font-[var(--font-display)] leading-[1.05] tracking-tight"
+        className="mb-16 font-display leading-[1.05] tracking-tight"
         style={{ fontSize: "clamp(30px,5vw,52px)", color: "var(--v-text)" }}
       >
         Notre parcours
@@ -75,13 +75,13 @@ export function MarqueStory() {
             </div>
             <div>
               <p
-                className="font-[var(--font-mono)] text-xs font-black uppercase tracking-widest"
+                className="font-mono text-xs font-black uppercase tracking-widest"
                 style={{ color: "var(--v-gold)" }}
               >
                 {item.year}
               </p>
               <h3
-                className="mt-2 font-[var(--font-display)] text-2xl leading-snug"
+                className="mt-2 font-display text-2xl leading-snug"
                 style={{ color: "var(--v-text)" }}
               >
                 {item.title}

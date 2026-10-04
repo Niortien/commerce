@@ -23,9 +23,9 @@ function ChecklistStep({ done, label, href }: { done: boolean; label: string; hr
   const content = (
     <>
       {done ? (
-        <IconCheck size={14} className="shrink-0 text-in" />
+        <IconCheck size={14} className="shrink-0 text-in-text" aria-hidden />
       ) : (
-        <IconCircle size={14} className="shrink-0 text-text-dim" />
+        <IconCircle size={14} className="shrink-0 text-text-dim" aria-hidden />
       )}
       <span className={done ? "text-text-muted line-through" : "text-text"}>{label}</span>
     </>
@@ -46,25 +46,25 @@ function ChecklistStep({ done, label, href }: { done: boolean; label: string; hr
 
 export function DashboardTopProduits({ produits, isLoading, isError, diagnostic }: DashboardTopProduitsProps) {
   return (
-    <div className="rounded-xl border border-border/60 bg-[var(--color-surface-high)] p-4">
-      <p className="mb-3 text-xs uppercase tracking-wide text-text-muted">Top 5 produits — 7j</p>
+    <div className="rounded-lg border border-border bg-surface p-4 shadow-card">
+      <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-text-muted">Top 5 produits — 7 jours</h2>
 
       {isLoading ? (
         <div className="space-y-2">
           {[...Array(5)].map((_, i) => (
-            <div key={i} className="h-8 animate-pulse rounded-md bg-[var(--color-surface)]" />
+            <div key={i} className="h-10 animate-pulse rounded-md bg-surface-high" />
           ))}
         </div>
       ) : isError ? (
-        <div className="rounded-lg border border-out/30 bg-out/5 px-3 py-3">
-          <p className="text-xs font-semibold text-out">Impossible de charger le classement</p>
+        <div role="alert" className="rounded-lg border border-out-line bg-out-dim px-3 py-3">
+          <p className="text-xs font-semibold text-out-text">Impossible de charger le classement</p>
           <p className="mt-0.5 text-[11px] text-text-muted">Vérifie la connexion au serveur</p>
         </div>
       ) : produits.length === 0 ? (
         <div className="space-y-2">
           <p className="text-sm text-text-muted">Aucune vente sur les 7 derniers jours</p>
           {diagnostic && (
-            <ul className="space-y-1.5 rounded-md border border-border/40 bg-[var(--color-surface)] px-3 py-2.5">
+            <ul className="space-y-2 rounded-md border border-border bg-surface-high px-3 py-3">
               <ChecklistStep
                 done={diagnostic.totalProduits > 0}
                 label="Ajouter des produits au catalogue"
@@ -93,19 +93,19 @@ export function DashboardTopProduits({ produits, isLoading, isError, diagnostic 
           {produits.slice(0, 5).map((p, i) => (
             <li
               key={p.produitId}
-              className="flex items-center justify-between rounded-md border border-border/60 bg-[var(--color-surface)] px-3 py-2"
+              className="flex items-center justify-between gap-3 rounded-md bg-surface-high px-3 py-2"
             >
-              <div className="flex items-center gap-2">
-                <span className="w-5 text-center font-[var(--font-mono)] text-xs text-text-muted">
+              <div className="flex min-w-0 items-center gap-2">
+                <span className="w-5 shrink-0 text-center font-mono text-xs text-text-muted">
                   {i + 1}
                 </span>
-                <span className="text-sm font-medium text-text">{p.nom}</span>
+                <span className="truncate text-sm font-medium text-text">{p.nom}</span>
               </div>
-              <div className="text-right">
-                <p className="font-[var(--font-mono)] text-xs text-accent">
+              <div className="shrink-0 text-right">
+                <p className="tabular font-mono text-xs font-medium text-accent-text">
                   {Number(p.montantTotal).toLocaleString("fr-FR")} FCFA
                 </p>
-                <p className="text-[10px] text-text-muted">{p.quantiteTotale} vendus</p>
+                <p className="text-xs text-text-muted">{p.quantiteTotale} vendus</p>
               </div>
             </li>
           ))}

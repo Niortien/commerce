@@ -75,8 +75,9 @@ export function LoginView() {
   });
 
   return (
-    <section className="mx-auto mt-16 max-w-md rounded-lg border border-border bg-surface p-6">
-      <h1 className="mb-4 font-[var(--font-display)] text-2xl md:text-3xl">Connexion</h1>
+    <section className="w-full rounded-lg border border-border bg-surface p-6 shadow-card md:p-8">
+      <h1 className="font-display text-2xl font-extrabold tracking-tight md:text-3xl">Connexion</h1>
+      <p className="mb-5 mt-1 text-sm text-text-muted">Accédez au back-office de votre boutique.</p>
       <div className="space-y-3">
         <Input
           type="email"

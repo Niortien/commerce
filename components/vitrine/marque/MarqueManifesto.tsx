@@ -53,7 +53,7 @@ export function MarqueManifesto() {
           style={{ borderColor: "var(--v-gold)" }}
         >
           <p
-            className="font-[var(--font-display)] font-black leading-tight tracking-tight"
+            className="font-display font-black leading-tight tracking-tight"
             style={{ fontSize: "clamp(22px,4vw,40px)", color: "var(--v-text)" }}
           >
             &ldquo;La mode est un langage.

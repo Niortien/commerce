@@ -25,7 +25,7 @@ export function CommandBar() {
         onValueChange={setInput}
         placeholder="+5 jogging noir L @12000"
         variant="underlined"
-        classNames={{ input: "font-[var(--font-mono)] text-text" }}
+        classNames={{ input: "font-mono text-text" }}
         endContent={isLoading ? <Spinner size="sm" color="warning" /> : null}
       />
       <div className="mt-2 min-h-5 text-xs text-text-muted">

@@ -41,7 +41,7 @@ export function HomePromoSection() {
               </span>
             </div>
             <h2
-              className="font-[var(--font-display)] font-black uppercase leading-none tracking-tight"
+              className="font-display font-black uppercase leading-none tracking-tight"
               style={{ fontSize: "clamp(36px, 6vw, 72px)", color: "var(--v-text)" }}
             >
               Promos

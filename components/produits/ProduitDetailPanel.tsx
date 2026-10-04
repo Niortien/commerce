@@ -347,7 +347,7 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
     >
       {/* header fixe */}
       <div className="flex items-center justify-between border-b border-border/60 px-4 py-3">
-        <h3 className="font-[var(--font-display)] text-xl">
+        <h3 className="font-display text-xl">
           {isNew ? "Nouveau produit" : "Éditer produit"}
         </h3>
         <Button isIconOnly variant="light" onPress={onClose} aria-label="Fermer le panel">✕</Button>
@@ -406,7 +406,7 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
               errorMessage={errors.nom?.message}
               classNames={{
                 label: "text-text-muted",
-                input: "text-xl font-[var(--font-display)] text-text",
+                input: "text-xl font-display text-text",
                 inputWrapper: "border-2 border-[var(--color-border-active)]/50 bg-[var(--color-surface)] data-[hover=true]:border-[var(--color-border-active)]",
               }}
               {...register("nom")}
@@ -418,7 +418,7 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
               isInvalid={!!errors.sku}
               classNames={{
                 label: "text-text-muted",
-                input: "font-[var(--font-mono)] text-sm text-text",
+                input: "font-mono text-sm text-text",
                 inputWrapper: "border-2 border-[var(--color-border-active)]/50 bg-[var(--color-surface)] data-[hover=true]:border-[var(--color-border-active)]",
               }}
               {...register("sku")}
@@ -703,7 +703,7 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
                 <tbody>
                   {selectedTailles.map((t) => (
                     <tr key={t}>
-                      <td className="py-1 pr-3 font-[var(--font-mono)] text-text">{t}</td>
+                      <td className="py-1 pr-3 font-mono text-text">{t}</td>
                       {selectedCouleurs.map((c) => (
                         <td key={c} className="py-1 pr-2">
                           <Input
@@ -711,7 +711,7 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
                             variant="bordered"
                             size="sm"
                             classNames={{
-                              input: "text-center font-[var(--font-mono)] text-text",
+                              input: "text-center font-mono text-text",
                               base: "max-w-[72px]",
                               inputWrapper: "border-2 border-[var(--color-border-active)]/50 bg-[var(--color-surface)] data-[hover=true]:border-[var(--color-border-active)]",
                             }}

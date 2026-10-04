@@ -27,13 +27,13 @@ export function HomeFeaturedDrops() {
       <div className="mx-auto mb-12 flex max-w-7xl items-end justify-between gap-4 px-5 md:px-16">
         <div>
           <p
-            className="mb-2 font-[var(--font-display)] text-sm italic"
+            className="mb-2 font-display text-sm italic"
             style={{ color: "var(--v-gold)" }}
           >
             Stock limité · Commande rapide
           </p>
           <h2
-            className="font-[var(--font-display)] leading-[1.05] tracking-tight"
+            className="font-display leading-[1.05] tracking-tight"
             style={{ fontSize: "clamp(32px, 5vw, 56px)", color: "var(--v-text)" }}
           >
             Derniers arrivages
@@ -111,7 +111,7 @@ export function HomeFeaturedDrops() {
               {/* Légende */}
               <div className="mt-4">
                 <span
-                  className="font-[var(--font-mono)] text-[10px] font-bold uppercase tracking-[0.28em]"
+                  className="font-mono text-[10px] font-bold uppercase tracking-[0.28em]"
                   style={{ color: "var(--v-gold)" }}
                 >
                   Réf. #{String(i + 1).padStart(2, "0")}
@@ -120,7 +120,7 @@ export function HomeFeaturedDrops() {
                 {produit ? (
                   <>
                     <h3
-                      className="mt-1.5 font-[var(--font-display)] text-lg leading-snug"
+                      className="mt-1.5 font-display text-lg leading-snug"
                       style={{ color: "var(--v-text)" }}
                     >
                       {produit.nom}
@@ -134,7 +134,7 @@ export function HomeFeaturedDrops() {
                     <div className="mt-3 flex items-baseline justify-between gap-2">
                       <div className="flex items-baseline gap-2">
                         <span
-                          className="font-[var(--font-mono)] text-base font-black"
+                          className="font-mono text-base font-black"
                           style={{ color: isPromo ? "var(--v-gold)" : "var(--v-text)" }}
                         >
                           {(isPromo ? prixPromo! : prix).toLocaleString("fr-FR")}
@@ -142,7 +142,7 @@ export function HomeFeaturedDrops() {
                         </span>
                         {isPromo && (
                           <span
-                            className="font-[var(--font-mono)] text-xs line-through"
+                            className="font-mono text-xs line-through"
                             style={{ color: "var(--v-dim)" }}
                           >
                             {prix.toLocaleString("fr-FR")}

@@ -18,7 +18,7 @@ export function HomeTicker() {
           <span key={item} className="flex items-center gap-3">
             {i > 0 && <span style={{ color: "var(--v-border-gold)" }}>·</span>}
             <span
-              className="font-[var(--font-display)] text-xs italic tracking-wide"
+              className="font-display text-xs italic tracking-wide"
               style={{ color: "var(--v-gold)" }}
             >
               {item}

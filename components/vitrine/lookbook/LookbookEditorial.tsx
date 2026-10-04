@@ -20,13 +20,13 @@ export function LookbookEditorial() {
           transition={{ duration: 0.6 }}
         >
           <p
-            className="mb-4 font-[var(--font-display)] text-sm italic"
+            className="mb-4 font-display text-sm italic"
             style={{ color: "var(--v-gold)" }}
           >
             L&rsquo;histoire derri&egrave;re la collection
           </p>
           <h2
-            className="mb-8 font-[var(--font-display)] leading-[1.05] tracking-tight"
+            className="mb-8 font-display leading-[1.05] tracking-tight"
             style={{ fontSize: "clamp(28px,5vw,48px)", color: "var(--v-text)" }}
           >
             Inspir&eacute; par <span className="italic" style={{ color: "var(--v-gold)" }}>Abidjan.</span>
@@ -46,7 +46,7 @@ export function LookbookEditorial() {
             {STATS.map((stat) => (
               <div key={stat.label}>
                 <p
-                  className="font-[var(--font-mono)] text-2xl font-black"
+                  className="font-mono text-2xl font-black"
                   style={{ color: "var(--v-gold)" }}
                 >
                   {stat.value}
@@ -86,7 +86,7 @@ export function LookbookEditorial() {
             aria-hidden
           />
           <div className="relative flex h-full items-end p-8">
-            <p className="font-[var(--font-display)] text-sm italic leading-relaxed" style={{ color: "#fff" }}>
+            <p className="font-display text-sm italic leading-relaxed" style={{ color: "#fff" }}>
               Marcory · Cocody · Le Plateau
             </p>
           </div>

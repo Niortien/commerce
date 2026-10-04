@@ -180,6 +180,9 @@ export function RecuPrint({
         }}>
           Luxury Boutique
         </div>
+        <div style={{ borderTop: "1px dashed #000", margin: "8px 0 4px" }} />
+        <div style={{ textAlign: "center", fontSize: 8 }}>Propulsé par Mon Djossi</div>
+        <div style={{ textAlign: "center", fontSize: 8 }}>Gérez · Vendez · Développez</div>
       </div>
 
       {/* Modal visuelle */}
@@ -299,6 +302,10 @@ export function RecuPrint({
               <p className="mt-3 text-center text-lg font-bold italic tracking-[0.3em] text-gray-300">
                 Luxury Boutique
               </p>
+              <div className="mt-3 border-t border-dashed border-gray-300 pt-2 text-center text-[9px] text-gray-400">
+                <p>Propulsé par Mon Djossi</p>
+                <p>Gérez · Vendez · Développez</p>
+              </div>
             </div>
           </ModalBody>
           <ModalFooter className="gap-3">

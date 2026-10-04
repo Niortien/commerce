@@ -28,7 +28,7 @@ export function LookbookBehindScenes() {
             Notre communauté
           </p>
           <h2
-            className="font-[var(--font-display)] font-black uppercase leading-none tracking-tight"
+            className="font-display font-black uppercase leading-none tracking-tight"
             style={{ fontSize: "clamp(28px,5vw,56px)", color: "var(--v-text)" }}
           >
             Ils portent

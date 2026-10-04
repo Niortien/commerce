@@ -27,7 +27,7 @@ export function MarqueContact() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ delay: 0.1 }}
-        className="mb-12 font-[var(--font-display)] font-black uppercase leading-none tracking-tight"
+        className="mb-12 font-display font-black uppercase leading-none tracking-tight"
         style={{ fontSize: "clamp(32px,6vw,64px)", color: "var(--v-text)" }}
       >
         Contact
@@ -79,7 +79,7 @@ export function MarqueContact() {
             {HORAIRES.map((h) => (
               <div key={h.jour} className="flex items-center justify-between">
                 <span className="text-xs" style={{ color: "var(--v-muted)" }}>{h.jour}</span>
-                <span className="font-[var(--font-mono)] text-xs font-black" style={{ color: "var(--v-text)" }}>
+                <span className="font-mono text-xs font-black" style={{ color: "var(--v-text)" }}>
                   {h.heure}
                 </span>
               </div>

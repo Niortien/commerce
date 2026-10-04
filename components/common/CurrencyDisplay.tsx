@@ -13,7 +13,7 @@ interface CurrencyDisplayProps {
 
 const SIZE_CLASS: Record<CurrencySize, string> = {
   sm: "text-sm",
-  md: "text-base",
+  md: "text-md",
   lg: "text-2xl",
   xl: "text-6xl leading-none",
 };
@@ -29,7 +29,7 @@ const TONE_CLASS: Record<CurrencyTone, string> = {
 
 export function CurrencyDisplay({ montant, size = "md", tone = "default", className }: CurrencyDisplayProps) {
   return (
-    <span className={cn("font-[var(--font-mono)] tracking-[0.02em]", SIZE_CLASS[size], TONE_CLASS[tone], className)}>
+    <span className={cn("font-mono tracking-[0.02em]", SIZE_CLASS[size], TONE_CLASS[tone], className)}>
       {formatCurrency(montant)}
     </span>
   );

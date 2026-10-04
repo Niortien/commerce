@@ -287,7 +287,7 @@ export function ProduitDetailView({ id }: ProduitDetailViewProps) {
           <Button variant="light" isIconOnly className="text-text-muted" onPress={() => router.back()}>
             ←
           </Button>
-          <h1 className="flex-1 font-[var(--font-display)] text-3xl md:text-4xl">{produit.nom}</h1>
+          <h1 className="flex-1 font-display text-3xl md:text-4xl">{produit.nom}</h1>
           {!produit.isActif && (
             <Chip size="sm" variant="flat" className="bg-[var(--color-out-dim)] text-out">Inactif</Chip>
           )}
@@ -311,7 +311,7 @@ export function ProduitDetailView({ id }: ProduitDetailViewProps) {
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-text-muted">SKU</span>
-                  <span className="font-[var(--font-mono)] text-accent">{produit.sku}</span>
+                  <span className="font-mono text-accent">{produit.sku}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-text-muted">Catégorie</span>
@@ -433,12 +433,12 @@ export function ProduitDetailView({ id }: ProduitDetailViewProps) {
                     const isAlerte = v.quantiteStock <= v.seuilAlerte;
                     return (
                       <tr key={v.id} className="border-b border-border/30 last:border-0">
-                        <td className="py-2 pr-4 font-[var(--font-mono)] text-accent">{v.taille}</td>
+                        <td className="py-2 pr-4 font-mono text-accent">{v.taille}</td>
                         <td className="py-2 pr-4 text-text">{v.couleur}</td>
                         <td className="py-2 pr-4">
                           <StockBadge value={v.quantiteStock} isAlert={isAlerte} />
                         </td>
-                        <td className="py-2 pr-4 font-[var(--font-mono)] text-text-muted">{v.seuilAlerte}</td>
+                        <td className="py-2 pr-4 font-mono text-text-muted">{v.seuilAlerte}</td>
                         {isAdmin && (
                           <td className="py-2 pr-4">
                             <AdjustCell varianteId={v.id} />
@@ -480,11 +480,11 @@ export function ProduitDetailView({ id }: ProduitDetailViewProps) {
                   {mouvements.map((m) => (
                     <tr key={m.id} className="border-b border-border/30 last:border-0">
                       <td className="py-2 pr-4"><FlowTag type={TYPE_FLOW[m.type]} /></td>
-                      <td className="py-2 pr-4 font-[var(--font-mono)] text-text">
+                      <td className="py-2 pr-4 font-mono text-text">
                         {m.type === "SORTIE" || m.type === "RETOUR" ? "−" : "+"}{m.quantite}
                       </td>
                       <td className="py-2 pr-4 text-text-muted">{m.motif ?? "—"}</td>
-                      <td className="py-2 font-[var(--font-mono)] text-xs text-text-muted">
+                      <td className="py-2 font-mono text-xs text-text-muted">
                         {new Date(m.createdAt).toLocaleDateString("fr-FR", {
                           day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit",
                         })}

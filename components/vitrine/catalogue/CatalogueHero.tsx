@@ -16,18 +16,18 @@ export function CatalogueHero({ total, search, onSearch }: CatalogueHeroProps) {
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
             <p
-              className="mb-2 font-[var(--font-display)] text-sm italic"
+              className="mb-2 font-display text-sm italic"
               style={{ color: "var(--v-gold)" }}
             >
               Luxury Boutique &mdash; Abidjan
             </p>
             <h1
-              className="font-[var(--font-display)] leading-[1.05] tracking-tight"
+              className="font-display leading-[1.05] tracking-tight"
               style={{ fontSize: "clamp(40px, 7vw, 76px)", color: "var(--v-text)" }}
             >
               Catalogue
             </h1>
-            <p className="mt-2 font-[var(--font-mono)] text-sm" style={{ color: "var(--v-muted)" }}>
+            <p className="mt-2 font-mono text-sm" style={{ color: "var(--v-muted)" }}>
               {total} article{total !== 1 ? "s" : ""}
             </p>
           </div>
