@@ -116,7 +116,7 @@ export function SessionDetailDrawer({ session, onClose }: SessionDetailDrawerPro
             <div className="flex-1 overflow-y-auto">
               {isLoading ? (
                 <div className="flex h-32 items-center justify-center">
-                  <Spinner color="warning" size="sm" />
+                  <Spinner color="primary" size="sm" />
                 </div>
               ) : transactions.length === 0 ? (
                 <p className="p-5 text-center text-sm text-text-dim">Aucune transaction</p>

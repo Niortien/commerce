@@ -7,6 +7,8 @@ import {
   today,
   type DateValue,
 } from "@internationalized/date";
+import { IconHistory } from "@tabler/icons-react";
+import { EmptyRiver } from "@/components/common/EmptyRiver";
 import { useSessionsList } from "@/features/caisse/query/caisse-queries";
 import type { Session } from "@/types";
 import { SessionCard } from "./SessionCard";
@@ -47,13 +49,14 @@ export function SessionsList() {
 
   return (
     <>
-      <div>
+      <section aria-label="Historique des sessions">
         <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
-          <h2 className="text-sm font-semibold uppercase tracking-[0.08em] text-text-muted">
+          <h2 className="flex items-center gap-2 font-display text-lg font-bold text-text">
+            <IconHistory size={20} aria-hidden className="text-cash-text" />
             Historique des sessions
           </h2>
           {data && (
-            <span className="text-xs text-text-dim">
+            <span className="rounded-full bg-surface-high px-2.5 py-0.5 text-xs font-medium text-text-muted">
               {data.pages[0]?.meta?.total ?? 0} session
               {(data.pages[0]?.meta?.total ?? 0) !== 1 ? "s" : ""}
             </span>
@@ -71,18 +74,18 @@ export function SessionsList() {
             classNames={{
               base: "max-w-[300px]",
               inputWrapper:
-                "border border-border/60 bg-[var(--color-surface-high)] shadow-none hover:border-[var(--color-cash)]/50 focus-within:!border-[var(--color-cash)]/70 h-9",
-              segment: "text-text focus:bg-[var(--color-cash)]/20",
+                "border border-border bg-surface shadow-none hover:border-cash/50 focus-within:!border-cash h-10",
+              segment: "text-text focus:bg-cash/20",
               separator: "text-text-dim",
               calendarContent:
-                "bg-[var(--color-surface)] border border-border/60 rounded-xl shadow-xl",
+                "bg-surface border border-border rounded-xl shadow-lg",
             }}
           />
           {dateRange && (
             <Button
               size="sm"
               variant="light"
-              className="text-xs text-text-dim hover:text-text-muted"
+              className="text-xs text-text-muted hover:text-text"
               onPress={() => setDateRange(null)}
             >
               Réinitialiser
@@ -92,18 +95,15 @@ export function SessionsList() {
 
         {isLoading ? (
           <div className="flex h-32 items-center justify-center">
-            <Spinner color="warning" size="sm" />
+            <Spinner color="primary" size="sm" />
           </div>
         ) : sessions.length === 0 ? (
-          <div className="rounded-xl border border-border/60 bg-surface p-8 text-center">
-            <p className="text-sm text-text-dim">
-              {dateRange
-                ? "Aucune session sur cette période"
-                : "Aucune session enregistrée"}
-            </p>
-          </div>
+          <EmptyRiver
+            message={dateRange ? "Aucune session sur cette période" : "Aucune session enregistrée"}
+            hint={dateRange ? "Élargissez la période ou réinitialisez le filtre." : "Les journées clôturées apparaîtront ici."}
+          />
         ) : (
-          <div className="space-y-2">
+          <div className="grid gap-3 lg:grid-cols-2">
             {sessions.map((session) => (
               <SessionCard
                 key={session.id}
@@ -126,7 +126,7 @@ export function SessionsList() {
             </Button>
           </div>
         )}
-      </div>
+      </section>
 
       <SessionDetailDrawer
         session={selectedSession}

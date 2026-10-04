@@ -52,27 +52,27 @@ export function ProduitSearchBar({
           value={search}
           onChange={(e) => onSearch(e.target.value)}
           className={[
-            "w-full rounded-xl border bg-[var(--color-surface)] py-2.5 pl-9 pr-20 text-sm text-text placeholder:text-text-dim",
-            "outline-none transition-all",
+            "w-full rounded-xl border bg-surface py-3 pl-10 pr-20 text-base text-text placeholder:text-text-muted md:text-sm",
+            "outline-none transition-all duration-150",
             "focus:border-accent/60 focus:ring-2 focus:ring-accent/20",
-            search ? "border-accent/40" : "border-border/60",
+            search ? "border-accent/50" : "border-border",
           ].join(" ")}
         />
 
         {/* Count + clear */}
         <div className="absolute right-3 flex items-center gap-2">
           {search && (
-            <span className="rounded-full bg-accent/15 px-2 py-0.5 font-mono text-[11px] text-accent">
+            <span className="rounded-full bg-accent/15 px-2 py-0.5 font-mono text-[11px] text-accent-text">
               {count}
             </span>
           )}
           {search && (
             <button
               onClick={() => { onSearch(""); inputRef.current?.focus(); }}
-              className="flex h-5 w-5 items-center justify-center rounded-full bg-[var(--color-surface-high)] text-text-dim hover:text-text"
+              className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-surface-high text-text-muted hover:text-text"
               aria-label="Effacer la recherche"
             >
-              <IconX size={12} />
+              <IconX size={12} aria-hidden />
             </button>
           )}
         </div>
@@ -82,12 +82,14 @@ export function ProduitSearchBar({
       <div className="flex gap-1.5 overflow-x-auto pb-0.5 [scrollbar-width:none]">
         {/* Tous */}
         <button
+          type="button"
+          aria-pressed={!categorieId && !enPromo}
           onClick={() => onCategorie(undefined)}
           className={[
-            "shrink-0 rounded-full border px-3 py-1 text-xs font-medium transition-all",
+            "min-h-9 shrink-0 cursor-pointer rounded-full border px-3.5 text-sm font-medium transition-colors duration-150",
             !categorieId && !enPromo
-              ? "border-accent/60 bg-accent/15 text-accent"
-              : "border-border/50 bg-[var(--color-surface-high)] text-text-muted hover:border-accent/30",
+              ? "border-accent bg-accent text-white"
+              : "border-border bg-surface text-text-muted hover:border-accent hover:text-text",
           ].join(" ")}
         >
           Tous
@@ -96,13 +98,15 @@ export function ProduitSearchBar({
         {/* Catégories */}
         {categories.map((cat) => (
           <button
+            type="button"
+            aria-pressed={categorieId === cat.id}
             key={cat.id}
             onClick={() => onCategorie(cat.id === categorieId ? undefined : cat.id)}
             className={[
-              "shrink-0 rounded-full border px-3 py-1 text-xs font-medium transition-all",
+              "min-h-9 shrink-0 cursor-pointer rounded-full border px-3.5 text-sm font-medium transition-colors duration-150",
               categorieId === cat.id
-                ? "border-accent/60 bg-accent/15 text-accent"
-                : "border-border/50 bg-[var(--color-surface-high)] text-text-muted hover:border-accent/30",
+                ? "border-accent bg-accent text-white"
+                : "border-border bg-surface text-text-muted hover:border-accent hover:text-text",
             ].join(" ")}
           >
             {cat.nom}
@@ -111,15 +115,17 @@ export function ProduitSearchBar({
 
         {/* Promo */}
         <button
+          type="button"
+          aria-pressed={enPromo}
           onClick={() => onPromo(!enPromo)}
           className={[
-            "shrink-0 flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-medium transition-all",
+            "flex min-h-9 shrink-0 cursor-pointer items-center gap-1 rounded-full border px-3.5 text-sm font-medium transition-colors duration-150",
             enPromo
-              ? "border-[var(--color-return)]/60 bg-[var(--color-return)]/15 text-[var(--color-return)]"
-              : "border-border/50 bg-[var(--color-surface-high)] text-text-muted hover:border-[var(--color-return)]/30",
+              ? "border-return bg-return text-white"
+              : "border-border bg-surface text-text-muted hover:border-return hover:text-text",
           ].join(" ")}
         >
-          <IconTag size={11} />
+          <IconTag size={13} aria-hidden />
           Promo
         </button>
       </div>

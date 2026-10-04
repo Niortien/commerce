@@ -4,6 +4,7 @@ import { MarketingFeatures } from "@/components/marketing/MarketingFeatures";
 import { MarketingFooter } from "@/components/marketing/MarketingFooter";
 import { MarketingHero } from "@/components/marketing/MarketingHero";
 import { MarketingLifecycle } from "@/components/marketing/MarketingLifecycle";
+import { MarketingMarquee } from "@/components/marketing/MarketingMarquee";
 import { MarketingNav } from "@/components/marketing/MarketingNav";
 import { MarketingPillars } from "@/components/marketing/MarketingPillars";
 import { MarketingPlans } from "@/components/marketing/MarketingPlans";
@@ -23,6 +24,7 @@ export function MarketingView() {
       <MarketingNav />
       <main id="contenu">
         <MarketingHero />
+        <MarketingMarquee />
         <MarketingPillars />
         <MarketingFeatures />
         <MarketingLifecycle />

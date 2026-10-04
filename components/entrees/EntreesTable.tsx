@@ -9,11 +9,13 @@ import {
   type SortingState,
 } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
-import { Button } from "@heroui/react";
+import { IconArrowBackUp, IconPencil, IconTrash } from "@tabler/icons-react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { CurrencyDisplay } from "@/components/common/CurrencyDisplay";
 import { ConfirmModal } from "@/components/common/ConfirmModal";
+import { RowActionButton } from "@/components/common/RowActionButton";
+import { StatutPill } from "@/components/common/StatutPill";
 import {
   useAnnulerEntree,
   useDeleteEntree,
@@ -81,23 +83,13 @@ export function EntreesTable({ data }: EntreesTableProps) {
       columnHelper.accessor("totalCout", {
         header: "Coût total",
         cell: (info) => (
-          <CurrencyDisplay montant={info.getValue()} tone="in" size="sm" />
+          <CurrencyDisplay montant={info.getValue()} tone="in" size="sm" className="font-semibold tabular-nums" />
         ),
       }),
       columnHelper.accessor("notes", {
         header: "Statut",
         enableSorting: false,
-        cell: (info) => {
-          const notes = info.getValue();
-          if (notes?.includes("[ANNULEE]")) {
-            return (
-              <span className="rounded bg-[color:rgba(255,77,109,0.15)] px-1.5 py-0.5 text-[10px] font-semibold uppercase text-[var(--color-out)]">
-                Annulée
-              </span>
-            );
-          }
-          return <span className="text-xs text-text-muted">Active</span>;
-        },
+        cell: (info) => <StatutPill annulee={info.getValue()?.includes("[ANNULEE]") ?? false} />,
       }),
       columnHelper.display({
         id: "actions",
@@ -109,35 +101,22 @@ export function EntreesTable({ data }: EntreesTableProps) {
             <div className="flex items-center gap-1.5">
               {!isAnnulee && (
                 <>
-                  <Button
-                    size="sm"
-                    variant="flat"
-                    className="min-w-0 bg-[color:rgba(143,126,245,0.12)] text-purple-400"
-                    onPress={() => setEditEntree(entree)}
-                  >
-                    ✏️
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="flat"
-                    className="min-w-0 bg-[color:rgba(255,77,109,0.10)] text-[var(--color-out)]"
+                  <RowActionButton label="Modifier l'entrée" tone="accent" onPress={() => setEditEntree(entree)}>
+                    <IconPencil size={16} aria-hidden />
+                  </RowActionButton>
+                  <RowActionButton
+                    label="Annuler l'entrée"
+                    tone="neutral"
                     isLoading={annulerMutation.isPending && annulerMutation.variables === entree.id}
                     onPress={() => annulerMutation.mutate(entree.id)}
-                    aria-label="Annuler l'entrée"
                   >
-                    <span className="hidden sm:inline">Annuler</span>
-                    <span className="sm:hidden">✕</span>
-                  </Button>
+                    <IconArrowBackUp size={16} aria-hidden />
+                  </RowActionButton>
                 </>
               )}
-              <Button
-                size="sm"
-                variant="flat"
-                className="min-w-0 bg-[color:rgba(255,77,109,0.06)] text-[var(--color-out)]"
-                onPress={() => setDeleteTarget(entree)}
-              >
-                🗑️
-              </Button>
+              <RowActionButton label="Supprimer l'entrée" tone="out" onPress={() => setDeleteTarget(entree)}>
+                <IconTrash size={16} aria-hidden />
+              </RowActionButton>
             </div>
           );
         },
@@ -174,13 +153,13 @@ export function EntreesTable({ data }: EntreesTableProps) {
         danger
       />
 
-      <div className="overflow-x-auto rounded-xl border border-border/60">
+      <div className="overflow-x-auto rounded-xl border border-border bg-surface shadow-card">
         <table className="w-full border-collapse text-sm">
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr
                 key={headerGroup.id}
-                className="border-b border-border/60 bg-[var(--color-surface-high)]"
+                className="border-b border-border bg-surface-high"
               >
                 {headerGroup.headers.map((header) => (
                   <th
@@ -216,8 +195,8 @@ export function EntreesTable({ data }: EntreesTableProps) {
                   <tr
                     key={row.id}
                     className={[
-                      "border-b border-border/30 transition-colors last:border-0",
-                      isAnnulee ? "opacity-40" : "hover:bg-[color:rgba(57,211,83,0.04)]",
+                      "border-b border-border transition-colors last:border-0",
+                      isAnnulee ? "opacity-40" : "hover:bg-in-dim",
                     ].join(" ")}
                   >
                     {row.getVisibleCells().map((cell) => (
