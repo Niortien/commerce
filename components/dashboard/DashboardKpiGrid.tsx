@@ -11,7 +11,9 @@ import {
   IconTrendingUp,
 } from "@tabler/icons-react";
 import type { IconProps } from "@tabler/icons-react";
+import { CountUp } from "@/components/common/CountUp";
 import { CurrencyDisplay } from "@/components/common/CurrencyDisplay";
+import { SpotlightCard } from "@/components/common/SpotlightCard";
 import type { ResumeJour } from "@/types";
 
 interface DashboardKpiGridProps {
@@ -48,17 +50,19 @@ const TONE_CLASSES: Record<Tone, { chip: string; text: string }> = {
 function KpiCard({ label, value, sub, tone, icon: Icon, isMontant = false, hint, href }: KpiCardProps) {
   const t = TONE_CLASSES[tone];
   const content = (
-    <>
+    <div className="p-4">
       <div className="flex items-center justify-between gap-2">
         <p className="text-xs font-semibold uppercase tracking-wider text-text-muted">{label}</p>
-        <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-md ${t.chip}`}>
-          <Icon size={16} aria-hidden />
+        <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${t.chip}`}>
+          <Icon size={18} aria-hidden />
         </span>
       </div>
       {isMontant ? (
-        <CurrencyDisplay montant={String(value)} size="lg" className="tabular mt-2 block font-medium text-text" />
+        <CurrencyDisplay montant={String(value)} size="lg" className="tabular mt-3 block font-display font-extrabold text-text" />
       ) : (
-        <p className="tabular mt-2 font-display text-2xl font-extrabold text-text">{value}</p>
+        <p className="tabular mt-3 font-display text-2xl font-extrabold text-text">
+          {typeof value === "number" ? <CountUp value={value} /> : value}
+        </p>
       )}
       {sub && <p className="mt-1 text-xs text-text-muted">{sub}</p>}
       {hint && (
@@ -67,22 +71,23 @@ function KpiCard({ label, value, sub, tone, icon: Icon, isMontant = false, hint,
           {href && <IconArrowRight size={12} aria-hidden className="transition-transform duration-150 group-hover:translate-x-0.5" />}
         </p>
       )}
-    </>
+    </div>
   );
 
-  const base = "rounded-lg border border-border bg-surface p-4 shadow-card";
   if (href) {
     return (
-      <Link
-        href={href}
-        className={`group block cursor-pointer ${base} transition-colors duration-150 hover:border-border-active`}
-      >
-        {content}
-      </Link>
+      <SpotlightCard tone={tone} className="group hover:-translate-y-0.5">
+        <Link
+          href={href}
+          className="block cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[var(--tone)]"
+        >
+          {content}
+        </Link>
+      </SpotlightCard>
     );
   }
 
-  return <div className={base}>{content}</div>;
+  return <SpotlightCard tone={tone}>{content}</SpotlightCard>;
 }
 
 export function DashboardKpiGrid({

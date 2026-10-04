@@ -28,7 +28,7 @@ export function DashboardActivityFeed({ entrees, sorties, isLoading }: Dashboard
 
   return (
     <div className="rounded-lg border border-border bg-surface p-4 shadow-card">
-      <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-text-muted">Dernière activité</h2>
+      <h2 className="mb-3 text-sm font-semibold text-text">Dernière activité</h2>
 
       {isLoading ? (
         <div className="space-y-2">
@@ -37,13 +37,13 @@ export function DashboardActivityFeed({ entrees, sorties, isLoading }: Dashboard
           ))}
         </div>
       ) : items.length === 0 ? (
-        <p className="text-sm text-text-muted">Aucune activité récente</p>
+        <p className="rounded-md border border-dashed border-border py-6 text-center text-sm text-text-muted">Aucune activité récente</p>
       ) : (
         <ul className="space-y-2" aria-label="Activité récente">
           {items.map((a) => (
             <li
               key={`${a.kind}-${a.item.id}`}
-              className="flex items-center justify-between gap-3 rounded-md bg-surface-high px-3 py-2"
+              className="flex items-center justify-between gap-3 rounded-md border border-border px-3 py-2.5 transition-colors duration-150 hover:bg-surface-high"
             >
               <div className="flex min-w-0 items-center gap-2">
                 <FlowTag

@@ -3,19 +3,15 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { Chip, DateRangePicker, Spinner } from "@heroui/react";
-import { IconArrowRight } from "@tabler/icons-react";
-import {
-  endOfMonth,
-  endOfWeek,
-  getLocalTimeZone,
-  startOfMonth,
-  startOfWeek,
-  today,
-  type DateValue,
-} from "@internationalized/date";
-import { useLocale } from "react-aria";
+import { Spinner } from "@heroui/react";
+import { IconArrowRight, IconChartHistogram } from "@tabler/icons-react";
+import { getLocalTimeZone, today, type DateValue } from "@internationalized/date";
+import { CurrencyDisplay } from "@/components/common/CurrencyDisplay";
+import { PageHero } from "@/components/common/PageHero";
 import { PageWrapper } from "@/components/common/PageWrapper";
+import { PeriodFilter } from "@/components/common/PeriodFilter";
+import { SegmentedControl } from "@/components/common/SegmentedControl";
+import { dvToISO, type DateRange } from "@/lib/dateRange";
 import { useVentes, useFluxTresorerie, useTopProduits, useStockValeur, useDepenses } from "@/features/rapports/query/rapports-queries";
 import { useStockAlertes } from "@/features/stock/query/stock-queries";
 import { useResumeJour } from "@/features/caisse/query/caisse-queries";
@@ -48,20 +44,11 @@ const ActiviteVentesChart = dynamic(
   }
 );
 
-type DateRange = { start: DateValue; end: DateValue };
-
 const GROUP_BYS: { key: RapportGroupBy; label: string }[] = [
-  { key: "jour", label: "/ Jour" },
-  { key: "semaine", label: "/ Semaine" },
-  { key: "mois", label: "/ Mois" },
+  { key: "jour", label: "Par jour" },
+  { key: "semaine", label: "Par semaine" },
+  { key: "mois", label: "Par mois" },
 ];
-
-function dvToISO(dv: DateValue, endOfDay: boolean): string {
-  const d = dv.toDate(getLocalTimeZone());
-  if (endOfDay) d.setHours(23, 59, 59, 0);
-  else d.setHours(0, 0, 0, 0);
-  return d.toISOString();
-}
 
 function formatRange(range: DateRange): string {
   const fmt = (dv: DateValue) =>
@@ -77,41 +64,20 @@ function formatRange(range: DateRange): string {
 
 function SectionCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-xl border border-border/60 bg-[var(--color-surface)] p-4">
-      <h2 className="mb-4 text-xs font-semibold uppercase tracking-widest text-text-muted">
-        {title}
-      </h2>
+    <section className="rounded-xl border border-border bg-surface p-4 shadow-card md:p-5">
+      <h2 className="mb-4 text-sm font-semibold text-text">{title}</h2>
       {children}
-    </div>
+    </section>
   );
 }
 
 export function ActiviteView() {
-  const { locale } = useLocale();
   const activiteGroupBy = useUiStore((s) => s.activiteGroupBy);
   const setActiviteGroupBy = useUiStore((s) => s.setActiviteGroupBy);
 
   const now = useMemo(() => today(getLocalTimeZone()), []);
 
-  const presets = useMemo(
-    () => [
-      { label: "Aujourd'hui", value: { start: now, end: now } },
-      { label: "Hier", value: { start: now.subtract({ days: 1 }), end: now.subtract({ days: 1 }) } },
-      { label: "Cette semaine", value: { start: startOfWeek(now, locale), end: endOfWeek(now, locale) } },
-      { label: "Semaine passée", value: { start: startOfWeek(now, locale).subtract({ weeks: 1 }), end: endOfWeek(now, locale).subtract({ weeks: 1 }) } },
-      { label: "Ce mois", value: { start: startOfMonth(now), end: endOfMonth(now) } },
-      { label: "Mois dernier", value: { start: startOfMonth(now.subtract({ months: 1 })), end: endOfMonth(now.subtract({ months: 1 })) } },
-      { label: "30 jours", value: { start: now.subtract({ days: 29 }), end: now } },
-      { label: "90 jours", value: { start: now.subtract({ days: 89 }), end: now } },
-    ],
-    [locale, now]
-  );
-
   const [dateRange, setDateRange] = useState<DateRange>({ start: now, end: now });
-
-  const isPresetActive = (preset: DateRange) =>
-    dateRange.start.compare(preset.start) === 0 &&
-    dateRange.end.compare(preset.end) === 0;
 
   const params = useMemo(
     () => ({
@@ -159,70 +125,24 @@ export function ActiviteView() {
 
   return (
     <PageWrapper>
-      {/* En-tête */}
-      <div className="rounded-xl border border-border/80 bg-[linear-gradient(135deg,rgba(143,126,245,0.20),rgba(34,54,81,0.50))] p-4 md:p-5">
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div>
-            <h1 className="font-display text-2xl text-[var(--color-cash)] md:text-4xl">
-              Activité
-            </h1>
-            <p className="mt-1 font-mono text-xs text-text-muted">{rangeLabel}</p>
-          </div>
-
-          <div className="flex flex-col gap-3">
-            {/* Date range picker */}
-            <DateRangePicker
-              aria-label="Période d'analyse"
-              value={dateRange}
-              onChange={(val) => val && setDateRange(val)}
-              maxValue={now}
-              visibleMonths={2}
-              size="sm"
-              classNames={{
-                base: "max-w-[340px]",
-                inputWrapper:
-                  "border border-border/60 bg-[var(--color-surface-high)] shadow-none hover:border-accent/50 focus-within:!border-accent/70 h-9",
-                segment: "text-text focus:bg-accent/20",
-                separator: "text-text-dim",
-                calendarContent: "bg-[var(--color-surface)] border border-border/60 rounded-xl shadow-xl",
-              }}
-            />
-
-            {/* Raccourcis preset */}
-            <div className="flex flex-wrap gap-1.5">
-              {presets.map((p) => (
-                <Chip
-                  key={p.label}
-                  variant="flat"
-                  className={
-                    isPresetActive(p.value)
-                      ? "cursor-pointer bg-[var(--color-cash)] font-semibold text-black"
-                      : "cursor-pointer bg-[var(--color-surface-high)] text-text-muted hover:text-text"
-                  }
-                  onClick={() => setDateRange(p.value)}
-                >
-                  {p.label}
-                </Chip>
-              ))}
-              <span className="mx-0.5 self-center text-border">|</span>
-              {GROUP_BYS.map((g) => (
-                <Chip
-                  key={g.key}
-                  variant="flat"
-                  className={
-                    activiteGroupBy === g.key
-                      ? "cursor-pointer bg-[var(--color-surface-high)] font-semibold text-text"
-                      : "cursor-pointer bg-[var(--color-surface)] text-text-dim hover:text-text-muted"
-                  }
-                  onClick={() => setActiviteGroupBy(g.key)}
-                >
-                  {g.label}
-                </Chip>
-              ))}
-            </div>
-          </div>
+      <PageHero
+        tone="cash"
+        icon={IconChartHistogram}
+        eyebrow="Analyse"
+        title="Activité"
+        description={<span className="font-mono text-xs">{rangeLabel}</span>}
+      >
+        <div className="flex flex-col gap-3">
+          <PeriodFilter ariaLabel="Période d'analyse" tone="cash" extended value={dateRange} onChange={setDateRange} />
+          <SegmentedControl
+            ariaLabel="Regrouper les résultats"
+            tone="accent"
+            value={activiteGroupBy}
+            onChange={setActiviteGroupBy}
+            options={GROUP_BYS}
+          />
         </div>
-      </div>
+      </PageHero>
 
       {/* KPI Cards */}
       <ActiviteKpiCards
@@ -257,45 +177,21 @@ export function ActiviteView() {
       {/* Session du jour — paiements */}
       <SectionCard title="Répartition paiements — session du jour">
         {resume?.data ? (
-          <div className="space-y-3">
-            <div className="flex flex-wrap gap-4 text-sm">
-              <div>
-                <span className="text-text-muted">Ventes : </span>
-                <span className="[font-family:var(--font-mono)] font-semibold text-[var(--color-cash)]">
-                  {parseFloat(resume.data.totalVentes || "0").toLocaleString("fr-FR")} FCFA
-                </span>
-              </div>
-              <div>
-                <span className="text-text-muted">Bénéfice : </span>
-                <span
-                  className={`[font-family:var(--font-mono)] font-semibold ${
-                    parseFloat(resume.data.beneficeNet || "0") >= 0
-                      ? "text-[var(--color-in)]"
-                      : "text-[var(--color-out)]"
-                  }`}
-                >
-                  {parseFloat(resume.data.beneficeNet || "0").toLocaleString("fr-FR")} FCFA
-                </span>
-              </div>
-              <div>
-                <span className="text-text-muted">Transactions : </span>
-                <span className="[font-family:var(--font-mono)] font-semibold text-text">
-                  {resume.data.totalTransactions}
-                </span>
-              </div>
-              <div>
-                <span className="text-text-muted">Dépenses : </span>
-                <span className="[font-family:var(--font-mono)] font-semibold text-[var(--color-out)]">
-                  {parseFloat(resume.data.totalDepenses || "0").toLocaleString("fr-FR")} FCFA
-                </span>
-              </div>
-              <div>
-                <span className="text-text-muted">À déposer en caisse : </span>
-                <span className="[font-family:var(--font-mono)] font-semibold text-[var(--color-cash)]">
-                  {parseFloat(resume.data.montantADeposer || "0").toLocaleString("fr-FR")} FCFA
-                </span>
-              </div>
-            </div>
+          <div className="space-y-4">
+            <dl className="grid grid-cols-2 gap-3 text-sm sm:grid-cols-3 lg:grid-cols-5">
+              {[
+                { label: "Ventes", node: <CurrencyDisplay montant={resume.data.totalVentes || "0"} tone="cash" size="md" className="font-semibold" /> },
+                { label: "Bénéfice", node: <CurrencyDisplay montant={resume.data.beneficeNet || "0"} tone={parseFloat(resume.data.beneficeNet || "0") >= 0 ? "in" : "out"} size="md" className="font-semibold" /> },
+                { label: "Transactions", node: <span className="font-mono font-semibold text-text">{resume.data.totalTransactions}</span> },
+                { label: "Dépenses", node: <CurrencyDisplay montant={resume.data.totalDepenses || "0"} tone="out" size="md" className="font-semibold" /> },
+                { label: "À déposer en caisse", node: <CurrencyDisplay montant={resume.data.montantADeposer || "0"} tone="cash" size="md" className="font-semibold" /> },
+              ].map((c) => (
+                <div key={c.label}>
+                  <dt className="text-xs text-text-muted">{c.label}</dt>
+                  <dd>{c.node}</dd>
+                </div>
+              ))}
+            </dl>
             <ActivitePaiementBreakdown resume={resume.data} />
           </div>
         ) : (
@@ -308,10 +204,10 @@ export function ActiviteView() {
       {/* Lien vers le rapport hebdomadaire */}
       <Link
         href="/activite/hebdomadaire"
-        className="flex w-fit items-center gap-1.5 text-sm font-medium text-accent hover:underline"
+        className="flex min-h-11 w-fit cursor-pointer items-center gap-1.5 text-sm font-semibold text-accent-text hover:underline"
       >
         Voir les recettes par semaine
-        <IconArrowRight size={15} />
+        <IconArrowRight size={15} aria-hidden />
       </Link>
     </PageWrapper>
   );

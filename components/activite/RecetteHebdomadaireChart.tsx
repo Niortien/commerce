@@ -12,6 +12,7 @@ import {
 } from "recharts";
 import type { RecetteHebdomadaire } from "@/features/rapports/api/rapports-api";
 import { formatSemaineLabel } from "./formatSemaine";
+import { axisTick, chartColors, legendStyle, tooltipLabelStyle, tooltipStyle } from "@/lib/chartTheme";
 
 interface RecetteHebdomadaireChartProps {
   data: RecetteHebdomadaire[];
@@ -42,34 +43,29 @@ export function RecetteHebdomadaireChart({ data }: RecetteHebdomadaireChartProps
   return (
     <ResponsiveContainer width="100%" height={280}>
       <BarChart data={chartData} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
-        <CartesianGrid strokeDasharray="3 3" stroke="rgba(64,96,138,0.3)" />
+        <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
         <XAxis
           dataKey="label"
-          tick={{ fill: "#9A9088", fontSize: 11 }}
+          tick={axisTick}
           axisLine={false}
           tickLine={false}
         />
         <YAxis
           tickFormatter={fmt}
-          tick={{ fill: "#9A9088", fontSize: 11 }}
+          tick={axisTick}
           axisLine={false}
           tickLine={false}
           width={48}
         />
         <Tooltip
-          contentStyle={{
-            background: "#0C1628",
-            border: "1px solid #1A2A50",
-            borderRadius: "8px",
-            fontSize: "12px",
-            color: "#FAFAFA",
-          }}
+          contentStyle={tooltipStyle}
+          labelStyle={tooltipLabelStyle}
           formatter={(value: number) => [`${value.toLocaleString("fr-FR")} FCFA`]}
         />
-        <Legend wrapperStyle={{ fontSize: "12px", color: "#9A9088", paddingTop: "8px" }} />
-        <Bar dataKey="Ventes" fill="#39d353" radius={[3, 3, 0, 0]} />
-        <Bar dataKey="Dépenses" fill="#ff4d6d" radius={[3, 3, 0, 0]} />
-        <Bar dataKey="Recette nette" fill="#4A7AFF" radius={[3, 3, 0, 0]} />
+        <Legend wrapperStyle={legendStyle} />
+        <Bar dataKey="Ventes" fill={chartColors.in} radius={[3, 3, 0, 0]} />
+        <Bar dataKey="Dépenses" fill={chartColors.out} radius={[3, 3, 0, 0]} />
+        <Bar dataKey="Recette nette" fill={chartColors.accent} radius={[3, 3, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>
   );

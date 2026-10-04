@@ -12,6 +12,7 @@ import {
 } from "recharts";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
+import { axisTick, chartColors, formatAxisAmount, legendStyle, tooltipLabelStyle, tooltipStyle } from "@/lib/chartTheme";
 import type { RapportGroupBy } from "@/stores/uiStore";
 
 interface FluxPoint {
@@ -37,12 +38,6 @@ function formatLabel(iso: string, groupBy: RapportGroupBy): string {
   }
 }
 
-function fmt(v: number): string {
-  if (v >= 1_000_000) return `${(v / 1_000_000).toFixed(1)}M`;
-  if (v >= 1_000) return `${(v / 1_000).toFixed(0)}k`;
-  return String(v);
-}
-
 export function ActiviteFluxChart({ data, groupBy }: ActiviteFluxChartProps) {
   const chartData = data.map((d) => ({
     label: formatLabel(d.periode, groupBy),
@@ -62,35 +57,30 @@ export function ActiviteFluxChart({ data, groupBy }: ActiviteFluxChartProps) {
   return (
     <ResponsiveContainer width="100%" height={240}>
       <LineChart data={chartData} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
-        <CartesianGrid strokeDasharray="3 3" stroke="rgba(64,96,138,0.3)" />
+        <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} vertical={false} />
         <XAxis
           dataKey="label"
-          tick={{ fill: "#9A9088", fontSize: 11 }}
+          tick={axisTick}
           axisLine={false}
           tickLine={false}
         />
         <YAxis
-          tickFormatter={fmt}
-          tick={{ fill: "#9A9088", fontSize: 11 }}
+          tickFormatter={formatAxisAmount}
+          tick={axisTick}
           axisLine={false}
           tickLine={false}
           width={48}
         />
         <Tooltip
-          contentStyle={{
-            background: "#0C1628",
-            border: "1px solid #1A2A50",
-            borderRadius: "8px",
-            fontSize: "12px",
-            color: "#FAFAFA",
-          }}
+          contentStyle={tooltipStyle}
+          labelStyle={tooltipLabelStyle}
           formatter={(value: number) => [`${value.toLocaleString("fr-FR")} FCFA`]}
         />
-        <Legend wrapperStyle={{ fontSize: "12px", color: "#9A9088", paddingTop: "8px" }} />
+        <Legend wrapperStyle={legendStyle} />
         <Line
           type="monotone"
           dataKey="Cash entrant"
-          stroke="#39d353"
+          stroke={chartColors.in}
           strokeWidth={2}
           dot={false}
           activeDot={{ r: 4 }}
@@ -98,7 +88,7 @@ export function ActiviteFluxChart({ data, groupBy }: ActiviteFluxChartProps) {
         <Line
           type="monotone"
           dataKey="Cash sortant"
-          stroke="#ff4d6d"
+          stroke={chartColors.out}
           strokeWidth={2}
           dot={false}
           activeDot={{ r: 4 }}
@@ -106,7 +96,7 @@ export function ActiviteFluxChart({ data, groupBy }: ActiviteFluxChartProps) {
         <Line
           type="monotone"
           dataKey="Solde"
-          stroke="#4A7AFF"
+          stroke={chartColors.accent}
           strokeWidth={2}
           strokeDasharray="4 2"
           dot={false}
