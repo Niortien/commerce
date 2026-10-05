@@ -11,6 +11,7 @@ import toast from "react-hot-toast";
 import { boutiqueSignupSchema, type BoutiqueSignupInput, type SignupPlan } from "@/lib/validators/boutique-signup.schema";
 import { PaiementEnAttente } from "@/components/auth/PaiementEnAttente";
 import { PlanPicker, isPlanPayant, planName } from "@/components/auth/PlanPicker";
+import { prixPlan } from "@/lib/pricing";
 import { registerBoutiquePublic } from "@/features/auth/api/auth-api";
 import { useAuthStore } from "@/stores/authStore";
 import type { AppError } from "@/types";
@@ -25,7 +26,7 @@ export function RegisterBoutiqueView({ initialPlan = "ESSAI" }: { initialPlan?: 
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [attente, setAttente] = useState<{ boutique: string; plan: string; whatsapp?: string } | null>(null);
+  const [attente, setAttente] = useState<{ boutique: string; plan: string; montant: string; whatsapp?: string } | null>(null);
   const setTokens = useAuthStore((state) => state.setTokens);
   const setUser = useAuthStore((state) => state.setUser);
 
@@ -49,7 +50,7 @@ export function RegisterBoutiqueView({ initialPlan = "ESSAI" }: { initialPlan?: 
 
       if (isPlanPayant(values.plan)) {
         // Paiement d'abord : pas de session ouverte tant que le Super Admin n'a pas confirmé le règlement.
-        setAttente({ boutique: values.nomBoutique, plan: planName(values.plan), whatsapp: values.whatsapp?.trim() || undefined });
+        setAttente({ boutique: values.nomBoutique, plan: planName(values.plan), montant: prixPlan(values.plan), whatsapp: values.whatsapp?.trim() || undefined });
         return;
       }
 

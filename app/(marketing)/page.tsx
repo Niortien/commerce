@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { MarketingView } from "@/components/marketing/MarketingView";
+import { PLAN_PRIX_FCFA } from "@/lib/pricing";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -21,6 +22,13 @@ const JSON_LD = {
       operatingSystem: "Web",
       inLanguage: "fr",
       description: SITE_DESCRIPTION,
+      offers: (["MENSUEL", "TRIMESTRIEL", "ANNUEL"] as const).map((plan) => ({
+        "@type": "Offer",
+        name: `Abonnement ${plan.toLowerCase()}`,
+        price: PLAN_PRIX_FCFA[plan],
+        priceCurrency: "XOF",
+        url: `${SITE_URL}/inscription?plan=${plan}`,
+      })),
     },
   ],
 };

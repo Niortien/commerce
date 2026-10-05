@@ -32,6 +32,7 @@ import {
 import { PageHeader } from "@/components/common/PageHeader";
 import { PLAN_LABEL, STATUT_BOUTIQUE_META, dateFinPourPlan, daysUntil, formatDaysLeft, PLAN_DUREE_JOURS } from "@/lib/subscription";
 import { PlanCards } from "@/components/superadmin/PlanCards";
+import { PLAN_PRIX_FCFA } from "@/lib/pricing";
 import { StatusChip } from "@/components/common/StatusChip";
 import { BoutiquesSummary } from "@/components/superadmin/BoutiquesSummary";
 import { PlanAbonnement, StatutBoutique, type Boutique } from "@/types";
@@ -67,7 +68,7 @@ export function BoutiquesView() {
   function openAbonnement(b: Boutique) {
     setSelected(b);
     const plan = b.abonnementActif?.plan ?? PlanAbonnement.MENSUEL;
-    abonnementForm.reset({ boutiqueId: b.id, plan, dateFin: dateFinPourPlan(plan) });
+    abonnementForm.reset({ boutiqueId: b.id, plan, dateFin: dateFinPourPlan(plan), montant: PLAN_PRIX_FCFA[plan] });
     abonnementModal.onOpen();
   }
 
@@ -264,6 +265,7 @@ export function BoutiquesView() {
                     onChange={(plan) => {
                       field.onChange(plan);
                       abonnementForm.setValue("dateFin", dateFinPourPlan(plan));
+                      abonnementForm.setValue("montant", PLAN_PRIX_FCFA[plan]);
                     }}
                   />
                 )}
@@ -276,7 +278,7 @@ export function BoutiquesView() {
                 errorMessage={abonnementForm.formState.errors.dateFin?.message}
                 {...abonnementForm.register("dateFin")}
               />
-              <Input label="Montant" type="number" variant="bordered" {...abonnementForm.register("montant")} />
+              <Input label="Montant (FCFA)" type="number" variant="bordered" description="Pré-rempli selon le tarif du plan, modifiable (remise, geste commercial)" {...abonnementForm.register("montant")} />
               <Input label="Notes" variant="bordered" {...abonnementForm.register("notes")} />
             </div>
           </ModalBody>
