@@ -26,7 +26,7 @@ export function VitrineNav() {
     <>
       {/* Logo — flottant en haut à gauche, pas de bandeau plein largeur */}
       <Link
-        href="/"
+        href="/luxury"
         aria-label="Luxury Boutique"
         className="fixed left-5 top-5 z-50 flex h-12 w-12 items-center justify-center overflow-hidden rounded-full border backdrop-blur-md md:left-6 md:top-6"
         style={{ borderColor: "var(--v-nav-border)", backgroundColor: "var(--v-nav-bg)" }}
@@ -146,7 +146,7 @@ export function VitrineNav() {
             </div>
 
             <nav className="flex flex-1 flex-col justify-center px-6">
-              {[{ href: "/", label: "Accueil" }, ...NAV_LINKS].map((l, i) => (
+              {[{ href: "/luxury", label: "Accueil" }, ...NAV_LINKS].map((l, i) => (
                 <motion.div
                   key={l.href}
                   initial={{ opacity: 0, x: -24 }}

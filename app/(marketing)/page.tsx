@@ -7,6 +7,6 @@ export const metadata: Metadata = {
     "Mon Djossi réunit stock, caisse, entrées/sorties et vitrine en ligne. Activez, suspendez et renouvelez l'accès de chaque boutique selon son abonnement.",
 };
 
-export default function PresentationPage() {
+export default function HomePage() {
   return <MarketingView />;
 }

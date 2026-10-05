@@ -25,7 +25,7 @@ export function MarketingVitrine() {
           <div className="mt-6">
             <Button
               as={Link}
-              href="/"
+              href="/luxury"
               target="_blank"
               rel="noopener noreferrer"
               variant="bordered"

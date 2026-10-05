@@ -31,7 +31,7 @@ export function AuthShell({ children }: { children: ReactNode }) {
           </ul>
         </div>
         <Link
-          href="/presentation"
+          href="/"
           className="inline-flex w-fit cursor-pointer items-center gap-2 text-sm font-medium text-sidebar-muted transition-colors duration-150 hover:text-sidebar-text"
         >
           <IconArrowLeft size={16} aria-hidden /> Découvrir Mon Djossi
