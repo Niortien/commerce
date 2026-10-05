@@ -12,11 +12,12 @@ const MOYENS = [
 interface PaiementEnAttenteProps {
   boutique: string;
   plan: string;
+  montant: string;
   whatsapp?: string;
 }
 
 /** Écran affiché après l'inscription à un plan payant : la boutique n'est activée qu'une fois le paiement confirmé. */
-export function PaiementEnAttente({ boutique, plan, whatsapp }: PaiementEnAttenteProps) {
+export function PaiementEnAttente({ boutique, plan, montant, whatsapp }: PaiementEnAttenteProps) {
   return (
     <section className="w-full rounded-lg border border-border bg-surface p-6 shadow-card md:p-8" aria-live="polite">
       <span className="flex h-11 w-11 items-center justify-center rounded-full bg-return-dim text-return-text">
@@ -25,7 +26,7 @@ export function PaiementEnAttente({ boutique, plan, whatsapp }: PaiementEnAttent
       <h1 className="mt-4 font-display text-2xl md:text-3xl">Plus qu&apos;un paiement</h1>
       <p className="mt-2 text-sm leading-relaxed text-text-muted">
         La demande de <strong className="text-text">{boutique}</strong> pour le plan{" "}
-        <strong className="text-text">{plan}</strong> est enregistrée. L&apos;accès est activé dès que le paiement est
+        <strong className="text-text">{plan}</strong> ({montant}) est enregistrée. L&apos;accès est activé dès que le paiement est
         confirmé.
       </p>
 
@@ -46,7 +47,7 @@ export function PaiementEnAttente({ boutique, plan, whatsapp }: PaiementEnAttent
         </li>
         <li className="flex gap-3">
           <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-bold text-white">2</span>
-          <span className="pt-0.5 text-text">Vous réglez par Mobile Money.</span>
+          <span className="pt-0.5 text-text">Vous réglez <strong>{montant}</strong> par Mobile Money.</span>
         </li>
         <li className="flex gap-3">
           <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-bold text-white">3</span>

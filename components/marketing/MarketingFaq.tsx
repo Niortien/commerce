@@ -3,8 +3,17 @@
 import { Accordion, AccordionItem } from "@heroui/react";
 import { Reveal } from "@/components/marketing/Reveal";
 import { SectionHeading } from "@/components/marketing/SectionHeading";
+import { formatFcfa, PLAN_PRIX_FCFA } from "@/lib/pricing";
 
 const FAQ = [
+  {
+    q: "Combien coûte Mon Djossi ?",
+    a: `${formatFcfa(PLAN_PRIX_FCFA.MENSUEL)} par mois et par boutique, ${formatFcfa(PLAN_PRIX_FCFA.TRIMESTRIEL)} pour 3 mois ou ${formatFcfa(PLAN_PRIX_FCFA.ANNUEL)} pour un an. L'essai de 14 jours est gratuit, sans paiement.`,
+  },
+  {
+    q: "Comment se passe le paiement ?",
+    a: "Pour un plan payant, vous vous inscrivez, puis vous recevez les instructions de paiement sur WhatsApp. Vous réglez par Mobile Money (Wave, Orange Money, MTN) et votre boutique est activée dès que le paiement est confirmé.",
+  },
   {
     q: "Que se passe-t-il quand un abonnement expire ?",
     a: "La boutique passe au statut « Suspendue » : les actions de stock et de caisse sont bloquées et une bannière explique la situation à l'admin et aux caissiers. Une fois l'abonnement renouvelé par le Super Admin, l'accès est rétabli.",
@@ -19,7 +28,7 @@ const FAQ = [
   },
   {
     q: "Les caissiers ont-ils accès à tout ?",
-    a: "Non. La section Administration (boutique, caissiers, photos clients) est réservée à l'admin de la boutique.",
+    a: "Non. La section Administration (boutique, caissiers, catégories) est réservée à l'admin de la boutique.",
   },
   {
     q: "Dans quelle devise sont affichés les montants ?",

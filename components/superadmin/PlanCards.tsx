@@ -4,6 +4,7 @@ import { useId } from "react";
 import { IconCheck } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
 import { PLAN_DETAIL, PLAN_LABEL } from "@/lib/subscription";
+import { prixPlan } from "@/lib/pricing";
 import { PlanAbonnement } from "@/types";
 
 const PLANS = Object.values(PlanAbonnement);
@@ -34,11 +35,12 @@ export function PlanCards({ label = "Plan", value, onChange }: PlanCardsProps) {
               aria-checked={selected}
               onClick={() => onChange(plan)}
               className={cn(
-                "relative flex min-h-14 cursor-pointer flex-col items-start rounded-lg border px-3 py-2 text-left transition-colors duration-150",
+                "relative flex min-h-[4.5rem] cursor-pointer flex-col items-start rounded-lg border px-3 py-2 text-left transition-colors duration-150",
                 selected ? "border-accent bg-accent-dim" : "border-border bg-surface hover:border-text-dim"
               )}
             >
               <span className="text-sm font-semibold text-text">{PLAN_LABEL[plan]}</span>
+              <span className="text-sm font-bold text-text">{prixPlan(plan)}</span>
               <span className="text-xs text-text-muted">{PLAN_DETAIL[plan]}</span>
               {selected && (
                 <span className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-white">

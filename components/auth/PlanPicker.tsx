@@ -4,6 +4,7 @@ import { useId } from "react";
 import { IconCheck } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
 import { SIGNUP_PLANS, type SignupPlan } from "@/lib/validators/boutique-signup.schema";
+import { prixParMois, prixPlan } from "@/lib/pricing";
 
 const PLAN_INFO: Record<SignupPlan, { name: string; detail: string; payant: boolean }> = {
   ESSAI: { name: "Essai", detail: "14 jours, gratuit", payant: false },
@@ -41,12 +42,17 @@ export function PlanPicker({ value, onChange }: PlanPickerProps) {
               aria-checked={selected}
               onClick={() => onChange(plan)}
               className={cn(
-                "relative flex min-h-[4.25rem] cursor-pointer flex-col items-start rounded-lg border px-3 py-2.5 text-left transition-colors duration-150",
+                "relative flex min-h-[5.25rem] cursor-pointer flex-col items-start rounded-lg border px-3 py-2.5 text-left transition-colors duration-150",
                 selected ? "border-accent bg-accent-dim" : "border-border bg-surface hover:border-text-dim"
               )}
             >
               <span className="text-sm font-semibold text-text">{info.name}</span>
-              <span className="text-xs text-text-muted">{info.detail}</span>
+              <span className="text-sm font-bold text-text">{prixPlan(plan)}</span>
+              <span className="text-xs text-text-muted">
+                {plan === "TRIMESTRIEL" || plan === "ANNUEL"
+                  ? `soit ${new Intl.NumberFormat("fr-FR").format(prixParMois(plan) ?? 0)} / mois`
+                  : info.detail}
+              </span>
               {selected && (
                 <span className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-white">
                   <IconCheck size={12} aria-hidden />
@@ -58,7 +64,7 @@ export function PlanPicker({ value, onChange }: PlanPickerProps) {
       </div>
       <p className="mt-2 text-xs text-text-muted">
         {isPlanPayant(value)
-          ? "Ce plan se règle avant l'activation : vous recevrez les instructions de paiement sur WhatsApp."
+          ? `À régler avant l'activation : ${prixPlan(value)}. Vous recevrez les instructions de paiement sur WhatsApp.`
           : "Aucun paiement demandé pendant l'essai."}
       </p>
     </div>
