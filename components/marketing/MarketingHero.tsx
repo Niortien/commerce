@@ -28,7 +28,7 @@ export function MarketingHero() {
             ]}
           />
           <p className="mt-5 max-w-xl text-lg leading-relaxed text-text-muted">
-            Mon Djossi réunit le stock, la caisse, les entrées et sorties et la vitrine en ligne dans un seul outil. Vous
+            Mon Djossi réunit le stock, la caisse, et les entrées et sorties dans un seul outil. Vous
             activez, suspendez et renouvelez l&apos;accès de chaque boutique selon son abonnement.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">

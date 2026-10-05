@@ -1,10 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  poweredByHeader: false,
+  compress: true,
   images: {
-    remotePatterns: [
-      { protocol: "https", hostname: "res.cloudinary.com", pathname: "/dtxmfwslf/**" },
-    ],
     formats: ["image/avif", "image/webp"],
+  },
+  experimental: {
+    // Les barrels HeroUI / Tabler sont énormes : on n'embarque que les composants utilisés.
+    optimizePackageImports: ["@heroui/react", "@tabler/icons-react", "date-fns", "recharts", "framer-motion"],
   },
   async redirects() {
     return [{ source: "/presentation", destination: "/", permanent: true }];

@@ -127,7 +127,7 @@ export function CategoriesView() {
         title="Catégories"
         description={
           isAdmin
-            ? "Organisez vos produits par groupe. Le slug sert d'adresse dans la vitrine."
+            ? "Organisez vos produits par groupe."
             : "Consultation seule — la modification est réservée à l'administrateur."
         }
         actions={

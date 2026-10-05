@@ -8,7 +8,6 @@ import {
   IconLayoutDashboard,
   IconPackageExport,
   IconPackageImport,
-  IconPhoto,
   IconReportMoney,
   IconRosetteDiscount,
   IconUsers,
@@ -62,7 +61,6 @@ export const BOUTIQUE_ADMIN_NAV: NavSection = {
   items: [
     { href: "/admin/boutiques", label: "Ma boutique", icon: IconBuildingStore },
     { href: "/admin/utilisateurs", label: "Caissiers", icon: IconUsers },
-    { href: "/admin/photos-clients", label: "Photos clients", icon: IconPhoto },
   ],
 };
 

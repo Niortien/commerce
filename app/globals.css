@@ -5,7 +5,7 @@
 :root {
   /* ════════════════════════════════════════════════════════════
      Palette Back-office — bleu azur + marine, fond clair
-     (le storefront public [data-vitrine] garde son identité noir + or,
+     (
      voir plus bas : deux publics différents, deux palettes différentes)
      ════════════════════════════════════════════════════════════ */
 
@@ -332,90 +332,9 @@ input[type="number"] {
   appearance: textfield;
 }
 
-/* ══════════════════════════════════════════════════════════════
-   VITRINE LUXURY BOUTIQUE — Abidjan Edition
-   Cible : clientèle luxe multi-marques, Marcory, Abidjan
-   Palette : Noir pur · Or ivoirien · Rouge feu · Blanc propre
-   ══════════════════════════════════════════════════════════════ */
-[data-vitrine] {
-  /* La vitrine garde sa serif éditoriale ; l'ERP et le site de présentation utilisent Plus Jakarta Sans. */
-  --font-display: var(--font-serif);
-
-  --v-bg:       #0D0D0D;
-  --v-s1:       #1A1A1A;
-  --v-s2:       #242424;
-  --v-s3:       #2E2E2E;
-
-  --v-gold:     #D8A05C;
-  --v-gold-dim: rgba(216, 160, 92, 0.14);
-  --v-gold-glow: rgba(216, 160, 92, 0.22);
-
-  --v-hot:      #E85C5C;
-  --v-hot-dim:  rgba(232, 92, 92, 0.14);
-
-  /* Alias pour rétrocompatibilité des anciens composants */
-  --v-lime:     #D8A05C;
-  --v-lime-dim: rgba(216, 160, 92, 0.12);
-  --v-red:      #E85C5C;
-  --v-purple:   #B98CF5;
-
-  --v-text:     #FFFFFF;
-  --v-muted:    #C9B79A;
-  --v-dim:      #8F826A;
-
-  --v-border:      rgba(255, 255, 255, 0.10);
-  --v-border-gold: rgba(216, 160, 92, 0.30);
-  --v-nav-bg:      rgba(13, 13, 13, 0.92);
-  --v-nav-border:  rgba(255, 255, 255, 0.08);
-
-  /* Ombres luxe — or et profondeur */
-  --v-shadow-gold: 0 0 22px rgba(216, 160, 92, 0.20);
-  --v-shadow-hot:  0 0 18px rgba(232, 92, 92, 0.16);
-  --v-shadow-card: 0 10px 24px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.04);
-}
-
-[data-vitrine] body,
-[data-vitrine] {
-  background: var(--v-bg);
-  color: var(--v-text);
-}
-
-/* ── Vitrine — thème clair (secondaire, ivoire + or) ─────────── */
-[data-vitrine][data-theme="light"] {
-  --v-bg:          #F7F2E8;
-  --v-s1:          #FBF8F2;
-  --v-s2:          #F0E8D8;
-  --v-s3:          #E5D8BE;
-  --v-gold:        #B8843C;
-  --v-gold-dim:    rgba(184,132,60,0.12);
-  --v-gold-glow:   rgba(184,132,60,0.18);
-  --v-hot:         #C94040;
-  --v-hot-dim:     rgba(201,64,64,0.10);
-  --v-lime:        #B8843C;
-  --v-lime-dim:    rgba(184,132,60,0.10);
-  --v-red:         #C94040;
-  --v-purple:      #8A6BC4;
-  --v-text:        #221E16;
-  --v-muted:       #5C5445;
-  --v-dim:         #8A8071;
-  --v-border:      rgba(34,30,22,0.10);
-  --v-border-gold: rgba(184,132,60,0.28);
-  --v-nav-bg:      rgba(247,242,232,0.94);
-  --v-nav-border:  rgba(34,30,22,0.08);
-  --v-shadow-gold: 0 0 20px rgba(184,132,60,0.16);
-  --v-shadow-hot:  0 0 16px rgba(201,64,64,0.10);
-  --v-shadow-card: 0 8px 24px rgba(34,30,22,0.10), 0 0 0 1px rgba(34,30,22,0.05);
-  background: var(--v-bg);
-  color: var(--v-text);
-}
-
 @keyframes marquee {
   0%   { transform: translateX(0); }
   100% { transform: translateX(-50%); }
-}
-
-.vitrine-marquee-track {
-  animation: marquee 22s linear infinite;
 }
 
 /* ── Impression reçu thermique 80mm (fallback si popup bloqué) ── */

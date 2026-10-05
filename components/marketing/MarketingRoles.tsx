@@ -23,7 +23,7 @@ const ROLES = [
       "Gère produits, catégories et promotions",
       "Suit stock, entrées, sorties et rapports",
       "Crée les comptes caissiers",
-      "Modère les photos clients de la vitrine",
+      "Consulte l'activité et l'historique de sa boutique",
     ],
   },
   {

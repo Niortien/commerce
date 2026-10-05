@@ -23,7 +23,8 @@ const ALT = "Mon Djossi — Gérez, vendez, développez";
 export function BrandMark({ variant = "full", onDark, className, priority = false }: BrandMarkProps) {
   const isIcon = variant === "icon";
   const dims = isIcon ? ICON : FULL;
-  const size = cn("w-auto select-none", isIcon ? "h-9" : "h-10", className);
+  // object-contain object-left : même étiré par un parent flex en colonne, le logo garde ses proportions.
+  const size = cn("w-auto max-w-full select-none object-contain object-left", isIcon ? "h-9" : "h-10", className);
   const common = { width: dims.w, height: dims.h, priority };
 
   if (isIcon) {
