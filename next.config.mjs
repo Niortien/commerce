@@ -6,6 +6,9 @@ const nextConfig = {
     ],
     formats: ["image/avif", "image/webp"],
   },
+  async redirects() {
+    return [{ source: "/presentation", destination: "/", permanent: true }];
+  },
   async headers() {
     return [
       {

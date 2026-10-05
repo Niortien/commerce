@@ -36,7 +36,7 @@ export function MarketingNav() {
         className="absolute inset-x-0 top-0 h-0.5 origin-left bg-gradient-to-r from-[#7c3aed] via-[#2563eb] to-[#06b6d4]"
       />
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 md:px-6">
-        <Link href="/presentation" aria-label="Mon Djossi — accueil" className="rounded-md">
+        <Link href="/" aria-label="Mon Djossi — accueil" className="rounded-md">
           <BrandMark className="h-11" priority />
         </Link>
 

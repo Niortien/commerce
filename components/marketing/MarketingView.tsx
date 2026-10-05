@@ -11,7 +11,7 @@ import { MarketingPlans } from "@/components/marketing/MarketingPlans";
 import { MarketingRoles } from "@/components/marketing/MarketingRoles";
 import { MarketingVitrine } from "@/components/marketing/MarketingVitrine";
 
-/** Site de présentation du produit Mon Djossi (route `/presentation`). */
+/** Site de présentation du produit Mon Djossi (route `/`). */
 export function MarketingView() {
   return (
     <>
