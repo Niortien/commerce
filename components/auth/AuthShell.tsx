@@ -14,7 +14,7 @@ export function AuthShell({ children }: { children: ReactNode }) {
   return (
     <div className="grid min-h-dvh lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
       <aside className="hidden flex-col justify-between bg-sidebar p-10 text-sidebar-text lg:flex">
-        <BrandMark onDark className="h-12" priority />
+        <BrandMark onDark className="h-12 self-start" priority />
         <div className="max-w-md">
           <h2 className="font-display text-4xl font-extrabold leading-tight tracking-tight">
             Pilotez vos boutiques, un abonnement à la fois.

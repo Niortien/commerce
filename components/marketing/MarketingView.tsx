@@ -1,15 +1,17 @@
-import { MarketingCta } from "@/components/marketing/MarketingCta";
-import { MarketingFaq } from "@/components/marketing/MarketingFaq";
 import { MarketingFeatures } from "@/components/marketing/MarketingFeatures";
+import dynamic from "next/dynamic";
 import { MarketingFooter } from "@/components/marketing/MarketingFooter";
 import { MarketingHero } from "@/components/marketing/MarketingHero";
-import { MarketingLifecycle } from "@/components/marketing/MarketingLifecycle";
 import { MarketingMarquee } from "@/components/marketing/MarketingMarquee";
 import { MarketingNav } from "@/components/marketing/MarketingNav";
 import { MarketingPillars } from "@/components/marketing/MarketingPillars";
-import { MarketingPlans } from "@/components/marketing/MarketingPlans";
-import { MarketingRoles } from "@/components/marketing/MarketingRoles";
-import { MarketingVitrine } from "@/components/marketing/MarketingVitrine";
+
+// Sections sous la ligne de flottaison : chargées en morceaux séparés pour alléger le premier affichage.
+const MarketingLifecycle = dynamic(() => import("@/components/marketing/MarketingLifecycle").then((m) => m.MarketingLifecycle));
+const MarketingRoles = dynamic(() => import("@/components/marketing/MarketingRoles").then((m) => m.MarketingRoles));
+const MarketingPlans = dynamic(() => import("@/components/marketing/MarketingPlans").then((m) => m.MarketingPlans));
+const MarketingFaq = dynamic(() => import("@/components/marketing/MarketingFaq").then((m) => m.MarketingFaq));
+const MarketingCta = dynamic(() => import("@/components/marketing/MarketingCta").then((m) => m.MarketingCta));
 
 /** Site de présentation du produit Mon Djossi (route `/`). */
 export function MarketingView() {
@@ -29,7 +31,6 @@ export function MarketingView() {
         <MarketingFeatures />
         <MarketingLifecycle />
         <MarketingRoles />
-        <MarketingVitrine />
         <MarketingPlans />
         <MarketingFaq />
         <MarketingCta />

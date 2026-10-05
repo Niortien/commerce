@@ -8,37 +8,50 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
-import { boutiqueSignupSchema, type BoutiqueSignupInput } from "@/lib/validators/boutique-signup.schema";
+import { boutiqueSignupSchema, type BoutiqueSignupInput, type SignupPlan } from "@/lib/validators/boutique-signup.schema";
+import { PaiementEnAttente } from "@/components/auth/PaiementEnAttente";
+import { PlanPicker, isPlanPayant, planName } from "@/components/auth/PlanPicker";
 import { registerBoutiquePublic } from "@/features/auth/api/auth-api";
 import { useAuthStore } from "@/stores/authStore";
 import type { AppError } from "@/types";
 import { Role } from "@/types";
 
 /**
- * Auto-inscription publique : une boutique crée son compte, démarre un
- * essai gratuit de 14 jours, et atterrit directement sur son tableau de
- * bord. Elle apparaît ensuite dans la liste du Super Admin pour suivi.
+ * Auto-inscription publique. Plan « Essai » : la boutique démarre 14 jours gratuits et atterrit sur son tableau de bord.
+ * Plans payants (mensuel, trimestriel, annuel) : la demande est enregistrée, la boutique reste en attente et n'est pas
+ * connectée ; l'accès s'ouvre une fois le paiement confirmé par le Super Admin.
  */
-export function RegisterBoutiqueView() {
+export function RegisterBoutiqueView({ initialPlan = "ESSAI" }: { initialPlan?: SignupPlan }) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [attente, setAttente] = useState<{ boutique: string; plan: string; whatsapp?: string } | null>(null);
   const setTokens = useAuthStore((state) => state.setTokens);
   const setUser = useAuthStore((state) => state.setUser);
 
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<BoutiqueSignupInput>({
     resolver: zodResolver(boutiqueSignupSchema),
+    defaultValues: { plan: initialPlan },
   });
+  const plan = watch("plan");
 
   const onSubmit = handleSubmit(async (values) => {
     setIsSubmitting(true);
     try {
       const response = await registerBoutiquePublic(values);
       const { accessToken, refreshToken, user } = response.data;
+
+      if (isPlanPayant(values.plan)) {
+        // Paiement d'abord : pas de session ouverte tant que le Super Admin n'a pas confirmé le règlement.
+        setAttente({ boutique: values.nomBoutique, plan: planName(values.plan), whatsapp: values.whatsapp?.trim() || undefined });
+        return;
+      }
 
       setTokens(accessToken, refreshToken);
       setUser({
@@ -59,11 +72,15 @@ export function RegisterBoutiqueView() {
     }
   });
 
+  if (attente) {
+    return <PaiementEnAttente {...attente} />;
+  }
+
   return (
     <section className="w-full rounded-lg border border-border bg-surface p-6 shadow-card md:p-8">
       <h1 className="mb-1 font-display text-2xl md:text-3xl">Inscrire ma boutique</h1>
       <p className="mb-4 text-sm text-text-muted">
-        Créez votre espace en 1 minute. Essai gratuit de 14 jours, sans engagement.
+        Créez votre espace en 1 minute. Choisissez l&apos;essai gratuit de 14 jours ou un abonnement.
       </p>
       <div className="space-y-3">
         <Input
@@ -74,7 +91,14 @@ export function RegisterBoutiqueView() {
           {...register("nomBoutique")}
         />
         <Input label="Ville" variant="bordered" {...register("ville")} />
-        <Input label="WhatsApp" variant="bordered" placeholder="+225 07 00 00 00 00" {...register("whatsapp")} />
+        <Input
+          label="WhatsApp"
+          variant="bordered"
+          placeholder="+225 07 00 00 00 00"
+          isInvalid={Boolean(errors.whatsapp)}
+          errorMessage={errors.whatsapp?.message}
+          {...register("whatsapp")}
+        />
         <Input
           type="email"
           label="Votre email (admin)"
@@ -101,8 +125,9 @@ export function RegisterBoutiqueView() {
           }
           {...register("password")}
         />
+        <PlanPicker value={plan} onChange={(p) => setValue("plan", p, { shouldValidate: true })} />
         <Button className="w-full bg-accent text-white" onPress={() => void onSubmit()} isLoading={isSubmitting}>
-          Créer ma boutique
+          {isPlanPayant(plan) ? "Continuer vers le paiement" : "Créer ma boutique"}
         </Button>
         <p className="text-center text-sm text-default-500">
           Déjà inscrit ?{" "}

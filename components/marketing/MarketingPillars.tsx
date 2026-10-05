@@ -11,7 +11,7 @@ const PILLARS = [
   {
     verb: "Vendez",
     icon: IconCoin,
-    text: "Caisse en temps réel, reçus imprimables, vitrine en ligne et commandes directement sur WhatsApp.",
+    text: "Caisse en temps réel, reçus imprimables et suivi des ventes de toute l'équipe.",
   },
   {
     verb: "Développez",

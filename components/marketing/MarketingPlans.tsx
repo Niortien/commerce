@@ -39,7 +39,7 @@ export function MarketingPlans() {
                     Tarif communiqué à l&apos;inscription
                   </p>
                   <div className="mt-auto pt-6">
-                    <Button as={Link} href="/inscription" variant="bordered" className="w-full font-semibold">
+                    <Button as={Link} href={`/inscription?plan=${plan.code}`} variant="bordered" className="w-full font-semibold">
                       {plan.cta}
                     </Button>
                   </div>

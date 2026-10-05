@@ -53,3 +53,25 @@ export function formatDaysLeft(days: number): string {
   if (days === 1) return "1 jour restant";
   return `${days} jours restants`;
 }
+
+/** Durée habituelle de chaque plan (jours), utilisée pour pré-remplir la date de fin. */
+export const PLAN_DUREE_JOURS: Record<PlanAbonnement, number> = {
+  [PlanAbonnement.ESSAI]: 14,
+  [PlanAbonnement.MENSUEL]: 30,
+  [PlanAbonnement.TRIMESTRIEL]: 90,
+  [PlanAbonnement.ANNUEL]: 365,
+};
+
+export const PLAN_DETAIL: Record<PlanAbonnement, string> = {
+  [PlanAbonnement.ESSAI]: "14 jours pour découvrir",
+  [PlanAbonnement.MENSUEL]: "30 jours",
+  [PlanAbonnement.TRIMESTRIEL]: "90 jours",
+  [PlanAbonnement.ANNUEL]: "365 jours",
+};
+
+/** Date de fin (AAAA-MM-JJ, jour local) à `jours` jours d'aujourd'hui, au format attendu par un champ `date`. */
+export function dateFinPourPlan(plan: PlanAbonnement, depuis: Date = new Date()): string {
+  const d = new Date(depuis.getFullYear(), depuis.getMonth(), depuis.getDate() + PLAN_DUREE_JOURS[plan]);
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}

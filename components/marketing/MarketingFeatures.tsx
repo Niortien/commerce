@@ -41,8 +41,8 @@ const FEATURES = [
   },
   {
     icon: IconBrandWhatsapp,
-    title: "Vitrine et commande WhatsApp",
-    text: "Chaque boutique dispose d'un catalogue en ligne et d'un lookbook ; le client commande par WhatsApp.",
+    title: "Abonnement géré boutique par boutique",
+    text: "Activez, suspendez et renouvelez l'accès de chaque boutique selon son plan, depuis un seul tableau.",
   },
 ];
 
