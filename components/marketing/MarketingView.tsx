@@ -2,11 +2,13 @@ import { MarketingFeatures } from "@/components/marketing/MarketingFeatures";
 import dynamic from "next/dynamic";
 import { MarketingFooter } from "@/components/marketing/MarketingFooter";
 import { MarketingHero } from "@/components/marketing/MarketingHero";
-import { MarketingMarquee } from "@/components/marketing/MarketingMarquee";
 import { MarketingNav } from "@/components/marketing/MarketingNav";
-import { MarketingPillars } from "@/components/marketing/MarketingPillars";
+import { MarketingSteps } from "@/components/marketing/MarketingSteps";
+import { MarketingTrust } from "@/components/marketing/MarketingTrust";
 
 // Sections sous la ligne de flottaison : chargées en morceaux séparés pour alléger le premier affichage.
+const MarketingDay = dynamic(() => import("@/components/marketing/MarketingDay").then((m) => m.MarketingDay));
+const MarketingTestimonials = dynamic(() => import("@/components/marketing/MarketingTestimonials").then((m) => m.MarketingTestimonials));
 const MarketingLifecycle = dynamic(() => import("@/components/marketing/MarketingLifecycle").then((m) => m.MarketingLifecycle));
 const MarketingRoles = dynamic(() => import("@/components/marketing/MarketingRoles").then((m) => m.MarketingRoles));
 const MarketingPlans = dynamic(() => import("@/components/marketing/MarketingPlans").then((m) => m.MarketingPlans));
@@ -26,11 +28,13 @@ export function MarketingView() {
       <MarketingNav />
       <main id="contenu">
         <MarketingHero />
-        <MarketingMarquee />
-        <MarketingPillars />
+        <MarketingTrust />
+        <MarketingSteps />
+        <MarketingDay />
         <MarketingFeatures />
-        <MarketingLifecycle />
         <MarketingRoles />
+        <MarketingLifecycle />
+        <MarketingTestimonials />
         <MarketingPlans />
         <MarketingFaq />
         <MarketingCta />

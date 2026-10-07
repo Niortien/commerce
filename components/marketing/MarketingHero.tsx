@@ -2,65 +2,68 @@
 
 import Link from "next/link";
 import { Button } from "@heroui/react";
-import { IconArrowRight } from "@tabler/icons-react";
-import { AnimatedHeadline } from "@/components/common/AnimatedHeadline";
-import { AuroraBackground } from "@/components/common/AuroraBackground";
-import { ProductPreview } from "@/components/marketing/ProductPreview";
-import { Reveal } from "@/components/marketing/Reveal";
+import { IconArrowRight, IconCheck } from "@tabler/icons-react";
+import { MarketingPhone } from "@/components/marketing/MarketingPhone";
 
-const FACTS = ["Multi-boutiques", "3 rôles : plateforme, admin, caissier", "Montants en FCFA"];
+const FACTS = ["14 jours d'essai gratuit", "Montants en FCFA", "Plusieurs boutiques, un seul compte"];
+
+function IvoryFlag() {
+  return (
+    <span aria-hidden className="inline-flex h-4 overflow-hidden rounded-[4px] border border-border">
+      <i className="block h-full w-2 bg-[#F77F00]" />
+      <i className="block h-full w-2 bg-white" />
+      <i className="block h-full w-2 bg-[#009E60]" />
+    </span>
+  );
+}
 
 export function MarketingHero() {
   return (
-    <section className="relative isolate overflow-hidden border-b border-border bg-base">
-      <AuroraBackground />
-      <div aria-hidden className="dot-grid absolute inset-0 -z-10 opacity-40 [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]" />
-      <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-14 md:px-6 md:py-20 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:gap-14">
-        <Reveal>
-          <p className="inline-flex items-center gap-2 rounded-full bg-accent-dim px-3 py-1 text-xs font-semibold text-accent-text">
-            ERP de gestion de boutiques
+    <header className="relative isolate overflow-x-clip bg-base">
+      <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-10 px-4 pb-10 pt-12 md:px-6 md:pb-20 md:pt-24 lg:gap-16">
+        <div className="flex min-w-0 flex-[1_1_520px] flex-col gap-6">
+          <p className="mk-fade inline-flex w-fit items-center gap-2.5 rounded-full border border-border bg-surface py-[7px] pl-2 pr-3.5 text-sm font-semibold text-text-muted">
+            <IvoryFlag />
+            Pensé pour les boutiques de Côte d&apos;Ivoire
           </p>
-          <AnimatedHeadline
-            className="mt-5 font-display text-4xl font-extrabold leading-[1.08] tracking-tight text-text md:text-5xl lg:text-[3.5rem]"
-            segments={[
-              { text: "Gérez chaque boutique" },
-              { text: "selon son abonnement.", gradient: true },
-            ]}
-          />
-          <p className="mt-5 max-w-xl text-lg leading-relaxed text-text-muted">
-            Mon Djossi réunit le stock, la caisse, et les entrées et sorties dans un seul outil. Vous
-            activez, suspendez et renouvelez l&apos;accès de chaque boutique selon son abonnement.
+          <h1
+            className="mk-fade font-brand text-[2rem] font-bold leading-[1.1] tracking-[-0.045em] text-text md:text-[2.6rem] lg:text-[3.1rem]"
+            style={{ animationDelay: ".1s" }}
+          >
+            Sachez chaque soir combien votre boutique <span className="mk-mark">a gagné.</span>
+          </h1>
+          <p className="mk-fade max-w-xl text-lg leading-relaxed text-text-muted md:text-xl" style={{ animationDelay: ".8s" }}>
+            Caisse, stock et rapports dans une seule application. Vos caissiers encaissent au comptoir, vous suivez tout en
+            FCFA, même à distance.
           </p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <div className="mk-fade flex flex-col gap-3 sm:flex-row" style={{ animationDelay: ".95s" }}>
             <Button
               as={Link}
-              href="/inscription"
+              href="/inscription?plan=ESSAI"
               size="lg"
-              className="bg-accent font-semibold text-white"
-              endContent={<IconArrowRight size={18} aria-hidden />}
+              className="h-[52px] rounded-full bg-accent px-6 font-bold text-white shadow-[0_10px_24px_-12px_rgba(37,99,235,0.7)]"
+              endContent={<IconArrowRight size={19} aria-hidden />}
             >
-              Inscrire ma boutique
+              Essayer gratuitement 14 jours
             </Button>
-            <Button as={Link} href="/login" size="lg" variant="bordered" className="font-semibold">
-              Se connecter
+            <Button as={Link} href="#comment" size="lg" variant="bordered" className="h-[52px] rounded-full border-border bg-surface px-6 font-bold text-text">
+              Voir comment ça marche
             </Button>
           </div>
-          <ul className="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-sm text-text-muted">
+          <ul className="mk-fade flex flex-wrap gap-x-5 gap-y-2.5 text-[15px] font-medium text-text-muted" style={{ animationDelay: "1.1s" }}>
             {FACTS.map((f) => (
               <li key={f} className="flex items-center gap-2">
-                <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-accent" />
+                <IconCheck size={18} strokeWidth={2.6} className="text-accent" aria-hidden />
                 {f}
               </li>
             ))}
           </ul>
-        </Reveal>
+        </div>
 
-        <Reveal delay={0.08}>
-          <div className="float-slow">
-            <ProductPreview />
-          </div>
-        </Reveal>
+        <div className="min-w-0 flex-[1_1_400px]">
+          <MarketingPhone />
+        </div>
       </div>
-    </section>
+    </header>
   );
 }

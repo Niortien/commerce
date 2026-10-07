@@ -38,13 +38,13 @@ const FAQ = [
 
 export function MarketingFaq() {
   return (
-    <section id="faq" className="scroll-mt-20 bg-base py-16 md:py-24">
+    <section id="faq" className="scroll-mt-20 bg-base pt-[clamp(72px,10vw,128px)]">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 md:px-6 lg:grid-cols-[minmax(0,4fr)_minmax(0,7fr)] lg:gap-14">
         <Reveal>
-          <SectionHeading eyebrow="FAQ" title="Questions fréquentes" />
+          <SectionHeading eyebrow="Questions fréquentes" title="Vous vous demandez sûrement…" />
         </Reveal>
         <Reveal delay={0.05}>
-          <Accordion variant="splitted" selectionMode="multiple">
+          <Accordion variant="splitted" selectionMode="multiple" itemClasses={{ base: "!rounded-[20px] !border !border-border !bg-surface !shadow-none" }}>
             {FAQ.map(({ q, a }) => (
               <AccordionItem
                 key={q}

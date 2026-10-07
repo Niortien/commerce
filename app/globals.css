@@ -451,3 +451,60 @@ input[type="number"] {
   .marquee-track { animation: none !important; flex-wrap: wrap; justify-content: center; }
   .marquee-track [aria-hidden="true"] { display: none; }
 }
+
+/* ════════════════════════════════════════════════════════════
+   Site de présentation — maquette « Nouveau design » (téléphone, boucle de la journée, surlignage or)
+   Neutralisé sous prefers-reduced-motion (voir bas de bloc).
+   ════════════════════════════════════════════════════════════ */
+
+.mk-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--color-accent-text); }
+.mk-eyebrow::before { content: ""; width: 18px; height: 3px; border-radius: 2px; background: #FFC531; }
+.mk-eyebrow-dark { color: #8FB2F0; }
+
+.mk-mark { position: relative; z-index: 0; white-space: nowrap; }
+.mk-mark::before { content: ""; position: absolute; left: -.06em; right: -.06em; bottom: .04em; height: .38em; border-radius: .1em; background: #FFC531; z-index: -1; transform-origin: left; animation: mk-sweep .9s 1s cubic-bezier(.2,.7,.2,1) both; }
+@keyframes mk-sweep { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+@keyframes mk-rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+.mk-fade { animation: mk-rise .9s cubic-bezier(.2,.7,.2,1) both; }
+
+/* Téléphone du hero */
+.mk-phone { animation: mk-rise 1s .35s cubic-bezier(.2,.7,.2,1) both; }
+.mk-ring { stroke: var(--color-accent); stroke-linecap: round; transform: rotate(-90deg); transform-origin: 50% 50%; animation: mk-ringfill 1.8s .9s cubic-bezier(.2,.7,.2,1) both; }
+@keyframes mk-ringfill { from { stroke-dashoffset: 201; } }
+.mk-bar { transform-origin: bottom; animation: mk-growup 1s cubic-bezier(.2,.7,.2,1) both; }
+@keyframes mk-growup { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+.mk-halo { animation: mk-halo 2.4s 2.5s ease-out infinite; }
+@keyframes mk-halo { 0% { box-shadow: 0 0 0 0 rgba(255,197,49,.7); } 80%, 100% { box-shadow: 0 0 0 14px rgba(255,197,49,0); } }
+.mk-float { animation: mk-popin .7s cubic-bezier(.2,.8,.25,1.25) both, mk-bob 6s ease-in-out infinite; }
+@keyframes mk-popin { from { opacity: 0; transform: translateY(14px) scale(.9); } to { opacity: 1; transform: none; } }
+@keyframes mk-bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -8px; } }
+
+/* Étapes : pointillés qui avancent */
+.mk-steps::before { content: ""; position: absolute; top: 56px; left: 16%; right: 16%; height: 2px; background-image: linear-gradient(90deg, #B6C3D8 50%, transparent 50%); background-size: 16px 2px; animation: mk-march 1.2s linear infinite; }
+@keyframes mk-march { to { background-position: 16px 0; } }
+@media (max-width: 1023px) { .mk-steps::before { display: none; } }
+
+/* Boucle de la journée : un point or parcourt le rail et allume chaque moment */
+.mk-rail::after { content: ""; position: absolute; top: -5px; left: 0; width: 12px; height: 12px; border-radius: 9999px; background: #FFC531; box-shadow: 0 0 0 6px rgba(255,197,49,.18); animation: mk-travel 8s linear infinite; }
+@keyframes mk-travel { from { left: 0; } to { left: calc(100% - 12px); } }
+.mk-lit { animation: mk-lit 8s linear infinite; }
+@keyframes mk-lit { 0%, 22% { background: #FFC531; color: #0F172A; transform: scale(1.06); } 26%, 100% { background: #1B2E4F; color: #8FB2F0; transform: none; } }
+.mk-spin { animation: mk-spin 6s linear infinite; }
+.mk-spin-slow { animation: mk-spin 24s linear infinite; }
+@keyframes mk-spin { to { transform: rotate(360deg); } }
+
+/* Abonnement : bandeau qui glisse puis « tape » de temps en temps, puce active qui pulse */
+.mk-banner { animation: mk-slidein .8s cubic-bezier(.2,.7,.2,1) both, mk-nudge 4s 1.5s ease-in-out infinite; }
+@keyframes mk-slidein { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: none; } }
+@keyframes mk-nudge { 0%, 88%, 100% { translate: 0 0; } 91% { translate: -4px 0; } 94% { translate: 4px 0; } 97% { translate: -2px 0; } }
+.mk-glow { animation: mk-glow 2.4s ease-out infinite; }
+@keyframes mk-glow { 0% { box-shadow: 0 0 0 0 rgba(37,99,235,.45); } 70%, 100% { box-shadow: 0 0 0 10px rgba(37,99,235,0); } }
+.mk-wiggle { animation: mk-wiggle 3.5s ease-in-out infinite; }
+@keyframes mk-wiggle { 0%, 90%, 100% { transform: rotate(0); } 93% { transform: rotate(-5deg); } 96% { transform: rotate(5deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .mk-mark::before, .mk-fade, .mk-phone, .mk-ring, .mk-bar, .mk-halo, .mk-float, .mk-steps::before, .mk-rail::after, .mk-lit, .mk-spin, .mk-spin-slow, .mk-banner, .mk-glow, .mk-wiggle {
+    animation: none !important;
+  }
+}
