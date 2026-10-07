@@ -7,7 +7,7 @@ import { SectionHeading } from "@/components/marketing/SectionHeading";
 const TESTIMONIALS = [
   {
     quote:
-      "Avant, je comptais le stock à la main et je découvrais les ruptures trop tard. Avec Mon Djossi, je vois mes ventes et mes alertes en temps réel, même quand je ne suis pas à la boutique.",
+      "Grâce à Mon Djossi, nous suivons mieux nos finances, le stock de nos produits et nos recettes. Je vois mes ventes et mes alertes en temps réel, même quand je ne suis pas à la boutique.",
     name: "Le gérant",
     role: "Dri Valé · streetwear, Abidjan",
     avatar: "bg-[#0F172A]",
@@ -29,7 +29,7 @@ export function MarketingTestimonials() {
           <SectionHeading
             eyebrow="Témoignages"
             title="Ils gèrent leur boutique avec Mon Djossi."
-            description="Chez Dri Valé, la caisse, le stock et les rapports passent par Mon Djossi, au quotidien."
+            description="Chez Dri Valé, Mon Djossi sert à suivre les finances, le stock des produits et les recettes, au quotidien."
           />
         </Reveal>
         <ul className="mt-12 grid gap-5 md:grid-cols-2">
