@@ -1,4 +1,4 @@
-import type { ModePaiement, Taille, TypeSortie } from "./enums";
+import type { ModePaiement, TypeSortie } from "./enums";
 
 interface CommandBase {
   raw: string;
@@ -10,7 +10,7 @@ export interface EntreeCommand extends CommandBase {
   quantite: number;
   produitSearch: string;
   couleur?: string;
-  taille?: Taille;
+  taille?: string;
   prixUnitaire?: string;
   varianteId?: string;
 }
@@ -21,7 +21,7 @@ export interface SortieCommand extends CommandBase {
   quantite: number;
   produitSearch: string;
   couleur?: string;
-  taille?: Taille;
+  taille?: string;
   prixUnitaire?: string;
   varianteId?: string;
 }

@@ -26,16 +26,6 @@ export enum StatutAbonnement {
   ANNULE = "ANNULE",
 }
 
-export enum Taille {
-  XS = "XS",
-  S = "S",
-  M = "M",
-  L = "L",
-  XL = "XL",
-  XXL = "XXL",
-  XXXL = "XXXL",
-}
-
 export enum TypeMouvement {
   ENTREE = "ENTREE",
   SORTIE = "SORTIE",
@@ -62,4 +52,16 @@ export enum ModePaiement {
 export enum StatutSession {
   OUVERTE = "OUVERTE",
   FERMEE = "FERMEE",
+}
+
+export enum TypeCommerce {
+  MODE = "MODE",
+  CHAUSSURES = "CHAUSSURES",
+  ALIMENTATION = "ALIMENTATION",
+  SUPERMARCHE = "SUPERMARCHE",
+  PHARMACIE = "PHARMACIE",
+  ELECTRONIQUE = "ELECTRONIQUE",
+  BEAUTE = "BEAUTE",
+  QUINCAILLERIE = "QUINCAILLERIE",
+  AUTRE = "AUTRE",
 }

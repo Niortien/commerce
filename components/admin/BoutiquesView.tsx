@@ -1,16 +1,18 @@
 "use client";
 
 import { useEffect } from "react";
-import { Button, Chip, Input, Skeleton } from "@heroui/react";
-import { useForm } from "react-hook-form";
+import { Button, Chip, Input, Select, SelectItem, Skeleton } from "@heroui/react";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useMyBoutique } from "@/features/boutiques/query/boutiques-queries";
 import { useUpdateMyBoutique } from "@/features/boutiques/mutation/boutiques-mutations";
-import { StatutAbonnement, StatutBoutique } from "@/types";
+import { TYPE_COMMERCE_OPTIONS } from "@/lib/commerceConfig";
+import { StatutAbonnement, StatutBoutique, TypeCommerce } from "@/types";
 
 const schema = z.object({
   nom: z.string().min(1, "Requis"),
+  typeCommerce: z.nativeEnum(TypeCommerce),
   ville: z.string().optional(),
   adresse: z.string().optional(),
   whatsapp: z.string().optional(),
@@ -37,7 +39,7 @@ export function BoutiquesView() {
   const boutique = res?.data;
   const updateMutation = useUpdateMyBoutique();
 
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
+  const { register, handleSubmit, reset, control, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
   });
 
@@ -45,6 +47,7 @@ export function BoutiquesView() {
     if (boutique) {
       reset({
         nom: boutique.nom,
+        typeCommerce: boutique.typeCommerce ?? TypeCommerce.MODE,
         ville: boutique.ville ?? "",
         adresse: boutique.adresse ?? "",
         whatsapp: boutique.whatsapp ?? "",
@@ -104,6 +107,24 @@ export function BoutiquesView() {
 
       <form onSubmit={(e) => void onSubmit(e)} className="flex max-w-xl flex-col gap-3 rounded-lg border border-border bg-surface p-4">
         <Input label="Nom de la boutique" variant="bordered" isInvalid={!!errors.nom} errorMessage={errors.nom?.message} {...register("nom")} />
+        <Controller
+          name="typeCommerce"
+          control={control}
+          render={({ field }) => (
+            <Select
+              label="Type de commerce"
+              variant="bordered"
+              description="Adapte les catégories et les variantes (taille, contenance, dosage…)."
+              selectedKeys={field.value ? [field.value] : []}
+              disallowEmptySelection
+              onSelectionChange={(keys) => field.onChange(Array.from(keys)[0])}
+            >
+              {TYPE_COMMERCE_OPTIONS.map((o) => (
+                <SelectItem key={o.value}>{o.label}</SelectItem>
+              ))}
+            </Select>
+          )}
+        />
         <Input label="Ville" variant="bordered" {...register("ville")} />
         <Input label="Adresse" variant="bordered" {...register("adresse")} />
         <Input label="WhatsApp" variant="bordered" placeholder="+225 07 00 00 00 00" {...register("whatsapp")} />

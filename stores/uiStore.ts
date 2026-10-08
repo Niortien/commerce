@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import type { Taille, TypeSortie } from "@/types";
+import type { TypeSortie } from "@/types";
 
 export type SortiePeriode = "7j" | "30j" | "90j";
 type FeedDensity = "compact" | "cozy";
@@ -10,7 +10,7 @@ interface UiState {
   produitPanelId: string | null;
   stockFiltre: {
     categorieId?: string;
-    taille?: Taille;
+    taille?: string;
     alerte?: boolean;
   };
   sortiePeriode: SortiePeriode;

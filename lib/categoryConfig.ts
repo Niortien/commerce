@@ -90,9 +90,12 @@ export function getTaillesForSlug(slug: string | undefined): string[] | null {
  *  Priorité : champ `description` (catégories créées via admin) puis slug hardcodé.
  *  Catégories sans groupe connu → bucket "Autres".
  */
-export function groupCategories<T extends { slug: string; description?: string | null }>(categories: T[]) {
+export function groupCategories<T extends { slug: string; description?: string | null }>(
+  categories: T[],
+  groupsConfig: { label: string; slugs: string[] }[] = CATEGORY_GROUPS
+) {
   const grouped = new Set<T>();
-  const groups = CATEGORY_GROUPS.map((group) => {
+  const groups = groupsConfig.map((group) => {
     const items = categories.filter(
       (c) => c.description === group.label || group.slugs.includes(c.slug)
     );

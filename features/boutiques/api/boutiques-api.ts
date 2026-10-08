@@ -1,8 +1,9 @@
 import { apiGet, apiPatch } from "@/lib/api";
-import type { Boutique } from "@/types";
+import type { Boutique, TypeCommerce } from "@/types";
 
 export interface UpdateMyBoutiqueBody {
   nom?: string;
+  typeCommerce?: TypeCommerce;
   adresse?: string;
   ville?: string;
   whatsapp?: string;
