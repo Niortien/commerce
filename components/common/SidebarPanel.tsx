@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { useLogout } from "@/features/auth/mutation/auth-mutations";
 import { findActiveHref, type NavSection } from "@/lib/navigation";
 import { BrandMark } from "@/components/common/BrandMark";
+import { useChatUnreadCount } from "@/features/chat/query/chat-queries";
 import { ThemeToggle } from "@/components/common/ThemeToggle";
 
 interface SidebarPanelProps {
@@ -39,6 +40,7 @@ export function SidebarPanel({
   const pathname = usePathname();
   const logout = useLogout();
   const activeHref = findActiveHref(sections, pathname);
+  const chatUnread = useChatUnreadCount();
 
   return (
     <div className={cn("flex h-full flex-col gap-3 overflow-y-auto bg-sidebar p-4 text-sidebar-text", className)}>
@@ -90,6 +92,14 @@ export function SidebarPanel({
                     className={cn("shrink-0", active ? "text-sidebar-accent" : "text-sidebar-muted group-hover:text-sidebar-text")}
                   />
                   {item.label}
+                  {item.badge === "chat" && chatUnread > 0 && (
+                    <span
+                      aria-label={`${chatUnread} messages non lus`}
+                      className="ml-auto rounded-full bg-rose-500 px-1.5 text-[11px] font-semibold text-white"
+                    >
+                      {chatUnread}
+                    </span>
+                  )}
                 </Link>
               );
             })}

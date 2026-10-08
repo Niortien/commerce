@@ -43,6 +43,7 @@ export const createSuperAdminUserSchema = z.object({
   email: z.string().email("Email invalide"),
   password: z.string().min(8, "8 caractères minimum"),
   role: z.enum(["SUPER_ADMIN", "ADMIN", "CAISSIER"]),
+  telephone: z.string().optional(),
   boutiqueId: z.string().nullable().optional(),
 });
 export type CreateSuperAdminUserInput = z.infer<typeof createSuperAdminUserSchema>;

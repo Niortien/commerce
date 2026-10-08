@@ -5,8 +5,10 @@ export interface SuperAdminUser {
   id: string;
   email: string;
   role: "SUPER_ADMIN" | "ADMIN" | "CAISSIER";
+  /** Numéro de l'utilisateur (renseigné surtout pour les ADMIN). */
+  telephone: string | null;
   boutiqueId: string | null;
-  boutique: { id: string; nom: string } | null;
+  boutique: { id: string; nom: string; telephone: string | null; whatsapp: string | null } | null;
   createdAt: string;
 }
 
@@ -14,6 +16,7 @@ export interface CreateSuperAdminUserBody {
   email: string;
   password: string;
   role: "SUPER_ADMIN" | "ADMIN" | "CAISSIER";
+  telephone?: string | null;
   boutiqueId?: string | null;
 }
 
@@ -21,6 +24,7 @@ export interface UpdateSuperAdminUserBody {
   email?: string;
   password?: string;
   role?: "SUPER_ADMIN" | "ADMIN" | "CAISSIER";
+  telephone?: string | null;
   boutiqueId?: string | null;
 }
 
