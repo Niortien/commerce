@@ -20,13 +20,9 @@ import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 import { useCategoriesList } from "@/features/produits/query/produits-queries";
 import type { NewProduitForEntree } from "@/features/entrees/api/entrees-api";
-import {
-  DEFAULT_COLORS,
-  SHOE_SLUGS,
-  SLUG_COULEUR_CONFIG,
-  getTaillesForSlug,
-  groupCategories,
-} from "@/lib/categoryConfig";
+import { groupCategories } from "@/lib/categoryConfig";
+import { getVariantConfig } from "@/lib/commerceConfig";
+import { useCommerceConfig } from "@/hooks/useCommerceConfig";
 import type { EntreeFormLineData } from "./EntreeFormLine";
 
 const schema = z.object({
@@ -34,8 +30,8 @@ const schema = z.object({
   categorieId: z.string().min(1, "Catégorie requise"),
   prixVente: z.string().regex(/^\d+(\.\d{1,2})?$/, "Prix invalide"),
   prixAchat: z.string().regex(/^\d+(\.\d{1,2})?$/, "Prix invalide"),
-  taille: z.string().min(1, "Taille requise"),
-  couleur: z.string().min(1, "Couleur requise"),
+  taille: z.string().min(1, "Valeur requise"),
+  couleur: z.string().min(1, "Valeur requise"),
   seuilAlerte: z.coerce.number().int().min(0).optional(),
   quantite: z.coerce.number().int().min(1, "Quantité min. 1"),
   prixUnitaire: z.string().regex(/^\d+(\.\d{1,2})?$/, "Prix invalide"),
@@ -54,7 +50,8 @@ interface NewProduitModalProps {
 export function NewProduitModal({ isOpen, defaultValues, onClose, onAdd }: NewProduitModalProps) {
   const { data: categoriesData, isLoading: catLoading } = useCategoriesList();
   const categories = categoriesData?.data ?? [];
-  const categoryGroups = groupCategories(categories);
+  const { type: typeCommerce, config: commerce } = useCommerceConfig();
+  const categoryGroups = groupCategories(categories, commerce.groups);
 
   const {
     register,
@@ -78,11 +75,11 @@ export function NewProduitModal({ isOpen, defaultValues, onClose, onAdd }: NewPr
   const watchedCouleur     = useWatch({ control, name: "couleur" });
 
   const selectedCat   = categories.find((c) => c.id === watchedCategorieId);
-  const isChaussure   = selectedCat ? SHOE_SLUGS.has(selectedCat.slug) : false;
-  const tailleOptions = getTaillesForSlug(selectedCat?.slug);     // null = numeric
-  const couleurConfig = selectedCat ? (SLUG_COULEUR_CONFIG[selectedCat.slug] ?? null) : null;
-  const couleurLabel  = couleurConfig?.label ?? "Couleur";
-  const couleurPresets = couleurConfig ? couleurConfig.presets : DEFAULT_COLORS;
+  const variantConfig = getVariantConfig(typeCommerce, selectedCat?.slug);
+  const tailleOptions = variantConfig.attr1Presets;     // null = saisie numérique
+  const tailleLabel   = variantConfig.attr1Label;
+  const couleurLabel  = variantConfig.attr2Label;
+  const couleurPresets = variantConfig.attr2Presets;
 
   // Sync prix unitaire avec prix achat
   useEffect(() => {
@@ -247,12 +244,12 @@ export function NewProduitModal({ isOpen, defaultValues, onClose, onAdd }: NewPr
               <p className="mb-3 text-[11px] uppercase tracking-wider text-text-muted">Variante</p>
               <div className="space-y-3">
                 {/* Taille */}
-                {isChaussure || tailleOptions === null ? (
+                {tailleOptions === null || tailleOptions.length === 0 ? (
                   <Input
-                    label="Pointure"
+                    label={tailleLabel}
                     variant="bordered"
-                    inputMode="numeric"
-                    placeholder="Ex : 42"
+                    inputMode={tailleOptions === null ? "numeric" : "text"}
+                    placeholder={tailleOptions === null ? "Ex : 42" : undefined}
                     isInvalid={!!errors.taille}
                     errorMessage={errors.taille?.message}
                     classNames={{ label: "text-text-muted text-xs", input: "text-text" }}
@@ -260,7 +257,7 @@ export function NewProduitModal({ isOpen, defaultValues, onClose, onAdd }: NewPr
                   />
                 ) : (
                   <Select
-                    label="Taille"
+                    label={tailleLabel}
                     variant="bordered"
                     isInvalid={!!errors.taille}
                     errorMessage={errors.taille?.message}
@@ -332,7 +329,7 @@ export function NewProduitModal({ isOpen, defaultValues, onClose, onAdd }: NewPr
                 <Input
                   label="Quantité reçue"
                   variant="bordered"
-                  inputMode="numeric"
+                  inputMode={tailleOptions === null ? "numeric" : "text"}
                   isInvalid={!!errors.quantite}
                   errorMessage={errors.quantite?.message}
                   classNames={{ label: "text-text-muted text-xs", input: "text-text" }}

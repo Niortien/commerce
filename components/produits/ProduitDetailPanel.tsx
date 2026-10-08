@@ -9,12 +9,9 @@ import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import type { AppError } from "@/types";
 import { createProduitSchema, type CreateProduitInput } from "@/lib/validators/produit.schema";
-import {
-  DEFAULT_COLORS,
-  SLUG_COULEUR_CONFIG,
-  getTaillesForSlug,
-  groupCategories,
-} from "@/lib/categoryConfig";
+import { groupCategories } from "@/lib/categoryConfig";
+import { getVariantConfig } from "@/lib/commerceConfig";
+import { useCommerceConfig } from "@/hooks/useCommerceConfig";
 import { getMotionVariant, panelSlide } from "@/lib/motionVariants";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useCategoriesList, produitKeys } from "@/features/produits/query/produits-queries";
@@ -41,7 +38,8 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
   /* ── catégories ─────────────────────────────────────────── */
   const { data: categoriesData, isLoading: catsLoading } = useCategoriesList();
   const categories = categoriesData?.data ?? [];
-  const categoryGroups = useMemo(() => groupCategories(categories), [categories]);
+  const { type: typeCommerce, config: commerce } = useCommerceConfig();
+  const categoryGroups = useMemo(() => groupCategories(categories, commerce.groups), [categories, commerce.groups]);
 
   /* ── RHF ───────────────────────────────────────────────── */
   const {
@@ -68,11 +66,11 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
 
   /* ── logique catégorie → tailles / couleurs ────────────── */
   const selectedCat = categories.find((c) => c.id === selectedCategorieId);
-  const taillePresets = getTaillesForSlug(selectedCat?.slug);     // null = chaussures
-  const couleurConfig = selectedCat ? (SLUG_COULEUR_CONFIG[selectedCat.slug] ?? null) : null;
-  const couleurLabel = couleurConfig?.label ?? "Couleur";
-  // null config = catégorie standard → top 10 couleurs ; config avec presets vides = saisie libre
-  const couleurPresets = couleurConfig ? couleurConfig.presets : DEFAULT_COLORS;
+  const variantConfig = getVariantConfig(typeCommerce, selectedCat?.slug);
+  const taillePresets = variantConfig.attr1Presets;     // null = saisie numérique libre
+  const tailleLabel = variantConfig.attr1Label;
+  const couleurLabel = variantConfig.attr2Label;
+  const couleurPresets = variantConfig.attr2Presets;
 
   /* ── useEffect édition ──────────────────────────────────── */
   // On n'initialise l'état local QUE quand on ouvre un nouveau produit (id change).
@@ -208,7 +206,7 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
 
   const onSubmit = handleSubmit(async (fields) => {
     if (selectedTailles.length === 0 || selectedCouleurs.length === 0) {
-      setVarianteError("Sélectionnez au moins une taille et une couleur");
+      setVarianteError(`Sélectionnez au moins un choix pour « ${tailleLabel} » et « ${couleurLabel} »`);
       return;
     }
     setVarianteError(null);
@@ -524,7 +522,7 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
         <section className="rounded-lg border border-border/80 bg-[var(--color-surface-high)] p-4">
 
           {/* ── Tailles ── */}
-          <p className="mb-3 text-xs uppercase tracking-[0.08em] text-text-muted">Tailles</p>
+          <p className="mb-3 text-xs uppercase tracking-[0.08em] text-text-muted">{tailleLabel}</p>
 
           {taillePresets === null ? (
             /* Chaussures : chips des tailles ajoutées + input numérique */
@@ -549,7 +547,7 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
               <div className="flex gap-2">
                 <Input
                   variant="bordered"
-                  placeholder="Pointure (ex : 42)"
+                  placeholder={`${tailleLabel} (ex : 42)`}
                   inputMode="numeric"
                   value={newTaille}
                   onValueChange={setNewTaille}
@@ -586,7 +584,7 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
               <div className="flex gap-2 pt-1">
                 <Input
                   variant="bordered"
-                  placeholder="Taille personnalisée (optionnel)"
+                  placeholder={`${tailleLabel} personnalisé(e) (optionnel)`}
                   value={newTaille}
                   onValueChange={setNewTaille}
                   onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addTaille(); } }}
@@ -694,7 +692,7 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
               <table className="w-full text-sm">
                 <thead>
                   <tr>
-                    <th className="pb-2 pr-3 text-left font-normal text-text-muted">Taille</th>
+                    <th className="pb-2 pr-3 text-left font-normal text-text-muted">{tailleLabel}</th>
                     {selectedCouleurs.map((c) => (
                       <th key={c} className="pb-2 pr-2 text-left font-normal text-text-muted">{c}</th>
                     ))}

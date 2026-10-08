@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Input } from "@heroui/react";
+import { Button, Input, Select, SelectItem } from "@heroui/react";
 import { IconEye, IconEyeOff } from "@tabler/icons-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -11,11 +11,12 @@ import toast from "react-hot-toast";
 import { boutiqueSignupSchema, type BoutiqueSignupInput, type SignupPlan } from "@/lib/validators/boutique-signup.schema";
 import { PaiementEnAttente } from "@/components/auth/PaiementEnAttente";
 import { PlanPicker, isPlanPayant, planName } from "@/components/auth/PlanPicker";
+import { TYPE_COMMERCE_OPTIONS } from "@/lib/commerceConfig";
 import { prixPlan } from "@/lib/pricing";
 import { registerBoutiquePublic } from "@/features/auth/api/auth-api";
 import { useAuthStore } from "@/stores/authStore";
 import type { AppError } from "@/types";
-import { Role } from "@/types";
+import { Role, TypeCommerce } from "@/types";
 
 /**
  * Auto-inscription publique. Plan « Essai » : la boutique démarre 14 jours gratuits et atterrit sur son tableau de bord.
@@ -38,9 +39,10 @@ export function RegisterBoutiqueView({ initialPlan = "ESSAI" }: { initialPlan?: 
     formState: { errors },
   } = useForm<BoutiqueSignupInput>({
     resolver: zodResolver(boutiqueSignupSchema),
-    defaultValues: { plan: initialPlan },
+    defaultValues: { plan: initialPlan, typeCommerce: TypeCommerce.MODE },
   });
   const plan = watch("plan");
+  const typeCommerce = watch("typeCommerce");
 
   const onSubmit = handleSubmit(async (values) => {
     setIsSubmitting(true);
@@ -91,6 +93,22 @@ export function RegisterBoutiqueView({ initialPlan = "ESSAI" }: { initialPlan?: 
           errorMessage={errors.nomBoutique?.message}
           {...register("nomBoutique")}
         />
+        <Select
+          label="Type de commerce"
+          variant="bordered"
+          selectedKeys={[typeCommerce]}
+          disallowEmptySelection
+          isInvalid={Boolean(errors.typeCommerce)}
+          errorMessage={errors.typeCommerce?.message}
+          onSelectionChange={(keys) => {
+            const value = Array.from(keys)[0];
+            if (value) setValue("typeCommerce", value as TypeCommerce, { shouldValidate: true });
+          }}
+        >
+          {TYPE_COMMERCE_OPTIONS.map((o) => (
+            <SelectItem key={o.value}>{o.label}</SelectItem>
+          ))}
+        </Select>
         <Input label="Ville" variant="bordered" {...register("ville")} />
         <Input
           label="WhatsApp"

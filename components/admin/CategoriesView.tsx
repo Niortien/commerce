@@ -27,7 +27,7 @@ import { RowActionButton } from "@/components/common/RowActionButton";
 import { StatTile } from "@/components/common/StatTile";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { motionEasing } from "@/lib/motionVariants";
-import { CATEGORY_GROUPS } from "@/lib/categoryConfig";
+import { useCommerceConfig } from "@/hooks/useCommerceConfig";
 import { useAdminCategories } from "@/features/categories/query/categories-queries";
 import {
   useCreateCategorie,
@@ -37,7 +37,6 @@ import {
 import { useAuthStore } from "@/stores/authStore";
 import type { Categorie } from "@/types";
 
-const GROUPES = CATEGORY_GROUPS.map((g) => g.label);
 
 function slugify(str: string) {
   return str
@@ -57,6 +56,8 @@ type FormData = z.infer<typeof schema>;
 
 export function CategoriesView() {
   const isAdmin = useAuthStore((s) => s.user?.role === "ADMIN");
+  const { config: commerce } = useCommerceConfig();
+  const GROUPES = commerce.groups.map((g) => g.label);
   const { data: res, isLoading } = useAdminCategories();
   const categories = res?.data ?? [];
 

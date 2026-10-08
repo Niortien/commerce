@@ -9,6 +9,8 @@ import { StockBadge } from "@/components/common/StockBadge";
 import { FlowTag } from "@/components/common/FlowTag";
 import { EmptyRiver } from "@/components/common/EmptyRiver";
 import { useAuthStore } from "@/stores/authStore";
+import { useCommerceConfig } from "@/hooks/useCommerceConfig";
+import { getVariantConfig } from "@/lib/commerceConfig";
 import { useProduit, useProduitMouvements } from "@/features/produits/query/produits-queries";
 import {
   useAddProduitImage,
@@ -241,6 +243,7 @@ function DeleteVarianteCell({ variante, produitId }: { variante: Variante; produ
 
 /* ── Vue principale ───────────────────────────────────────────── */
 export function ProduitDetailView({ id }: ProduitDetailViewProps) {
+  const { type: typeCommerce } = useCommerceConfig();
   const router = useRouter();
   const [showPanel, setShowPanel] = useState(false);
   const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
@@ -254,6 +257,7 @@ export function ProduitDetailView({ id }: ProduitDetailViewProps) {
   const [promoExpanded, setPromoExpanded] = useState(false);
 
   const produit = data?.data;
+  const variantLabels = getVariantConfig(typeCommerce, produit?.categorie?.slug);
   const mouvements = mouvData?.data ?? [];
 
   if (isLoading) {
@@ -420,8 +424,8 @@ export function ProduitDetailView({ id }: ProduitDetailViewProps) {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-border/60 text-left text-xs text-text-muted">
-                    <th className="pb-2 pr-4 font-normal">Taille</th>
-                    <th className="pb-2 pr-4 font-normal">Couleur</th>
+                    <th className="pb-2 pr-4 font-normal">{variantLabels.attr1Label}</th>
+                    <th className="pb-2 pr-4 font-normal">{variantLabels.attr2Label}</th>
                     <th className="pb-2 pr-4 font-normal">Stock</th>
                     <th className="pb-2 pr-4 font-normal">Seuil</th>
                     {isAdmin && <th className="pb-2 pr-4 font-normal">Ajuster</th>}
