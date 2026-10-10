@@ -6,7 +6,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { IconMenu2, IconX } from "@tabler/icons-react";
 import { useAuthStore } from "@/stores/authStore";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { BOUTIQUE_ADMIN_NAV, BOUTIQUE_NAV } from "@/lib/navigation";
+import { BOUTIQUE_ADMIN_NAV, getBoutiqueNav } from "@/lib/navigation";
+import { useTypeCommerce } from "@/hooks/useTypeCommerce";
 import { BoutiqueIdentity } from "@/components/common/BoutiqueIdentity";
 import { BrandMark } from "@/components/common/BrandMark";
 import { SidebarPanel } from "@/components/common/SidebarPanel";
@@ -18,7 +19,8 @@ export function MobileNav() {
   const reduced = useReducedMotion();
   const isAdmin = useAuthStore((s) => s.user?.role === "ADMIN");
   const boutiqueName = useAuthStore((s) => s.user?.boutiqueName);
-  const sections = isAdmin ? [...BOUTIQUE_NAV, BOUTIQUE_ADMIN_NAV] : BOUTIQUE_NAV;
+  const nav = getBoutiqueNav(useTypeCommerce());
+  const sections = isAdmin ? [...nav, BOUTIQUE_ADMIN_NAV] : nav;
 
   // Le tiroir se ferme à chaque changement de page, et avec Échap.
   useEffect(() => setOpen(false), [pathname]);

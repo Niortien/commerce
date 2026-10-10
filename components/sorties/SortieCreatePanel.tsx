@@ -11,11 +11,19 @@ import { useCreateSortie } from "@/features/sorties/mutation/sorties-mutations";
 import { useAddTransaction } from "@/features/caisse/mutation/caisse-mutations";
 import { useActiveSession } from "@/features/caisse/query/caisse-queries";
 import { VariantePicker, type VarianteSelection } from "@/components/common/VariantePicker";
-import { ModePaiement, TypeSortie } from "@/types";
+import { ModePaiement, ModeService, TypeCommerce, TypeSortie } from "@/types";
+import { useTypeCommerce } from "@/hooks/useTypeCommerce";
+import { UNITES, isVarianteUnique } from "@/lib/unites";
+import { ModeServicePicker } from "./ModeServicePicker";
 import { RecuPrint, type RecuLigne } from "./RecuPrint";
 import { SortieTypeStep } from "./SortieTypeStep";
 import { SortieFormLine, type SortieFormLineData } from "./SortieFormLine";
 import { SortiePaiementStep } from "./SortiePaiementStep";
+import { SegmentedControl } from "@/components/common/SegmentedControl";
+import { CREDIT_VIDE, VenteCreditFields, erreurCredit, versOptionsCredit, type CreditSaisie } from "@/components/common/VenteCreditFields";
+import { useClients } from "@/features/clients/query/clients-queries";
+import { echeanceDans } from "@/lib/credit";
+import type { RecuCredit } from "./RecuPrint";
 
 interface RecuData {
   reference: string;
@@ -28,7 +36,13 @@ interface RecuData {
   monnaieRendue?: string;
   remiseMontant?: string;
   totalAvantRemise?: string;
+  credit?: RecuCredit;
 }
+
+const OPTIONS_REGLEMENT = [
+  { key: "COMPTANT", label: "Comptant" },
+  { key: "CREDIT", label: "À crédit" },
+];
 
 interface SortieCreatePanelProps {
   isOpen: boolean;
@@ -41,6 +55,15 @@ export function SortieCreatePanel({ isOpen, onClose }: SortieCreatePanelProps) {
   const addTransactionMutation = useAddTransaction();
   const { data: activeSessionData } = useActiveSession();
   const hasActiveSession = !!(activeSessionData?.data);
+  const typeCommerce = useTypeCommerce();
+  const isRestaurant = typeCommerce === TypeCommerce.RESTAURANT;
+  // Quincaillerie : un client pro peut emporter la marchandise et payer plus tard.
+  const creditPossible = typeCommerce === TypeCommerce.QUINCAILLERIE;
+  const [reglement, setReglement] = useState("COMPTANT");
+  const [credit, setCredit] = useState<CreditSaisie>(CREDIT_VIDE);
+  const { data: clientsRes } = useClients({ actifs: true });
+  const [modeService, setModeService] = useState<ModeService>(ModeService.SUR_PLACE);
+  const [tableLabel, setTableLabel] = useState("");
 
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [selectedType, setSelectedType] = useState<TypeSortie | null>(null);
@@ -82,6 +105,11 @@ export function SortieCreatePanel({ isOpen, onClose }: SortieCreatePanelProps) {
     paiementMontantRecu !== "" &&
     parseFloat(paiementMontantRecu) < parseFloat(totalMontant);
 
+  const aCredit = creditPossible && reglement === "CREDIT";
+  const clientCredit = clientsRes?.data.find((c) => c.id === credit.clientId);
+  const blocageCredit = aCredit ? erreurCredit(credit, Number(totalMontant), clientCredit) : null;
+  const paiementPret = aCredit ? !blocageCredit : Boolean(paiementMode) && !montantInsuffisant;
+
   const handleReset = () => {
     setStep(1);
     setSelectedType(null);
@@ -98,6 +126,10 @@ export function SortieCreatePanel({ isOpen, onClose }: SortieCreatePanelProps) {
     setPaiementRef("");
     setPaiementNotes("");
     setPaiementMontantRecu("");
+    setModeService(ModeService.SUR_PLACE);
+    setTableLabel("");
+    setReglement("COMPTANT");
+    setCredit(CREDIT_VIDE);
   };
 
   const handleRemiseMontant = (val: string) => {
@@ -131,6 +163,9 @@ export function SortieCreatePanel({ isOpen, onClose }: SortieCreatePanelProps) {
       quantiteStock: sel.quantiteStock,
       quantite: 1,
       prixUnitaire,
+      unite: sel.unite,
+      nature: sel.nature,
+      pieceUnique: sel.pieceUnique,
     };
     if (replacingIndex !== null) {
       setLines((cur) => cur.map((l, i) => (i === replacingIndex ? newLine : l)));
@@ -170,7 +205,7 @@ export function SortieCreatePanel({ isOpen, onClose }: SortieCreatePanelProps) {
 
   const handleLignesConfirm = () => {
     if (lines.length === 0) {
-      toast.error("Ajoute au moins une variante.");
+      toast.error("Ajoute au moins un article.");
       return;
     }
     if (remiseDepasse) {
@@ -229,7 +264,58 @@ export function SortieCreatePanel({ isOpen, onClose }: SortieCreatePanelProps) {
     );
   };
 
+  /** Vente à crédit : l'acompte éventuel entre en caisse côté serveur ; le reste va au compte du client. */
+  const handleVenteCredit = async () => {
+    const options = versOptionsCredit(credit);
+    if (!options || blocageCredit || !clientCredit) return;
+    try {
+      const { data: sortie } = await createSortieMutation.mutateAsync({
+        type: TypeSortie.VENTE,
+        notes: sortieNotes.trim() || undefined,
+        remiseMontant: hasRemise ? parseFloat(remiseMontant).toFixed(2) : undefined,
+        lignes: lines.map((l) => ({
+          varianteId: l.varianteId,
+          quantite: l.quantite,
+          prixUnitaire: parseFloat(l.prixUnitaire || "0").toFixed(2),
+        })),
+        ...options,
+      });
+      const acompte = Number(options.acompteMontant ?? 0);
+      setRecuData({
+        reference: sortie.reference,
+        date: sortie.createdAt,
+        lignes: lines.map((l) => ({
+          produitNom: l.produitNom,
+          taille: isVarianteUnique(l) ? UNITES[l.unite].singulier : l.taille,
+          couleur: isVarianteUnique(l) ? "" : l.couleur,
+          quantite: l.quantite,
+          prixUnitaire: l.prixUnitaire,
+          sousTotal: (l.quantite * parseFloat(l.prixUnitaire || "0")).toFixed(0),
+        })),
+        totalMontant: sortie.totalMontant,
+        modePaiement: options.acompteMode ?? ModePaiement.CASH,
+        remiseMontant: sortie.remiseMontant ?? undefined,
+        totalAvantRemise: sortie.totalAvantRemise ?? undefined,
+        credit: {
+          client: clientCredit.nom,
+          acompte,
+          acompteMode: options.acompteMode,
+          reste: Number(sortie.totalMontant) - acompte,
+          echeance: echeanceDans(options.echeanceJours),
+        },
+      });
+      setRecuOpen(true);
+      toast.success(`Vente mise sur le compte de ${clientCredit.nom}`);
+    } catch {
+      // Message d'erreur affiché par la mutation (plafond dépassé, stock insuffisant…).
+    }
+  };
+
   const handleVenteSubmit = async () => {
+    if (aCredit) {
+      await handleVenteCredit();
+      return;
+    }
     if (!paiementMode || montantInsuffisant) return;
 
     const recuNum = parseFloat(paiementMontantRecu || "0");
@@ -244,6 +330,8 @@ export function SortieCreatePanel({ isOpen, onClose }: SortieCreatePanelProps) {
         type: TypeSortie.VENTE,
         notes: sortieNotes.trim() || undefined,
         remiseMontant: hasRemise ? parseFloat(remiseMontant).toFixed(2) : undefined,
+        modeService: isRestaurant ? modeService : undefined,
+        tableLabel: isRestaurant && modeService === ModeService.SUR_PLACE ? tableLabel.trim() || undefined : undefined,
         lignes: lines.map((l) => ({
           varianteId: l.varianteId,
           quantite: l.quantite,
@@ -267,8 +355,9 @@ export function SortieCreatePanel({ isOpen, onClose }: SortieCreatePanelProps) {
 
       const recuLignes: RecuLigne[] = lines.map((l) => ({
         produitNom: l.produitNom,
-        taille: l.taille,
-        couleur: l.couleur,
+        // Produit sans taille ni couleur : le reçu montre son unité (kg, m, portion…).
+        taille: isVarianteUnique(l) ? UNITES[l.unite].singulier : l.taille,
+        couleur: isVarianteUnique(l) ? "" : l.couleur,
         quantite: l.quantite,
         prixUnitaire: l.prixUnitaire,
         sousTotal: (l.quantite * parseFloat(l.prixUnitaire || "0")).toFixed(0),
@@ -326,6 +415,7 @@ export function SortieCreatePanel({ isOpen, onClose }: SortieCreatePanelProps) {
           monnaieRendue={recuData.monnaieRendue}
           remiseMontant={recuData.remiseMontant}
           totalAvantRemise={recuData.totalAvantRemise}
+          credit={recuData.credit}
         />
       )}
 
@@ -379,6 +469,14 @@ export function SortieCreatePanel({ isOpen, onClose }: SortieCreatePanelProps) {
                 <p className="text-xs uppercase tracking-wide text-text-muted">
                   Type : <span className="font-semibold text-[var(--color-out)]">{selectedType}</span>
                 </p>
+              )}
+              {isRestaurant && selectedType === TypeSortie.VENTE && (
+                <ModeServicePicker
+                  mode={modeService}
+                  table={tableLabel}
+                  onModeChange={setModeService}
+                  onTableChange={setTableLabel}
+                />
               )}
               {!isDepense && (
                 <Input
@@ -462,7 +560,7 @@ export function SortieCreatePanel({ isOpen, onClose }: SortieCreatePanelProps) {
                     className="mt-3 w-full border border-dashed border-accent/40 bg-[var(--color-accent-dim)] text-accent"
                     onPress={() => { setReplacingIndex(null); setPickerOpen(true); }}
                   >
-                    + Ajouter une variante
+                    + Ajouter un article
                   </Button>
                 </section>
               )}
@@ -513,7 +611,13 @@ export function SortieCreatePanel({ isOpen, onClose }: SortieCreatePanelProps) {
           )}
 
           {/* Step 3 */}
-          {step === 3 && (
+          {step === 3 && creditPossible && (
+            <SegmentedControl ariaLabel="Mode de règlement" options={OPTIONS_REGLEMENT} value={reglement} onChange={setReglement} className="mb-4" />
+          )}
+          {step === 3 && aCredit && (
+            <VenteCreditFields total={Number(totalMontant)} valeur={credit} onChange={setCredit} />
+          )}
+          {step === 3 && !aCredit && (
             <SortiePaiementStep
               totalMontant={totalMontant}
               totalAvantRemise={hasRemise ? totalAvantRemise.toFixed(0) : undefined}
@@ -590,6 +694,8 @@ export function SortieCreatePanel({ isOpen, onClose }: SortieCreatePanelProps) {
                   setPaiementRef("");
                   setPaiementNotes("");
                   setPaiementMontantRecu("");
+                  setReglement("COMPTANT");
+                  setCredit(CREDIT_VIDE);
                   setStep(2);
                 }}
                 isDisabled={isPending}
@@ -599,11 +705,11 @@ export function SortieCreatePanel({ isOpen, onClose }: SortieCreatePanelProps) {
               <Button
                 className="flex-1 bg-accent font-semibold text-white"
                 size="lg"
-                isDisabled={!paiementMode || montantInsuffisant || isPending}
+                isDisabled={!paiementPret || isPending}
                 isLoading={isPending}
                 onPress={() => void handleVenteSubmit()}
               >
-                {isPending ? <Spinner size="sm" color="current" /> : "Enregistrer la vente"}
+                {isPending ? <Spinner size="sm" color="current" /> : aCredit ? "Vendre à crédit" : "Enregistrer la vente"}
               </Button>
             </div>
           )}

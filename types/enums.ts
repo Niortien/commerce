@@ -4,6 +4,14 @@ export enum Role {
   CAISSIER = "CAISSIER",
 }
 
+/** Type de commerce d'une boutique : il décide des pages et du vocabulaire de son espace. */
+export enum TypeCommerce {
+  VETEMENTS = "VETEMENTS",
+  RESTAURANT = "RESTAURANT",
+  QUINCAILLERIE = "QUINCAILLERIE",
+  FRIPERIE = "FRIPERIE",
+}
+
 export enum StatutBoutique {
   EN_ATTENTE = "EN_ATTENTE",
   ESSAI = "ESSAI",
@@ -62,4 +70,54 @@ export enum ModePaiement {
 export enum StatutSession {
   OUVERTE = "OUVERTE",
   FERMEE = "FERMEE",
+}
+
+/** Unité de vente d'un produit. Les unités comptées exigent une quantité entière. */
+export enum Unite {
+  PIECE = "PIECE",
+  PORTION = "PORTION",
+  SAC = "SAC",
+  CARTON = "CARTON",
+  BOITE = "BOITE",
+  PAQUET = "PAQUET",
+  BOUTEILLE = "BOUTEILLE",
+  KG = "KG",
+  G = "G",
+  L = "L",
+  M = "M",
+  M2 = "M2",
+}
+
+/** ARTICLE : vendu tel quel. PLAT : préparé à partir d'ingrédients (restaurant). INGREDIENT : acheté, jamais vendu seul. */
+export enum NatureProduit {
+  ARTICLE = "ARTICLE",
+  PLAT = "PLAT",
+  INGREDIENT = "INGREDIENT",
+}
+
+/** Restaurant : comment la commande est servie. */
+export enum ModeService {
+  SUR_PLACE = "SUR_PLACE",
+  A_EMPORTER = "A_EMPORTER",
+  LIVRAISON = "LIVRAISON",
+}
+
+export enum StatutDevis {
+  EN_COURS = "EN_COURS",
+  ACCEPTE = "ACCEPTE",
+  CONVERTI = "CONVERTI",
+  ANNULE = "ANNULE",
+}
+
+/** Compte d'un client à crédit : il doit (VENTE), il paie (REGLEMENT), une vente est annulée (ANNULATION). */
+export enum TypeOperationCredit {
+  VENTE = "VENTE",
+  REGLEMENT = "REGLEMENT",
+  ANNULATION = "ANNULATION",
+}
+
+/** Friperie : une balle se déballe (EN_COURS) puis se ferme aux ajouts (TERMINEE). */
+export enum StatutBalle {
+  EN_COURS = "EN_COURS",
+  TERMINEE = "TERMINEE",
 }

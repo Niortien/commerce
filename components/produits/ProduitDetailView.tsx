@@ -20,7 +20,10 @@ import {
 } from "@/features/produits/mutation/produits-mutations";
 import { ProduitDetailPanel } from "./ProduitDetailPanel";
 import { PromoInlineForm, type PromoFormData } from "@/components/promotions/PromoInlineForm";
-import type { ProduitImage, TypeMouvement, Variante } from "@/types";
+import { NatureProduit, type ProduitImage, type TypeMouvement, type Variante } from "@/types";
+import { natureDe } from "@/lib/unites";
+import { RecetteEditor } from "./RecetteEditor";
+import { PieceUniqueOrigine } from "./PieceUniqueOrigine";
 
 interface ProduitDetailViewProps {
   id: string;
@@ -278,6 +281,8 @@ export function ProduitDetailView({ id }: ProduitDetailViewProps) {
   }
 
   const totalStock = produit.variantes?.reduce((sum, v) => sum + v.quantiteStock, 0) ?? 0;
+  // Un plat est préparé à la commande : pas de stock propre, mais une fiche technique.
+  const plat = natureDe(produit) === NatureProduit.PLAT;
 
   return (
     <>
@@ -331,7 +336,8 @@ export function ProduitDetailView({ id }: ProduitDetailViewProps) {
                   <CurrencyDisplay montant={produit.prixVente} size="lg" />
                 </div>
                 <div>
-                  <p className="text-xs text-text-muted">Achat</p>
+                  {/* Pièce de friperie : sa part du coût de la balle. */}
+                  <p className="text-xs text-text-muted">{produit.pieceUnique ? "Coût de revient" : "Achat"}</p>
                   <CurrencyDisplay montant={produit.prixAchat} size="lg" />
                 </div>
               </div>
@@ -403,15 +409,23 @@ export function ProduitDetailView({ id }: ProduitDetailViewProps) {
               )}
             </div>
 
-            <div className="rounded-xl border border-border/80 bg-surface p-4">
-              <p className="mb-1 text-xs uppercase tracking-[0.08em] text-text-muted">Stock total</p>
-              <StockBadge value={totalStock} />
-            </div>
+            {produit.pieceUnique ? (
+              <PieceUniqueOrigine produit={produit} />
+            ) : (
+              !plat && (
+                <div className="rounded-xl border border-border/80 bg-surface p-4">
+                  <p className="mb-1 text-xs uppercase tracking-[0.08em] text-text-muted">Stock total</p>
+                  <StockBadge value={totalStock} />
+                </div>
+              )
+            )}
           </div>
         </div>
 
+        {plat && <RecetteEditor platId={id} prixVente={produit.prixVente} canEdit={isAdmin} />}
+
         {/* variantes */}
-        {produit.variantes && produit.variantes.length > 0 && (
+        {!plat && !produit.pieceUnique && produit.variantes && produit.variantes.length > 0 && (
           <div className="rounded-xl border border-border/80 bg-surface p-4">
             <p className="mb-3 text-xs uppercase tracking-[0.08em] text-text-muted">
               Variantes ({produit.variantes.length})

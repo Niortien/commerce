@@ -8,6 +8,7 @@ import {
   getProduitById,
   getProduitMouvements,
   getProduits,
+  getRecette,
   type ProduitListParams,
   type ProduitMouvementsParams,
 } from "../api/produits-api";
@@ -19,7 +20,17 @@ export const produitKeys = {
   mouvements: (id: string, params: ProduitMouvementsParams) =>
     ["produits", "mouvements", id, params] as const,
   categories: () => ["categories"] as const,
+  recette: (id: string) => ["produits", "recette", id] as const,
 };
+
+export function useRecette(produitId: string, enabled = true) {
+  const token = useAuthStore((s) => s.accessToken);
+  return useQuery({
+    queryKey: produitKeys.recette(produitId),
+    queryFn: () => getRecette(produitId),
+    enabled: !!token && !!produitId && enabled,
+  });
+}
 
 export function useProduitsList(params: ProduitListParams = {}) {
   const token = useAuthStore((s) => s.accessToken);

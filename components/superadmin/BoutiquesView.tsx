@@ -20,6 +20,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useSuperAdminBoutiques } from "@/features/super-admin/query/superadmin-queries";
 import {
   useChangerStatutBoutique,
+  useChangerTypeCommerce,
   useCreateAbonnement,
   useRegisterBoutique,
 } from "@/features/super-admin/mutation/superadmin-mutations";
@@ -35,17 +36,28 @@ import { PlanCards } from "@/components/superadmin/PlanCards";
 import { PLAN_PRIX_FCFA } from "@/lib/pricing";
 import { StatusChip } from "@/components/common/StatusChip";
 import { BoutiquesSummary } from "@/components/superadmin/BoutiquesSummary";
-import { PlanAbonnement, StatutBoutique, type Boutique } from "@/types";
+import { CommerceBadge } from "@/components/common/CommerceBadge";
+import { CommerceTypePicker } from "@/components/common/CommerceTypePicker";
+import { ConfirmModal } from "@/components/common/ConfirmModal";
+import { COMMERCE_PROFILES, TYPES_COMMERCE, isTypeCommerce, resolveTypeCommerce } from "@/lib/commerce";
+import { useSectorStore } from "@/stores/sectorStore";
+import { PlanAbonnement, StatutBoutique, TypeCommerce, type Boutique } from "@/types";
 
 const STATUT_OPTIONS = Object.values(StatutBoutique);
 
 export function BoutiquesView() {
   const { data: res, isLoading } = useSuperAdminBoutiques();
-  const boutiques = res?.data ?? [];
+  // Le Super Admin ne voit que le secteur choisi dans la barre latérale (ou toute la plateforme).
+  const secteur = useSectorStore((s) => s.secteur);
+  const profile = secteur === "TOUS" ? null : COMMERCE_PROFILES[secteur];
+  const toutes = res?.data ?? [];
+  const boutiques = profile ? toutes.filter((b) => resolveTypeCommerce(b.typeCommerce) === profile.type) : toutes;
 
   const registerMutation = useRegisterBoutique();
   const statutMutation = useChangerStatutBoutique();
   const abonnementMutation = useCreateAbonnement();
+  const typeMutation = useChangerTypeCommerce();
+  const [typeChange, setTypeChange] = useState<{ boutique: Boutique; type: TypeCommerce } | null>(null);
 
   const registerModal = useDisclosure();
   const abonnementModal = useDisclosure();
@@ -61,7 +73,7 @@ export function BoutiquesView() {
   });
 
   function openRegister() {
-    registerForm.reset({ plan: PlanAbonnement.ESSAI });
+    registerForm.reset({ plan: PlanAbonnement.ESSAI, typeCommerce: profile?.type });
     registerModal.onOpen();
   }
 
@@ -91,15 +103,25 @@ export function BoutiquesView() {
 
   const enAttente = selected?.statut === StatutBoutique.EN_ATTENTE;
 
+  async function confirmTypeChange() {
+    if (!typeChange) return;
+    await typeMutation.mutateAsync({ id: typeChange.boutique.id, typeCommerce: typeChange.type });
+    setTypeChange(null);
+  }
+
   return (
     <div className="mx-auto flex w-full max-w-7xl flex-col gap-5 p-4 md:p-6">
       <PageHeader
-        eyebrow="Plateforme"
-        title="Boutiques & abonnements"
-        description="Toutes les boutiques de la plateforme : leur statut, leur plan et leur date d'échéance. Une boutique suspendue ne peut plus utiliser le stock ni la caisse."
+        eyebrow={profile ? "Secteur" : "Plateforme"}
+        title={profile ? `${profile.pluriel} & abonnements` : "Boutiques & abonnements"}
+        description={
+          profile
+            ? `Seuls les commerces de type « ${profile.label} » sont affichés. Changez de secteur dans la barre latérale.`
+            : "Toutes les boutiques de la plateforme : leur statut, leur plan et leur date d'échéance. Une boutique suspendue ne peut plus utiliser le stock ni la caisse."
+        }
         actions={
           <Button className="bg-accent font-semibold text-white" onPress={openRegister} startContent={<IconPlus size={16} aria-hidden />}>
-            Inscrire une boutique
+            {profile ? `Inscrire : ${profile.label.toLowerCase()}` : "Inscrire une boutique"}
           </Button>
         }
       />
@@ -113,12 +135,20 @@ export function BoutiquesView() {
           ))}
         </div>
       ) : boutiques.length === 0 ? (
-        <p className="rounded-lg border border-dashed border-border p-8 text-center text-sm text-text-muted">Aucune boutique inscrite</p>
+        <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed border-border p-8 text-center">
+          <p className="text-sm text-text-muted">
+            {profile ? `Aucun commerce de type « ${profile.label} » pour le moment.` : "Aucune boutique inscrite."}
+          </p>
+          <Button variant="bordered" className="min-h-11 font-medium" onPress={openRegister} startContent={<IconPlus size={16} aria-hidden />}>
+            {profile ? `Inscrire : ${profile.label.toLowerCase()}` : "Inscrire une boutique"}
+          </Button>
+        </div>
       ) : (
         <ul className="grid gap-3 lg:grid-cols-2" aria-label="Liste des boutiques">
           {boutiques.map((b) => {
             const meta = STATUT_BOUTIQUE_META[b.statut];
             const attente = b.statut === StatutBoutique.EN_ATTENTE;
+            const type = resolveTypeCommerce(b.typeCommerce);
             return (
               <li key={b.id} className="flex flex-col gap-4 rounded-lg border border-border bg-surface p-4 shadow-card">
                 <div className="flex items-start justify-between gap-3">
@@ -127,6 +157,7 @@ export function BoutiquesView() {
                     <p className="truncate text-xs text-text-muted">
                       {b.ville ?? "—"} · /{b.slug}
                     </p>
+                    {!profile && <CommerceBadge type={type} className="mt-2" />}
                   </div>
                   <StatusChip label={meta.label} tone={meta.tone} icon={meta.icon} className="shrink-0" />
                 </div>
@@ -179,6 +210,25 @@ export function BoutiquesView() {
                       <SelectItem key={st}>{STATUT_BOUTIQUE_META[st].label}</SelectItem>
                     ))}
                   </Select>
+                  <Select
+                    size="sm"
+                    label="Type"
+                    labelPlacement="outside-left"
+                    aria-label={`Type de commerce de ${b.nom}`}
+                    selectedKeys={[type]}
+                    disallowEmptySelection
+                    className="sm:max-w-[13rem]"
+                    classNames={{ trigger: "min-h-11", label: "text-xs text-text-muted" }}
+                    isDisabled={typeMutation.isPending}
+                    onSelectionChange={(keys) => {
+                      const next = Array.from(keys)[0];
+                      if (isTypeCommerce(next) && next !== type) setTypeChange({ boutique: b, type: next });
+                    }}
+                  >
+                    {TYPES_COMMERCE.map((t) => (
+                      <SelectItem key={t}>{COMMERCE_PROFILES[t].label}</SelectItem>
+                    ))}
+                  </Select>
                   <div className="flex gap-2 sm:ml-auto">
                     <Button
                       as={Link}
@@ -210,6 +260,20 @@ export function BoutiquesView() {
           <ModalHeader>Inscrire une nouvelle boutique</ModalHeader>
           <ModalBody>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <div className="sm:col-span-2">
+                <Controller
+                  name="typeCommerce"
+                  control={registerForm.control}
+                  render={({ field, fieldState }) => (
+                    <CommerceTypePicker
+                      label="Type de commerce"
+                      value={field.value}
+                      onChange={field.onChange}
+                      errorMessage={fieldState.error?.message}
+                    />
+                  )}
+                />
+              </div>
               <Input label="Nom de la boutique" variant="bordered" isInvalid={!!registerForm.formState.errors.nom} errorMessage={registerForm.formState.errors.nom?.message} {...registerForm.register("nom")} />
               <Input label="Ville" variant="bordered" {...registerForm.register("ville")} />
               <Input label="Adresse" variant="bordered" {...registerForm.register("adresse")} />
@@ -244,6 +308,21 @@ export function BoutiquesView() {
           </ModalFooter>
         </ModalContent>
       </Modal>
+
+      {/* Changement de type de commerce : réservé au Super Admin */}
+      <ConfirmModal
+        isOpen={typeChange !== null}
+        onClose={() => setTypeChange(null)}
+        onConfirm={() => void confirmTypeChange()}
+        isLoading={typeMutation.isPending}
+        title="Changer le type de commerce"
+        message={
+          typeChange
+            ? `« ${typeChange.boutique.nom} » deviendra : ${COMMERCE_PROFILES[typeChange.type].label}. Son équipe verra les pages et le vocabulaire de ce commerce. Ses produits, son stock et ses ventes ne changent pas.`
+            : ""
+        }
+        confirmLabel={typeChange ? `Passer en ${COMMERCE_PROFILES[typeChange.type].label.toLowerCase()}` : "Confirmer"}
+      />
 
       {/* Renouvellement / changement de plan */}
       <Modal isOpen={abonnementModal.isOpen} onClose={abonnementModal.onClose}>

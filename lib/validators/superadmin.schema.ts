@@ -1,7 +1,10 @@
 import { z } from "zod";
-import { PlanAbonnement, StatutAbonnement, StatutBoutique } from "@/types";
+import { PlanAbonnement, StatutAbonnement, StatutBoutique, TypeCommerce } from "@/types";
 
 export const registerBoutiqueSchema = z.object({
+  typeCommerce: z.nativeEnum(TypeCommerce, {
+    errorMap: () => ({ message: "Choisissez le type de commerce" }),
+  }),
   nom: z.string().min(2, "Nom requis"),
   ville: z.string().optional(),
   adresse: z.string().optional(),
@@ -14,6 +17,11 @@ export const registerBoutiqueSchema = z.object({
   dureeJours: z.coerce.number().int().min(1).optional(),
 });
 export type RegisterBoutiqueInput = z.infer<typeof registerBoutiqueSchema>;
+
+export const changerTypeCommerceSchema = z.object({
+  typeCommerce: z.nativeEnum(TypeCommerce),
+});
+export type ChangerTypeCommerceInput = z.infer<typeof changerTypeCommerceSchema>;
 
 export const changerStatutBoutiqueSchema = z.object({
   statut: z.nativeEnum(StatutBoutique),

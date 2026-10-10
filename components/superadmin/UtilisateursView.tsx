@@ -27,6 +27,8 @@ import {
   useDeleteSuperAdminUser,
 } from "@/features/super-admin/mutation/superadmin-mutations";
 import { createSuperAdminUserSchema, type CreateSuperAdminUserInput } from "@/lib/validators/superadmin.schema";
+import { COMMERCE_PROFILES, resolveTypeCommerce } from "@/lib/commerce";
+import { useSectorStore } from "@/stores/sectorStore";
 
 const ROLE_COLOR: Record<string, "danger" | "warning" | "default"> = {
   SUPER_ADMIN: "danger",
@@ -37,9 +39,18 @@ const ROLE_COLOR: Record<string, "danger" | "warning" | "default"> = {
 /** Vue transverse : tous les acteurs de la plateforme, toutes boutiques confondues. */
 export function UtilisateursView() {
   const { data: usersRes, isLoading } = useSuperAdminUsers();
-  const users = usersRes?.data ?? [];
   const { data: boutiquesRes } = useSuperAdminBoutiques();
-  const boutiques = boutiquesRes?.data ?? [];
+
+  // Avec un secteur choisi : seulement les comptes des boutiques de ce type (les Super Admins n'en ont pas).
+  const secteur = useSectorStore((s) => s.secteur);
+  const profile = secteur === "TOUS" ? null : COMMERCE_PROFILES[secteur];
+  const toutesBoutiques = boutiquesRes?.data ?? [];
+  const boutiques = profile
+    ? toutesBoutiques.filter((b) => resolveTypeCommerce(b.typeCommerce) === profile.type)
+    : toutesBoutiques;
+  const idsSecteur = new Set(boutiques.map((b) => b.id));
+  const tousUsers = usersRes?.data ?? [];
+  const users = profile ? tousUsers.filter((u) => u.boutiqueId != null && idsSecteur.has(u.boutiqueId)) : tousUsers;
 
   const createMutation = useCreateSuperAdminUser();
   const deleteMutation = useDeleteSuperAdminUser();
@@ -69,8 +80,12 @@ export function UtilisateursView() {
     <div className="p-6">
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-text">Utilisateurs</h1>
-          <p className="text-sm text-text-muted">Tous les acteurs de la plateforme, toutes boutiques confondues.</p>
+          <h1 className="text-2xl font-bold text-text">{profile ? `Utilisateurs : ${profile.pluriel.toLowerCase()}` : "Utilisateurs"}</h1>
+          <p className="text-sm text-text-muted">
+            {profile
+              ? `Admins et caissiers des commerces de type « ${profile.label} ».`
+              : "Tous les acteurs de la plateforme, toutes boutiques confondues."}
+          </p>
         </div>
         <Button className="bg-accent text-white" onPress={openCreate}>
           + Nouvel utilisateur
@@ -84,7 +99,7 @@ export function UtilisateursView() {
           <TableColumn>Boutique</TableColumn>
           <TableColumn>Actions</TableColumn>
         </TableHeader>
-        <TableBody isLoading={isLoading} emptyContent="Aucun utilisateur">
+        <TableBody isLoading={isLoading} emptyContent={profile ? `Aucun utilisateur dans les ${profile.pluriel.toLowerCase()}` : "Aucun utilisateur"}>
           {users.map((u) => (
             <TableRow key={u.id}>
               <TableCell>{u.email}</TableCell>

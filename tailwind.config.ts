@@ -31,6 +31,16 @@ const config: Config = {
   ],
   darkMode: "class",
   theme: {
+    /*
+     * `base` est une couleur de FOND (bg-base). Sans ce filtre, Tailwind génère aussi une couleur de texte
+     * `text-base` (#F4F6FB) qui entre en collision avec la taille de police `text-base` : un titre écrit
+     * `text-base` devenait blanc sur blanc. On retire donc `base` des couleurs de texte uniquement.
+     */
+    textColor: ({ theme }) => {
+      const couleurs = { ...theme("colors") };
+      delete couleurs.base;
+      return couleurs;
+    },
     extend: {
       fontFamily: {
         display: ["var(--font-display)", "sans-serif"],

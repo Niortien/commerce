@@ -10,7 +10,8 @@ export const sortieSchema = z
       .array(
         z.object({
           varianteId: z.string().uuid(),
-          quantite: z.number().int().positive(),
+          // Décimale pour ce qui se mesure (kg, m) ; le serveur exige un entier pour ce qui se compte.
+          quantite: z.number().positive(),
           prixUnitaire: z.string().regex(/^\d+(\.\d{1,2})?$/),
         })
       )

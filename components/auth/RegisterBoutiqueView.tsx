@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 import { boutiqueSignupSchema, type BoutiqueSignupInput, type SignupPlan } from "@/lib/validators/boutique-signup.schema";
 import { PaiementEnAttente } from "@/components/auth/PaiementEnAttente";
+import { CommerceTypePicker } from "@/components/common/CommerceTypePicker";
 import { PlanPicker, isPlanPayant, planName } from "@/components/auth/PlanPicker";
 import { prixPlan } from "@/lib/pricing";
 import { registerBoutiquePublic } from "@/features/auth/api/auth-api";
@@ -41,6 +42,7 @@ export function RegisterBoutiqueView({ initialPlan = "ESSAI" }: { initialPlan?: 
     defaultValues: { plan: initialPlan },
   });
   const plan = watch("plan");
+  const typeCommerce = watch("typeCommerce");
 
   const onSubmit = handleSubmit(async (values) => {
     setIsSubmitting(true);
@@ -81,9 +83,15 @@ export function RegisterBoutiqueView({ initialPlan = "ESSAI" }: { initialPlan?: 
     <section className="w-full rounded-lg border border-border bg-surface p-6 shadow-card md:p-8">
       <h1 className="mb-1 font-display text-2xl md:text-3xl">Inscrire ma boutique</h1>
       <p className="mb-4 text-sm text-text-muted">
-        Créez votre espace en 1 minute. Choisissez l&apos;essai gratuit de 14 jours ou un abonnement.
+        Créez votre espace en 1 minute. Votre type de commerce règle les pages de votre espace ; pour le
+        changer plus tard, contactez le support Mon Djossi.
       </p>
       <div className="space-y-3">
+        <CommerceTypePicker
+          value={typeCommerce}
+          onChange={(type) => setValue("typeCommerce", type, { shouldValidate: true })}
+          errorMessage={errors.typeCommerce?.message}
+        />
         <Input
           label="Nom de la boutique"
           variant="bordered"

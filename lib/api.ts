@@ -168,6 +168,15 @@ export async function apiPatch<T, B extends object = Record<string, unknown>>(
   return unwrapResponse(response.data);
 }
 
+export async function apiPut<T, B extends object = Record<string, unknown>>(
+  url: string,
+  body: B,
+  params?: Record<string, unknown>
+): Promise<{ data: T; meta: PageMeta }> {
+  const response = await api.put<ApiResponse<T>>(url, body, { params });
+  return unwrapResponse(response.data);
+}
+
 export async function apiDelete<T>(url: string): Promise<{ data: T; meta: PageMeta }> {
   const response = await api.delete<ApiResponse<T>>(url);
   return unwrapResponse(response.data);

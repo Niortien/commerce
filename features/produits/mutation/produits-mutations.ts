@@ -10,10 +10,12 @@ import {
   deleteVariante,
   deleteProduit,
   removeProduitImage,
+  saveRecette,
   updateProduit,
   updateVariante,
   type AdjustStockBody,
   type CreateProduitBody,
+  type RecetteBody,
   type UpdateProduitBody,
   type UpdateVarianteBody,
 } from "../api/produits-api";
@@ -26,6 +28,18 @@ export function useCreateProduit() {
     onSuccess: async () => {
       await qc.invalidateQueries({ queryKey: produitKeys.all });
     },
+  });
+}
+
+export function useSaveRecette(produitId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (body: RecetteBody) => saveRecette(produitId, body),
+    onSuccess: async () => {
+      await qc.invalidateQueries({ queryKey: produitKeys.recette(produitId) });
+      toast.success("Fiche technique enregistrée");
+    },
+    onError: (error: AppError) => toast.error(error?.message ?? "Fiche technique non enregistrée"),
   });
 }
 

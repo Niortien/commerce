@@ -13,6 +13,10 @@ import { useCreateEntree } from "@/features/entrees/mutation/entrees-mutations";
 import { VariantePicker, type VarianteSelection } from "@/components/common/VariantePicker";
 import { EntreeFormLine, type EntreeFormLineData } from "./EntreeFormLine";
 import { NewProduitModal } from "./NewProduitModal";
+import { NouvelArticleModal, type NouvelArticleEntree } from "@/components/common/NouvelArticleModal";
+import { useTypeCommerce } from "@/hooks/useTypeCommerce";
+import { VARIANTE_UNIQUE } from "@/lib/unites";
+import { TypeCommerce } from "@/types";
 import type { AppError } from "@/types";
 
 const headerSchema = z.object({
@@ -44,6 +48,8 @@ export function EntreeCreatePanel({ isOpen, onClose }: EntreeCreatePanelProps) {
     formState: { errors },
   } = useForm<HeaderFields>({ resolver: zodResolver(headerSchema) });
 
+  const vetements = useTypeCommerce() === TypeCommerce.VETEMENTS;
+
   const totalCout = lines
     .reduce((sum, l) => sum + l.quantite * parseFloat(l.prixUnitaire || "0"), 0)
     .toFixed(0);
@@ -56,6 +62,9 @@ export function EntreeCreatePanel({ isOpen, onClose }: EntreeCreatePanelProps) {
       couleur: sel.couleur,
       quantite: 1,
       prixUnitaire: sel.prixAchat,
+      unite: sel.unite,
+      conditionnementUnite: sel.conditionnementUnite,
+      conditionnementQuantite: sel.conditionnementQuantite,
     };
     if (replacingIndex !== null) {
       setLines((cur) => cur.map((l, i) => (i === replacingIndex ? newLine : l)));
@@ -149,11 +158,30 @@ export function EntreeCreatePanel({ isOpen, onClose }: EntreeCreatePanelProps) {
         onSelect={addExistingLine}
         onDone={replacingIndex === null ? closeAddFlow : undefined}
         excludedVarianteIds={replacingIndex !== null ? [] : existingVarianteIds}
+        usage="stock"
       />
 
-      {/* Modal nouveau produit */}
+      {/* Hors vêtements : article sans taille ni couleur, avec son unité */}
+      <NouvelArticleModal
+        mode="entree"
+        isOpen={addMode === "new" && !vetements}
+        onClose={closeAddFlow}
+        onAddLine={(a: NouvelArticleEntree) =>
+          addNewLine({
+            newProduit: a.newProduit,
+            isNew: true,
+            produitNom: a.newProduit.nom,
+            ...VARIANTE_UNIQUE,
+            quantite: a.quantite,
+            prixUnitaire: a.prixUnitaire,
+            unite: a.unite,
+          })
+        }
+      />
+
+      {/* Modal nouveau produit (vêtements : taille et couleur) */}
       <NewProduitModal
-        isOpen={addMode === "new"}
+        isOpen={addMode === "new" && vetements}
         defaultValues={
           replacingIndex !== null && lines[replacingIndex]?.isNew
             ? {

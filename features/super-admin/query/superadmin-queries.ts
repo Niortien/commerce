@@ -2,13 +2,13 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useAuthStore } from "@/stores/authStore";
-import { getSuperAdminBoutique, getSuperAdminBoutiques } from "../api/superadmin-boutiques-api";
+import { getSuperAdminBoutique, getSuperAdminBoutiques, type SuperAdminBoutiquesFilters } from "../api/superadmin-boutiques-api";
 import { getAbonnements } from "../api/superadmin-abonnements-api";
 import { getSuperAdminUsers } from "../api/superadmin-users-api";
-import type { StatutAbonnement, StatutBoutique } from "@/types";
+import type { StatutAbonnement } from "@/types";
 
 export const superAdminKeys = {
-  boutiques: (filters?: { statut?: StatutBoutique; search?: string }) => ["super-admin", "boutiques", filters ?? {}] as const,
+  boutiques: (filters?: SuperAdminBoutiquesFilters) => ["super-admin", "boutiques", filters ?? {}] as const,
   boutique: (id: string) => ["super-admin", "boutiques", id] as const,
   abonnements: (filters?: { boutiqueId?: string; statut?: StatutAbonnement }) => ["super-admin", "abonnements", filters ?? {}] as const,
   users: (filters?: { boutiqueId?: string; role?: string }) => ["super-admin", "users", filters ?? {}] as const,
@@ -20,7 +20,7 @@ function useIsSuperAdmin(): boolean {
   return !!token && role === "SUPER_ADMIN";
 }
 
-export function useSuperAdminBoutiques(filters?: { statut?: StatutBoutique; search?: string }) {
+export function useSuperAdminBoutiques(filters?: SuperAdminBoutiquesFilters) {
   const enabled = useIsSuperAdmin();
   return useQuery({
     queryKey: superAdminKeys.boutiques(filters),

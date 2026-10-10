@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { IconPhoto } from "@tabler/icons-react";
 import { CurrencyDisplay } from "@/components/common/CurrencyDisplay";
+import { PrixDemarque } from "@/components/common/PrixDemarque";
 import { SpotlightCard } from "@/components/common/SpotlightCard";
 import { cn } from "@/lib/utils";
 import type { Produit } from "@/types";
@@ -23,6 +24,8 @@ export function ProduitCard({ produit, onPress }: ProduitCardProps) {
     ? Math.round(((prixVente - parseFloat(produit.prixPromo!)) / prixVente) * 100)
     : null;
   const rupture = totalStock <= 0;
+  // Friperie : une pièce unique se vend une fois ; « Rupture » n'aurait pas de sens.
+  const badge = produit.pieceUnique ? (rupture ? "Vendue" : "Pièce unique") : rupture ? "Rupture" : `${totalStock} en stock`;
 
   return (
     <SpotlightCard as="article" tone={isPromo ? "return" : "accent"} className="group mb-3 break-inside-avoid hover:-translate-y-0.5">
@@ -55,10 +58,10 @@ export function ProduitCard({ produit, onPress }: ProduitCardProps) {
           <span
             className={cn(
               "absolute right-2.5 top-2.5 rounded-full px-2.5 py-0.5 text-xs font-semibold backdrop-blur-sm",
-              rupture ? "bg-out text-white" : "bg-surface/90 text-text"
+              rupture ? (produit.pieceUnique ? "bg-neutral-700 text-white" : "bg-out text-white") : "bg-surface/90 text-text"
             )}
           >
-            {rupture ? "Rupture" : `${totalStock} en stock`}
+            {badge}
           </span>
         </div>
 
@@ -75,6 +78,8 @@ export function ProduitCard({ produit, onPress }: ProduitCardProps) {
                   {prixVente.toLocaleString("fr-FR")}
                 </span>
               </>
+            ) : produit.prixInitial && Number(produit.prixInitial) > prixVente ? (
+              <PrixDemarque produit={produit} className="w-full justify-between" />
             ) : (
               <CurrencyDisplay montant={produit.prixVente} size="md" className="font-semibold" />
             )}

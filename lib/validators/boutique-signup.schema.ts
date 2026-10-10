@@ -1,10 +1,14 @@
 import { z } from "zod";
+import { TypeCommerce } from "@/types";
 
 export const SIGNUP_PLANS = ["ESSAI", "MENSUEL", "TRIMESTRIEL", "ANNUEL"] as const;
 export type SignupPlan = (typeof SIGNUP_PLANS)[number];
 
 export const boutiqueSignupSchema = z
   .object({
+    typeCommerce: z.nativeEnum(TypeCommerce, {
+      errorMap: () => ({ message: "Choisissez le type de votre commerce" }),
+    }),
     nomBoutique: z.string().min(2, "Nom de la boutique requis"),
     ville: z.string().optional(),
     whatsapp: z.string().optional(),

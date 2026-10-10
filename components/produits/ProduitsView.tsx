@@ -8,19 +8,38 @@ import { CountUp } from "@/components/common/CountUp";
 import { EmptyRiver } from "@/components/common/EmptyRiver";
 import { PageHero } from "@/components/common/PageHero";
 import { PageWrapper } from "@/components/common/PageWrapper";
+import { SegmentedControl } from "@/components/common/SegmentedControl";
 import { StatTile } from "@/components/common/StatTile";
 import { useProduitsList } from "@/features/produits/query/produits-queries";
-import type { AppError } from "@/types";
+import { TypeCommerce, type AppError } from "@/types";
+import { NouvelArticleModal } from "@/components/common/NouvelArticleModal";
+import { useTypeCommerce } from "@/hooks/useTypeCommerce";
+import { COMMERCE_PROFILES } from "@/lib/commerce";
 import { useUiStore } from "@/stores/uiStore";
 import { ProduitDetailPanel } from "./ProduitDetailPanel";
 import { ProduitMasonry } from "./ProduitMasonry";
 import { ProduitSearchBar } from "./ProduitSearchBar";
 import { ProduitAlphaIndex } from "./ProduitAlphaIndex";
 
+type Disponibilite = "EN_RAYON" | "VENDUE" | "TOUTES";
+
+const DISPONIBILITES: Array<{ key: Disponibilite; label: string }> = [
+  { key: "EN_RAYON", label: "En rayon" },
+  { key: "VENDUE", label: "Vendues" },
+  { key: "TOUTES", label: "Toutes" },
+];
+
 export function ProduitsView() {
   const router = useRouter();
   const panelId = useUiStore((state) => state.produitPanelId);
   const setPanelId = useUiStore((state) => state.setProduitPanelId);
+  const typeCommerce = useTypeCommerce();
+  const profile = COMMERCE_PROFILES[typeCommerce];
+  const vetements = typeCommerce === TypeCommerce.VETEMENTS;
+  const friperie = typeCommerce === TypeCommerce.FRIPERIE;
+  const [nouvelArticleOpen, setNouvelArticleOpen] = useState(false);
+  // Friperie : les pièces vendues restent dans l'historique mais ne doivent pas encombrer le rayon.
+  const [disponibilite, setDisponibilite] = useState<Disponibilite>("EN_RAYON");
 
   const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
@@ -42,6 +61,7 @@ export function ProduitsView() {
     search: search || undefined,
     categorieId,
     enPromo: enPromo || undefined,
+    disponibilite: friperie && disponibilite !== "TOUTES" ? disponibilite : undefined,
   });
 
   const produits = Array.isArray(data?.data) ? data.data : [];
@@ -59,17 +79,17 @@ export function ProduitsView() {
     <PageWrapper>
       <PageHero
         tone="accent"
-        icon={IconShirt}
+        icon={vetements ? IconShirt : profile.icon}
         eyebrow="Catalogue"
-        title="Produits"
+        title={profile.vocab.produits}
         description="Votre catalogue : fiches, variantes, prix et promotions. Touchez un produit pour l'ouvrir."
         actions={
           <Button
             className="min-h-11 bg-accent font-semibold text-white"
             startContent={<IconPlus size={18} aria-hidden />}
-            onPress={() => setPanelId("new")}
+            onPress={() => (vetements ? setPanelId("new") : setNouvelArticleOpen(true))}
           >
-            Nouveau produit
+            {vetements ? "Nouveau produit" : `Ajouter : ${profile.vocab.produits.toLowerCase()}`}
           </Button>
         }
       >
@@ -96,6 +116,24 @@ export function ProduitsView() {
           />
         </div>
       </PageHero>
+
+      {!vetements && (
+        <NouvelArticleModal
+          mode="catalogue"
+          isOpen={nouvelArticleOpen}
+          onClose={() => setNouvelArticleOpen(false)}
+          onCreated={(id) => router.push(`/produits/${id}`)}
+        />
+      )}
+
+      {friperie && (
+        <SegmentedControl
+          ariaLabel="Afficher les pièces"
+          options={DISPONIBILITES}
+          value={disponibilite}
+          onChange={setDisponibilite}
+        />
+      )}
 
       <ProduitSearchBar
         search={searchInput}
@@ -131,14 +169,35 @@ export function ProduitsView() {
 
       {!isLoading && !error && produits.length === 0 && (
         <EmptyRiver
-          message={isFiltering ? "Aucun produit ne correspond à votre recherche" : "Aucun produit pour l'instant"}
-          hint={isFiltering ? "Essayez un autre mot-clé ou retirez un filtre." : "Créez votre premier produit pour remplir le catalogue."}
+          message={
+            isFiltering
+              ? "Aucun produit ne correspond à votre recherche"
+              : friperie && disponibilite === "VENDUE"
+                ? "Aucune pièce vendue pour l'instant"
+                : "Aucun produit pour l'instant"
+          }
+          hint={
+            isFiltering
+              ? "Essayez un autre mot-clé ou retirez un filtre."
+              : friperie
+                ? "Les pièces arrivent en rayon quand vous déballez une balle."
+                : "Créez votre premier produit pour remplir le catalogue."
+          }
           action={
-            !isFiltering && (
-              <Button size="sm" className="bg-accent font-semibold text-white" onPress={() => setPanelId("new")}>
+            !isFiltering &&
+            (friperie ? (
+              <Button size="sm" className="bg-accent font-semibold text-white" onPress={() => router.push("/balles")}>
+                Voir les balles
+              </Button>
+            ) : (
+              <Button
+                size="sm"
+                className="bg-accent font-semibold text-white"
+                onPress={() => (vetements ? setPanelId("new") : setNouvelArticleOpen(true))}
+              >
                 Créer un produit
               </Button>
-            )
+            ))
           }
         />
       )}
