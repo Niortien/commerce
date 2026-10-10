@@ -12,8 +12,8 @@ import { SectionHeading } from "@/components/marketing/SectionHeading";
 const FEATURES = [
   {
     icon: IconBoxSeam,
-    title: "Stock par variante",
-    text: "Produits, catégories, tailles de XS à XXXL et alertes de seuil : vous savez ce qu'il reste et quand réapprovisionner.",
+    title: "Stock juste, quelle que soit l'unité",
+    text: "À la pièce, au mètre, au kilo ou au litre, par taille ou par format, avec des alertes de seuil : vous savez ce qu'il reste et quand réapprovisionner.",
   },
   {
     icon: IconCashRegister,
@@ -37,8 +37,8 @@ const FEATURES = [
   },
   {
     icon: IconBrandWhatsapp,
-    title: "Abonnement géré boutique par boutique",
-    text: "Activez, suspendez et renouvelez l'accès de chaque boutique selon son plan, depuis un seul tableau.",
+    title: "Vente à crédit et devis",
+    text: "Pour les clients pros : devis proforma imprimables, ventes à crédit avec acompte et échéance, relance WhatsApp des retards.",
   },
 ];
 

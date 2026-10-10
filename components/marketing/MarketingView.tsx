@@ -2,6 +2,7 @@ import { MarketingFeatures } from "@/components/marketing/MarketingFeatures";
 import dynamic from "next/dynamic";
 import { MarketingFooter } from "@/components/marketing/MarketingFooter";
 import { MarketingHero } from "@/components/marketing/MarketingHero";
+import { MarketingMetiers } from "@/components/marketing/MarketingMetiers";
 import { MarketingNav } from "@/components/marketing/MarketingNav";
 import { MarketingSteps } from "@/components/marketing/MarketingSteps";
 import { MarketingTrust } from "@/components/marketing/MarketingTrust";
@@ -30,6 +31,7 @@ export function MarketingView() {
         <MarketingHero />
         <MarketingTrust />
         <MarketingSteps />
+        <MarketingMetiers />
         <MarketingDay />
         <MarketingFeatures />
         <MarketingRoles />

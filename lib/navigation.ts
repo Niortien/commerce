@@ -1,6 +1,7 @@
 import {
   IconActivity,
   IconAddressBook,
+  IconBook,
   IconBoxSeam,
   IconBuildingStore,
   IconCategory2,
@@ -49,6 +50,8 @@ export function getBoutiqueNav(type: TypeCommerce): NavSection[] {
         { href: "/dashboard", label: "Dashboard", icon: IconLayoutDashboard },
         { href: "/activite", label: "Activité", icon: IconActivity },
         { href: "/activite/hebdomadaire", label: "Recette hebdo", icon: IconReportMoney },
+        // Le tutoriel du type de commerce de la boutique.
+        { href: "/guide", label: "Guide", icon: IconBook },
       ],
     },
     {

@@ -7,6 +7,18 @@ import { formatFcfa, PLAN_PRIX_FCFA } from "@/lib/pricing";
 
 const FAQ = [
   {
+    q: "Mon commerce n'est pas une boutique de vêtements, est-ce pour moi ?",
+    a: "Oui. À l'inscription, vous choisissez votre type de commerce : vêtements, restaurant, quincaillerie, friperie, chaussures, alimentation, supermarché, pharmacie, électronique, beauté ou autre. Restaurant, quincaillerie et friperie ont en plus leurs propres outils (fiches techniques, devis et crédit, balles et démarque).",
+  },
+  {
+    q: "Comment apprendre à utiliser l'application ?",
+    a: "Chaque type de commerce a son guide pas à pas, écrit avec des mots simples : il explique chaque page dans l'ordre où vous allez vous en servir. Il est disponible sur ce site (rubrique Guides) et dans l'application (menu « Guide »).",
+  },
+  {
+    q: "Puis-je vendre à crédit à mes clients professionnels ?",
+    a: "Oui, en quincaillerie : vous créez la fiche du client avec un plafond, vous vendez à crédit avec ou sans acompte, et l'application suit les échéances, les retards et les règlements, qui entrent dans la caisse du jour.",
+  },
+  {
     q: "Combien coûte Mon Djossi ?",
     a: `${formatFcfa(PLAN_PRIX_FCFA.MENSUEL)} par mois et par boutique, ${formatFcfa(PLAN_PRIX_FCFA.TRIMESTRIEL)} pour 3 mois ou ${formatFcfa(PLAN_PRIX_FCFA.ANNUEL)} pour un an. L'essai de 14 jours est gratuit, sans paiement.`,
   },

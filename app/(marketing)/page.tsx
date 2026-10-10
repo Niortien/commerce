@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: { absolute: "Mon Djossi — Logiciel de gestion de boutiques : stock et caisse" },
   alternates: { canonical: "/" },
   description:
-    "Mon Djossi réunit stock, caisse et entrées/sorties. Activez, suspendez et renouvelez l'accès de chaque boutique selon son abonnement.",
+    "Caisse, stock et rapports adaptés à votre métier : vêtements, restaurant (fiches techniques), quincaillerie (devis, crédit clients), friperie (balles, démarque) et plus. Essai gratuit 14 jours.",
 };
 
 const JSON_LD = {

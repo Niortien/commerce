@@ -24,17 +24,17 @@ export function MarketingHero() {
         <div className="flex min-w-0 flex-[1_1_520px] flex-col gap-6">
           <p className="mk-fade inline-flex w-fit items-center gap-2.5 rounded-full border border-border bg-surface py-[7px] pl-2 pr-3.5 text-sm font-semibold text-text-muted">
             <IvoryFlag />
-            Pensé pour les boutiques de Côte d&apos;Ivoire
+            Pensé pour les commerces de Côte d&apos;Ivoire
           </p>
           <h1
             className="mk-fade font-brand text-[2rem] font-bold leading-[1.1] tracking-[-0.045em] text-text md:text-[2.6rem] lg:text-[3.1rem]"
             style={{ animationDelay: ".1s" }}
           >
-            Sachez chaque soir combien votre boutique <span className="mk-mark">a gagné.</span>
+            Sachez chaque soir combien votre commerce <span className="mk-mark">a gagné.</span>
           </h1>
           <p className="mk-fade max-w-xl text-lg leading-relaxed text-text-muted md:text-xl" style={{ animationDelay: ".8s" }}>
-            Caisse, stock et rapports dans une seule application. Vos caissiers encaissent au comptoir, vous suivez tout en
-            FCFA, même à distance.
+            Caisse, stock et rapports dans une seule application, adaptée à votre métier : boutique de vêtements, restaurant,
+            quincaillerie, friperie… Vos caissiers encaissent au comptoir, vous suivez tout en FCFA, même à distance.
           </p>
           <div className="mk-fade flex flex-col gap-3 sm:flex-row" style={{ animationDelay: ".95s" }}>
             <Button

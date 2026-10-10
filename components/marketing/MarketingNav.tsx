@@ -8,13 +8,14 @@ import { IconMenu2, IconX } from "@tabler/icons-react";
 import { BrandMark } from "@/components/common/BrandMark";
 import { ThemeToggle } from "@/components/common/ThemeToggle";
 
+// Ancres préfixées par « / » : elles mènent aussi à l'accueil depuis les pages de guides.
 const LINKS = [
-  { href: "#comment", label: "Comment ça marche" },
-  { href: "#fonctionnalites", label: "Fonctionnalités" },
-  { href: "#roles", label: "Rôles" },
-  { href: "#temoignages", label: "Témoignages" },
-  { href: "#plans", label: "Tarifs" },
-  { href: "#faq", label: "FAQ" },
+  { href: "/#comment", label: "Comment ça marche" },
+  { href: "/#metiers", label: "Métiers" },
+  { href: "/#fonctionnalites", label: "Fonctionnalités" },
+  { href: "/#plans", label: "Tarifs" },
+  { href: "/#faq", label: "FAQ" },
+  { href: "/guides", label: "Guides" },
 ];
 
 export function MarketingNav() {

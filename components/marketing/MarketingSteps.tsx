@@ -3,12 +3,12 @@ import { SectionHeading } from "@/components/marketing/SectionHeading";
 
 const STEPS = [
   {
-    title: "Inscrivez votre boutique",
-    text: "Créez votre compte et choisissez votre formule. L'essai gratuit dure 14 jours.",
+    title: "Inscrivez votre commerce",
+    text: "Choisissez votre type de commerce et votre formule. Les pages s'adaptent à votre métier. L'essai gratuit dure 14 jours.",
   },
   {
     title: "Ajoutez vos produits et vos caissiers",
-    text: "Tailles, couleurs, stock de départ et seuils d'alerte. Chaque caissier reçoit son propre accès.",
+    text: "Tailles, pointures, plats ou articles au mètre, stock de départ et seuils d'alerte. Un guide pas à pas vous accompagne, et chaque caissier reçoit son propre accès.",
   },
   {
     title: "Encaissez, suivez, décidez",
