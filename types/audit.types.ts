@@ -33,3 +33,26 @@ export interface ConsultationOuverte {
     boutiqueStatut: string | null;
   };
 }
+
+/** Revenus des abonnements d'un secteur (type de commerce). */
+export interface RevenuSecteur {
+  typeCommerce: TypeCommerce;
+  nbBoutiques: number;
+  nbActives: number;
+  nbEssai: number;
+  nbAbonnementsPayes: number;
+  revenusAnnee: number;
+  revenusMoisCourant: number;
+  /** Abonnements en cours ramenés au mois (annuel ÷ 12, trimestriel ÷ 3). */
+  revenuMensuelRecurrent: number;
+}
+
+export interface RevenusPlateforme {
+  annee: number;
+  totalAnnee: number;
+  totalMoisCourant: number;
+  revenuMensuelRecurrent: number;
+  parSecteur: RevenuSecteur[];
+  /** Les 12 mois de l'année, avec le détail par secteur (secteurs à zéro absents). */
+  parMois: Array<{ mois: string; total: number; parSecteur: Array<{ typeCommerce: TypeCommerce; montant: number }> }>;
+}

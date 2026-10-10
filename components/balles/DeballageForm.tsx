@@ -18,6 +18,11 @@ interface DeballageFormProps {
 }
 
 /** « 0 » = pièce non triée, sinon le numéro du choix. */
+const FORMES = [
+  { key: "PIECE", label: "Pièce unique" },
+  { key: "TAS", label: "Tas à prix unique" },
+];
+
 const OPTIONS_CHOIX = [
   { key: "0", label: "Non triée" },
   ...CHOIX.map((c) => ({ key: String(c), label: libelleChoix(c) ?? "" })),
@@ -35,6 +40,12 @@ export function DeballageForm({ balle }: DeballageFormProps) {
   const nomRef = useRef<HTMLInputElement | null>(null);
   const [annonce, setAnnonce] = useState("");
   const [choix, setChoix] = useState("0");
+  // Pièce unique, ou tas d'articles semblables vendus au même prix (« tout à 500 F »).
+  const [forme, setForme] = useState("PIECE");
+  const [nbTas, setNbTas] = useState("10");
+  const tas = forme === "TAS";
+  const quantiteTas = Number(nbTas);
+  const tasInvalide = tas && !(Number.isInteger(quantiteTas) && quantiteTas >= 2 && quantiteTas <= 1000);
 
   // Champs contrôlés : un Input HeroUI branché par `register` ne se vide pas au `reset`.
   const { control, handleSubmit, reset, getValues, setValue, formState: { errors } } = useForm<PieceInput>({
@@ -59,16 +70,22 @@ export function DeballageForm({ balle }: DeballageFormProps) {
   };
 
   const onSubmit = handleSubmit(async (values) => {
+    if (tasInvalide) return;
     const res = await ajouter.mutateAsync([
       {
         nom: values.nom,
         categorieId: values.categorieId,
         prixVente: Number(values.prixVente),
         choix: isChoix(choixNum) ? choixNum : null,
+        ...(tas ? { quantite: quantiteTas } : {}),
       },
     ]);
     const piece = res.data[0];
-    setAnnonce(`${values.nom} mise en rayon${piece ? `, code ${piece.sku}` : ""}.`);
+    setAnnonce(
+      tas
+        ? `Tas « ${values.nom} » de ${quantiteTas} articles mis en rayon${piece ? `, code ${piece.sku}` : ""}.`
+        : `${values.nom} mise en rayon${piece ? `, code ${piece.sku}` : ""}.`
+    );
     // La pièce suivante est souvent de la même qualité : on repropose son prix conseillé.
     reset({ nom: "", prixVente: prixDuChoix !== null ? String(prixDuChoix) : "", categorieId: getValues("categorieId") });
     nomRef.current?.focus();
@@ -83,6 +100,23 @@ export function DeballageForm({ balle }: DeballageFormProps) {
         <span className="tabular text-xs text-text-muted">
           Prochaine pièce : B{balle.numero}-{String(prochain).padStart(3, "0")}
         </span>
+      </div>
+
+      <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-end">
+        <SegmentedControl ariaLabel="Forme de l'article" options={FORMES} value={forme} onChange={setForme} />
+        {tas && (
+          <Input
+            label="Articles dans le tas"
+            inputMode="numeric"
+            variant="bordered"
+            size="sm"
+            value={nbTas}
+            onValueChange={(v) => /^\d*$/.test(v) && setNbTas(v)}
+            isInvalid={tasInvalide}
+            errorMessage={tasInvalide ? "Entre 2 et 1 000 articles" : undefined}
+            className="sm:max-w-44"
+          />
+        )}
       </div>
 
       <div className="mb-3">
@@ -101,7 +135,7 @@ export function DeballageForm({ balle }: DeballageFormProps) {
           render={({ field }) => (
             <Input
               label="Pièce"
-              placeholder="Ex. Veste en jean"
+              placeholder={tas ? "Ex. Tas tee-shirts" : "Ex. Veste en jean"}
               variant="bordered"
               value={field.value}
               onValueChange={field.onChange}
@@ -141,7 +175,7 @@ export function DeballageForm({ balle }: DeballageFormProps) {
           control={control}
           render={({ field }) => (
             <Input
-              label="Prix"
+              label={tas ? "Prix de chaque article" : "Prix"}
               inputMode="numeric"
               variant="bordered"
               value={field.value}
@@ -165,7 +199,7 @@ export function DeballageForm({ balle }: DeballageFormProps) {
           startContent={<IconHanger size={18} aria-hidden />}
           isLoading={ajouter.isPending}
         >
-          Mettre en rayon
+          {tas ? "Mettre le tas en rayon" : "Mettre en rayon"}
         </Button>
       </form>
 

@@ -29,6 +29,8 @@ export interface PieceBody {
   description?: string;
   /** 1er, 2e ou 3e choix ; absent = non triée. */
   choix?: number | null;
+  /** Tas à prix unique : nombre d'articles (absent ou 1 = pièce unique). */
+  quantite?: number;
 }
 
 export const getBalles = (params?: BallesListParams) => apiGet<Balle[]>("/balles", params);

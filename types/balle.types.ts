@@ -27,7 +27,10 @@ export interface Balle {
   updatedAt: string;
   /** Achat + frais. */
   coutTotal: string;
+  /** Articles sortis de la balle : 1 par pièce unique, N par tas. */
   nbPieces: number;
+  /** Tas à prix unique parmi ses pièces. */
+  nbTas: number;
   nbEnRayon: number;
   nbVendues: number;
   /** Coût total ÷ nombre de pièces ; null tant que la balle est vide. */

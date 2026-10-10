@@ -214,6 +214,20 @@ export function getCommerceProfile(value: unknown): CommerceProfile {
   return COMMERCE_PROFILES[resolveTypeCommerce(value)];
 }
 
+/** Pages réservées à un métier (le serveur refuse aussi leurs données aux autres types). */
+const PAGES_METIER: Array<{ prefixe: string; types: TypeCommerce[] }> = [
+  { prefixe: "/devis", types: [TypeCommerce.QUINCAILLERIE] },
+  { prefixe: "/clients", types: [TypeCommerce.QUINCAILLERIE] },
+  { prefixe: "/balles", types: [TypeCommerce.FRIPERIE] },
+  { prefixe: "/demarque", types: [TypeCommerce.FRIPERIE] },
+];
+
+/** Types de commerce autorisés pour cette page ; null si elle est commune à tous. */
+export function metierRequis(pathname: string): TypeCommerce[] | null {
+  const page = PAGES_METIER.find((p) => pathname === p.prefixe || pathname.startsWith(`${p.prefixe}/`));
+  return page ? page.types : null;
+}
+
 export type SectorStyle = CSSProperties & Record<"--sector", string>;
 
 /**

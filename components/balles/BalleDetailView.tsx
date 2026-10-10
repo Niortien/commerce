@@ -70,9 +70,9 @@ export function BalleDetailView({ id }: BalleDetailViewProps) {
       detail: Number(balle.frais) > 0 ? `dont ${formatCurrency(balle.frais)} de frais` : undefined,
     },
     {
-      label: "Coût par pièce",
+      label: "Coût par article",
       valeur: balle.coutParPiece ? formatCurrency(balle.coutParPiece) : "—",
-      detail: `${balle.nbPieces} pièce${balle.nbPieces > 1 ? "s" : ""}`,
+      detail: `${balle.nbPieces} article${balle.nbPieces > 1 ? "s" : ""}${balle.nbTas > 0 ? `, dont ${balle.nbTas} tas` : ""}`,
     },
     {
       label: "Encaissé",
@@ -87,7 +87,7 @@ export function BalleDetailView({ id }: BalleDetailViewProps) {
     {
       label: "Encore en rayon",
       valeur: formatCurrency(balle.valeurEnRayon),
-      detail: `${balle.nbEnRayon} pièce${balle.nbEnRayon > 1 ? "s" : ""} à vendre`,
+      detail: `${balle.nbEnRayon} article${balle.nbEnRayon > 1 ? "s" : ""} à vendre`,
     },
   ];
 
@@ -175,7 +175,7 @@ export function BalleDetailView({ id }: BalleDetailViewProps) {
               <thead>
                 <tr className="text-left text-xs text-text-muted">
                   <th scope="col" className="pb-2 font-normal">Choix</th>
-                  <th scope="col" className="pb-2 text-right font-normal">Pièces</th>
+                  <th scope="col" className="pb-2 text-right font-normal">Articles</th>
                   <th scope="col" className="pb-2 text-right font-normal">Vendues</th>
                   <th scope="col" className="pb-2 text-right font-normal">Encaissé</th>
                 </tr>

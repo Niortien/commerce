@@ -82,7 +82,7 @@ export function BallesView() {
       >
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <StatTile tone="return" icon={IconPackageImport} label="En déballage" value={toutesRes ? enDeballage : "—"} />
-          <StatTile tone="in" icon={IconHanger} label="Pièces en rayon" value={toutesRes ? enRayon : "—"} delay={0.05} />
+          <StatTile tone="in" icon={IconHanger} label="Articles en rayon" value={toutesRes ? enRayon : "—"} delay={0.05} />
           <StatTile
             tone="cash"
             icon={IconPackages}
@@ -163,7 +163,7 @@ export function BallesView() {
 
                 <span className="grid grid-cols-3 gap-2 text-xs">
                   <span>
-                    <span className="block text-text-muted">Pièces</span>
+                    <span className="block text-text-muted">Articles</span>
                     <span className="tabular font-semibold text-text">{b.nbPieces}</span>
                   </span>
                   <span>

@@ -19,6 +19,11 @@ interface PieceListProps {
   pieces: Produit[];
 }
 
+/** Articles encore en rayon (1 ou 0 pour une pièce unique, le reste d'un tas). */
+function stockDe(p: Produit): number {
+  return Math.round((p.variantes ?? []).reduce((s, v) => s + v.quantiteStock, 0));
+}
+
 /** Les pièces sorties de la balle, la plus récente en tête. Une pièce en rayon peut encore être retirée. */
 export function PieceList({ balleId, pieces }: PieceListProps) {
   const [filtre, setFiltre] = useState<Filtre>("TOUTES");
@@ -73,11 +78,12 @@ export function PieceList({ balleId, pieces }: PieceListProps) {
                     <span className="font-mono sm:hidden">{p.sku} · </span>
                     {p.categorie?.nom ?? "Sans rayon"}
                     {libelleChoix(p.choix) && ` · ${libelleChoix(p.choix)}`}
+                    {!p.pieceUnique && ` · tas, ${stockDe(p)} restant${stockDe(p) > 1 ? "s" : ""}`}
                   </span>
                 </span>
                 <span className="flex flex-col items-end gap-1 sm:flex-row sm:items-center sm:gap-3">
                   <PrixDemarque produit={p} />
-                  <StatusChip label={enRayon ? "En rayon" : "Vendue"} tone={enRayon ? "in" : "neutral"} />
+                  <StatusChip label={enRayon ? "En rayon" : p.pieceUnique ? "Vendue" : "Épuisé"} tone={enRayon ? "in" : "neutral"} />
                 </span>
                 <span>
                   {enRayon && (
@@ -108,7 +114,7 @@ export function PieceList({ balleId, pieces }: PieceListProps) {
           setARetirer(null);
         }}
         title="Retirer cette pièce ?"
-        message={`« ${aRetirer?.nom ?? ""} » (${aRetirer?.sku ?? ""}) sort de la balle et du rayon. Le coût de la balle se répartit sur les pièces restantes.`}
+        message={`« ${aRetirer?.nom ?? ""} » (${aRetirer?.sku ?? ""}) sort de la balle et du rayon. Le coût de la balle se répartit sur les articles restants.`}
         confirmLabel="Retirer la pièce"
         isLoading={retirer.isPending}
         danger
