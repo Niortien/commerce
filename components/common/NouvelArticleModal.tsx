@@ -144,7 +144,14 @@ export function NouvelArticleModal({ isOpen, onClose, mode, onCreated, onAddLine
   const titre = mode === "entree" ? "Nouvel article reçu" : `Nouveau : ${profile.vocab.produits.toLowerCase()}`;
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="lg" scrollBehavior="inside">
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      size="lg"
+      scrollBehavior="inside"
+      // Ouvert depuis le panneau des entrées (z-800) : il doit passer devant.
+      classNames={{ wrapper: "z-[1000]", backdrop: "z-[950]" }}
+    >
       <ModalContent>
         <ModalHeader>{titre}</ModalHeader>
         <ModalBody>

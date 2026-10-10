@@ -212,7 +212,7 @@ export function EntreeCreatePanel({ isOpen, onClose }: EntreeCreatePanelProps) {
         initial="hidden"
         animate="visible"
         variants={getMotionVariant(panelSlide, reduced)}
-        className="fixed inset-y-0 right-0 z-[800] flex w-full max-w-[520px] flex-col border-l border-border bg-[linear-gradient(180deg,rgba(34,81,60,0.95),rgba(23,38,58,0.98))]"
+        className="fixed inset-y-0 right-0 z-[800] flex w-full max-w-[520px] flex-col border-l border-border bg-[var(--color-base)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-in)_14%,var(--color-base)),var(--color-base)_45%)] shadow-[-24px_0_48px_-24px_rgb(15_23_42/0.35)]"
         role="dialog"
         aria-modal="true"
         aria-label="Nouvelle entrée"
@@ -226,7 +226,7 @@ export function EntreeCreatePanel({ isOpen, onClose }: EntreeCreatePanelProps) {
         {/* Body */}
         <div className="flex-1 space-y-4 overflow-y-auto p-4 pb-6">
           {/* Fournisseur */}
-          <section className="rounded-lg border border-border/80 bg-[color:rgba(34,81,60,0.25)] p-4">
+          <section className="rounded-lg border border-border/80 bg-surface p-4">
             <p className="mb-3 text-xs uppercase tracking-wide text-text-muted">Fournisseur</p>
             <div className="space-y-3">
               <Input
@@ -256,7 +256,7 @@ export function EntreeCreatePanel({ isOpen, onClose }: EntreeCreatePanelProps) {
           </section>
 
           {/* Lignes */}
-          <section className="rounded-lg border border-border/80 bg-[color:rgba(34,81,60,0.25)] p-4">
+          <section className="rounded-lg border border-border/80 bg-surface p-4">
             <div className="mb-3 flex items-center justify-between">
               <p className="text-xs uppercase tracking-wide text-text-muted">Produits reçus</p>
               {lines.length > 0 && (
@@ -297,7 +297,7 @@ export function EntreeCreatePanel({ isOpen, onClose }: EntreeCreatePanelProps) {
                   initial={{ opacity: 0, y: 6 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 6 }}
-                  className="mt-3 overflow-hidden rounded-xl border border-in/30 bg-[color:rgba(34,81,60,0.35)] p-3"
+                  className="mt-3 overflow-hidden rounded-xl border border-in/30 bg-[color-mix(in_srgb,var(--color-in)_8%,var(--color-surface))] p-3"
                 >
                   <p className="mb-2.5 text-center text-xs text-text-muted">Ce produit existe-t-il déjà dans le stock ?</p>
                   <div className="grid grid-cols-2 gap-2">

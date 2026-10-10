@@ -488,7 +488,7 @@ export function SortieCreatePanel({ isOpen, onClose }: SortieCreatePanelProps) {
         initial="hidden"
         animate="visible"
         variants={getMotionVariant(panelSlide, reduced)}
-        className="fixed inset-y-0 right-0 z-[800] flex w-full max-w-[520px] flex-col border-l border-border bg-[linear-gradient(180deg,rgba(81,34,68,0.95),rgba(23,28,58,0.98))]"
+        className="fixed inset-y-0 right-0 z-[800] flex w-full max-w-[520px] flex-col border-l border-border bg-[var(--color-base)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-out)_14%,var(--color-base)),var(--color-base)_45%)] shadow-[-24px_0_48px_-24px_rgb(15_23_42/0.35)]"
         role="dialog"
         aria-modal="true"
         aria-label="Nouvelle sortie"
@@ -565,7 +565,7 @@ export function SortieCreatePanel({ isOpen, onClose }: SortieCreatePanelProps) {
               )}
 
               {isDepense ? (
-                <section className="space-y-3 rounded-lg border border-border/80 bg-[color:rgba(81,34,68,0.25)] p-4">
+                <section className="space-y-3 rounded-lg border border-border/80 bg-surface p-4">
                   <p className="text-xs uppercase tracking-wide text-text-muted">Détails de la dépense</p>
                   <Input
                     variant="bordered"
@@ -589,7 +589,7 @@ export function SortieCreatePanel({ isOpen, onClose }: SortieCreatePanelProps) {
                   />
                 </section>
               ) : (
-                <section className="rounded-lg border border-border/80 bg-[color:rgba(81,34,68,0.25)] p-4">
+                <section className="rounded-lg border border-border/80 bg-surface p-4">
                   <div className="mb-3 flex items-center justify-between">
                     <p className="text-xs uppercase tracking-wide text-text-muted">Produits</p>
                     {lines.length > 0 && (

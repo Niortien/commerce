@@ -342,7 +342,7 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
       initial="hidden"
       animate="visible"
       variants={getMotionVariant(panelSlide, reduced)}
-      className="fixed inset-y-0 right-0 z-[800] flex w-full max-w-[480px] flex-col border-l border-border bg-[linear-gradient(180deg,rgba(34,54,81,0.98),rgba(23,38,58,0.98))]"
+      className="fixed inset-y-0 right-0 z-[800] flex w-full max-w-[480px] flex-col border-l border-border bg-[var(--color-base)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-accent)_14%,var(--color-base)),var(--color-base)_45%)] shadow-[-24px_0_48px_-24px_rgb(15_23_42/0.35)]"
     >
       {/* header fixe */}
       <div className="flex items-center justify-between border-b border-border/60 px-4 py-3">

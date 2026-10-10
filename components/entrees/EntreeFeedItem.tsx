@@ -21,7 +21,7 @@ export function EntreeFeedItem({ entree, onCancel }: EntreeFeedItemProps) {
         "rounded-lg border p-3 transition",
         isAnnulee
           ? "border-border/40 bg-[var(--color-surface-high)] opacity-50"
-          : "border-border/80 bg-[linear-gradient(145deg,rgba(57,211,83,0.12),rgba(34,54,81,0.7))] hover:border-[var(--color-in)]/50 hover:shadow-md",
+          : "border-border/80 bg-[linear-gradient(145deg,color-mix(in_srgb,var(--color-in)_10%,var(--color-surface)),var(--color-surface))] hover:border-[var(--color-in)]/50 hover:shadow-md",
       ].join(" ")}
     >
       {/* Type + date */}

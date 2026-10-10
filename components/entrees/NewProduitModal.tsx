@@ -142,7 +142,7 @@ export function NewProduitModal({ isOpen, defaultValues, onClose, onAdd }: NewPr
         <ModalBody className="py-5">
           <div className="space-y-5">
             {/* Infos produit */}
-            <div className="rounded-xl border border-border/60 bg-[color:rgba(34,81,60,0.15)] p-4">
+            <div className="rounded-xl border border-border/60 bg-surface-high p-4">
               <p className="mb-3 text-[11px] uppercase tracking-wider text-text-muted">Informations produit</p>
               <div className="space-y-3">
                 <Input
@@ -240,7 +240,7 @@ export function NewProduitModal({ isOpen, defaultValues, onClose, onAdd }: NewPr
             </div>
 
             {/* Variante */}
-            <div className="rounded-xl border border-border/60 bg-[color:rgba(34,81,60,0.15)] p-4">
+            <div className="rounded-xl border border-border/60 bg-surface-high p-4">
               <p className="mb-3 text-[11px] uppercase tracking-wider text-text-muted">Variante</p>
               <div className="space-y-3">
                 {/* Taille */}
