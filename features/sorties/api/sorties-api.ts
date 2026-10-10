@@ -1,5 +1,5 @@
 import { apiDelete, apiGet, apiPatch, apiPost } from "@/lib/api";
-import type { Sortie, TypeSortie } from "@/types";
+import type { ModePaiement, ModeService, Sortie, TypeSortie } from "@/types";
 
 export interface SortiesListParams {
   page?: number;
@@ -17,11 +17,19 @@ export interface CreateSortieBody {
   remiseMontant?: string;
   dateOperation?: string;
   montant?: string;
+  /** Restaurant uniquement. */
+  modeService?: ModeService;
+  tableLabel?: string;
   lignes?: Array<{
     varianteId: string;
     quantite: number;
     prixUnitaire: string;
   }>;
+  /** Vente à crédit (quincaillerie) : inscrite au compte du client ; seul l'acompte entre en caisse. */
+  clientId?: string;
+  echeanceJours?: number;
+  acompteMontant?: string;
+  acompteMode?: ModePaiement;
 }
 
 export const getSorties = (params?: SortiesListParams) =>

@@ -1,16 +1,17 @@
 import { apiDelete, apiGet, apiPatch, apiPost } from "@/lib/api";
 import type { Categorie } from "@/types";
 
+/** `description` = le groupe de la catégorie, libre (« Grillades », « Plomberie »…) ; le serveur génère le slug. */
 export interface CreateCategorieBody {
   nom: string;
-  slug: string;
-  description: string;
+  slug?: string;
+  description?: string | null;
 }
 
 export interface UpdateCategorieBody {
   nom?: string;
   slug?: string;
-  description?: string;
+  description?: string | null;
 }
 
 export const adminGetCategories = () =>

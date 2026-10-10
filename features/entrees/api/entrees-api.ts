@@ -1,5 +1,5 @@
 import { apiDelete, apiGet, apiPatch, apiPost } from "@/lib/api";
-import type { Entree } from "@/types";
+import type { Entree, NatureProduit, Unite } from "@/types";
 
 export interface EntreesListParams {
   page?: number;
@@ -20,6 +20,9 @@ export interface NewProduitForEntree {
   couleur: string;
   seuilAlerte?: number;
   imageUrl?: string;
+  /** Hors vêtements : unité et nature du nouvel article (taille « Unique »). */
+  unite?: Unite;
+  nature?: NatureProduit;
 }
 
 export interface CreateEntreeBody {

@@ -7,7 +7,7 @@ export const entreeSchema = z.object({
     .array(
       z.object({
         varianteId: z.string().uuid("ID variante invalide"),
-        quantite: z.number().int().positive("Quantite > 0"),
+        quantite: z.number().positive("Quantite > 0"),
         prixUnitaire: z.string().regex(/^\d+(\.\d{1,2})?$/, "Montant invalide"),
       })
     )

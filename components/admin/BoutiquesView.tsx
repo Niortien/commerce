@@ -8,6 +8,8 @@ import { z } from "zod";
 import { useMyBoutique } from "@/features/boutiques/query/boutiques-queries";
 import { useUpdateMyBoutique } from "@/features/boutiques/mutation/boutiques-mutations";
 import { StatutAbonnement, StatutBoutique } from "@/types";
+import { CommerceBadge } from "@/components/common/CommerceBadge";
+import { resolveTypeCommerce } from "@/lib/commerce";
 
 const schema = z.object({
   nom: z.string().min(1, "Requis"),
@@ -100,6 +102,14 @@ export function BoutiquesView() {
         {!abonnement && (
           <span className="text-sm text-text-muted">Aucun abonnement enregistré — contactez le support.</span>
         )}
+      </div>
+
+      <div className="mb-6 flex max-w-xl flex-col gap-2 rounded-lg border border-border bg-surface p-4">
+        <p className="text-sm font-medium text-text">Type de commerce</p>
+        <CommerceBadge type={resolveTypeCommerce(boutique.typeCommerce)} className="w-fit" />
+        <p className="text-xs text-text-muted">
+          Il règle les pages et le vocabulaire de votre espace. Pour le changer, contactez le support Mon Djossi.
+        </p>
       </div>
 
       <form onSubmit={(e) => void onSubmit(e)} className="flex max-w-xl flex-col gap-3 rounded-lg border border-border bg-surface p-4">

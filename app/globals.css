@@ -52,6 +52,17 @@
   --sidebar-text-muted:   #9FB0C8;
   --sidebar-accent:       #60A5FA;
 
+  /* Types de commerce — une teinte par secteur, distincte des couleurs de flux
+     (vert entrée, rouge sortie, ambre retour, violet caisse). `-soft` = sur fond sombre. */
+  --sector-vetements:          #1D4ED8;
+  --sector-vetements-soft:     #93C5FD;
+  --sector-restaurant:         #C2410C;
+  --sector-restaurant-soft:    #FDBA74;
+  --sector-quincaillerie:      #0E7490;
+  --sector-quincaillerie-soft: #67E8F9;
+  --sector-friperie:           #A21CAF;
+  --sector-friperie-soft:      #F0ABFC;
+
   --space-1:  4px;
   --space-2:  8px;
   --space-3:  12px;
@@ -229,6 +240,11 @@
    palette noir + or indépendante de cette classe.
    ════════════════════════════════════════════════════════════ */
 :root.dark {
+  --sector-vetements:     var(--sector-vetements-soft);
+  --sector-restaurant:    var(--sector-restaurant-soft);
+  --sector-quincaillerie: var(--sector-quincaillerie-soft);
+  --sector-friperie:      var(--sector-friperie-soft);
+
   --color-base:         #0B1220;
   --color-surface:      #111A2E;
   --color-surface-high: #182338;

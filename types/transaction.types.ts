@@ -1,4 +1,4 @@
-import type { ModePaiement, TypeSortie } from "./enums";
+import type { ModeService, ModePaiement, TypeSortie } from "./enums";
 import type { Produit, Variante } from "./produit.types";
 
 export interface LigneEntree {
@@ -34,6 +34,9 @@ export interface Sortie {
   id: string;
   reference: string;
   type: TypeSortie;
+  /** Restaurant : sur place, à emporter ou en livraison. */
+  modeService?: ModeService | null;
+  tableLabel?: string | null;
   totalAvantRemise?: string | null;
   remiseMontant?: string | null;
   totalMontant: string;
@@ -42,5 +45,7 @@ export interface Sortie {
   lignes?: LigneSortie[];
   transactionId: string | null;
   transaction?: { modePaiement: ModePaiement; reference: string | null } | null;
+  /** Vente à crédit : le client qui doit la payer. */
+  clientId?: string | null;
   createdAt: string;
 }

@@ -1,5 +1,5 @@
-import { apiDelete, apiGet, apiPatch, apiPost } from "@/lib/api";
-import type { Categorie, MouvementStock, Produit, ProduitImage, Variante } from "@/types";
+import { apiDelete, apiGet, apiPatch, apiPost, apiPut } from "@/lib/api";
+import type { Categorie, MouvementStock, NatureProduit, Produit, ProduitImage, Recette, Unite, Variante } from "@/types";
 
 export interface ProduitListParams {
   page?: number;
@@ -10,6 +10,10 @@ export interface ProduitListParams {
   enPromo?: boolean;
   sortOrder?: "asc" | "desc";
   boutiqueId?: string;
+  /** Friperie : pièces d'une balle. */
+  balleId?: string;
+  /** Friperie : EN_RAYON = encore en stock ; VENDUE = pièce unique partie. */
+  disponibilite?: "EN_RAYON" | "VENDUE";
 }
 
 export interface ProduitMouvementsParams {
@@ -25,6 +29,10 @@ export interface CreateProduitBody {
   prixVente: string;
   prixAchat: string;
   imageUrl?: string;
+  unite?: Unite;
+  nature?: NatureProduit;
+  conditionnementUnite?: Unite;
+  conditionnementQuantite?: number;
   variantes?: Array<{
     taille: string;
     couleur: string;
@@ -45,6 +53,10 @@ export interface UpdateProduitBody {
   prixPromo?: string | null;
   dateDebutPromo?: string | null;
   dateFinPromo?: string | null;
+  unite?: Unite;
+  nature?: NatureProduit;
+  conditionnementUnite?: Unite | null;
+  conditionnementQuantite?: number | null;
 }
 
 export interface AddVarianteBody {
@@ -104,6 +116,18 @@ export const addProduitImage = (produitId: string, url: string) =>
 
 export const removeProduitImage = (produitId: string, imageId: string) =>
   apiDelete<void>(`/produits/${produitId}/images/${imageId}`);
+
+export interface RecetteBody {
+  lignes: Array<{ varianteId: string; quantite: number }>;
+}
+
+/** Fiche technique d'un plat : ingrédients pour une portion. */
+export const getRecette = (produitId: string) =>
+  apiGet<Recette[]>(`/produits/${produitId}/recette`);
+
+/** Remplace toute la fiche technique (réservé à l'admin). */
+export const saveRecette = (produitId: string, body: RecetteBody) =>
+  apiPut<Recette[], RecetteBody>(`/produits/${produitId}/recette`, body);
 
 export const deleteVariante = (id: string) =>
   apiDelete<void>(`/variantes/${id}`);

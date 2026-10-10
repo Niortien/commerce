@@ -5,3 +5,6 @@ export * from "./enums";
 export * from "./produit.types";
 export * from "./stock.types";
 export * from "./transaction.types";
+export * from "./devis.types";
+export * from "./balle.types";
+export * from "./client.types";

@@ -1,7 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Button, Input } from "@heroui/react";
+import { QuantiteInput } from "@/components/common/QuantiteInput";
+import { UNITES, arrondiQuantite, formatQuantite, isVarianteUnique } from "@/lib/unites";
+import { Unite } from "@/types";
 import type { NewProduitForEntree } from "@/features/entrees/api/entrees-api";
 
 export interface EntreeFormLineData {
@@ -13,6 +15,10 @@ export interface EntreeFormLineData {
   couleur: string;
   quantite: number;
   prixUnitaire: string;
+  /** Hors vêtements : unité du produit et éventuel conditionnement d'achat (carton de 24…). */
+  unite?: Unite;
+  conditionnementUnite?: Unite | null;
+  conditionnementQuantite?: number | null;
 }
 
 interface EntreeFormLineProps {
@@ -26,28 +32,11 @@ interface EntreeFormLineProps {
 
 export function EntreeFormLine({ line, index, onPickVariante, onEditNew, onChange, onRemove }: EntreeFormLineProps) {
   const sousTotal = (line.quantite * parseFloat(line.prixUnitaire || "0")).toFixed(0);
-
-  // Saisie libre : local state permet d'effacer et retaper sans blocage
-  const [qtyInput, setQtyInput] = useState(String(line.quantite));
-
-  useEffect(() => {
-    setQtyInput(String(line.quantite));
-  }, [line.quantite]);
-
-  const handleQtyChange = (val: string) => {
-    if (/^\d*$/.test(val)) setQtyInput(val);
-  };
-
-  const handleQtyBlur = () => {
-    const n = parseInt(qtyInput, 10);
-    if (isNaN(n) || n < 1) {
-      onChange(index, "quantite", 1);
-      setQtyInput("1");
-    } else {
-      onChange(index, "quantite", n);
-      setQtyInput(String(n));
-    }
-  };
+  const unite = line.unite ?? Unite.PIECE;
+  const unique = isVarianteUnique(line);
+  const colis = line.conditionnementUnite && line.conditionnementQuantite
+    ? { unite: line.conditionnementUnite, contenu: line.conditionnementQuantite }
+    : null;
 
   const handleRowClick = () => {
     if (line.isNew && onEditNew) {
@@ -60,35 +49,43 @@ export function EntreeFormLine({ line, index, onPickVariante, onEditNew, onChang
   return (
     <div className="grid grid-cols-[1fr_70px_90px_32px] items-center gap-1.5 rounded-lg border border-border/60 bg-[var(--color-surface-high)] px-3 py-2 sm:grid-cols-[1fr_80px_100px_80px_32px] sm:gap-2">
       {/* Produit / variante */}
-      <button
-        type="button"
-        className="flex flex-col items-start text-left"
-        onClick={handleRowClick}
-        aria-label={line.isNew ? "Modifier le nouveau produit" : "Changer la variante"}
-      >
-        <span className="flex items-center gap-1.5 text-sm font-medium text-text">
-          {line.produitNom}
-          {line.isNew && (
-            <span className="rounded bg-in/20 px-1 py-0.5 [font-family:var(--font-mono)] text-[9px] font-bold uppercase tracking-wide text-in">
-              NOUVEAU
-            </span>
-          )}
-        </span>
-        <span className="font-mono text-xs text-text-muted">
-          {line.taille} · {line.couleur}
-        </span>
-      </button>
+      <div className="flex min-w-0 flex-col items-start gap-1">
+        <button
+          type="button"
+          className="flex flex-col items-start text-left"
+          onClick={handleRowClick}
+          aria-label={line.isNew ? "Modifier le nouveau produit" : "Changer l'article"}
+        >
+          <span className="flex items-center gap-1.5 text-sm font-medium text-text">
+            {line.produitNom}
+            {line.isNew && (
+              <span className="rounded bg-in/20 px-1 py-0.5 [font-family:var(--font-mono)] text-[9px] font-bold uppercase tracking-wide text-in">
+                NOUVEAU
+              </span>
+            )}
+          </span>
+          <span className="font-mono text-xs text-text-muted">
+            {unique ? `en ${UNITES[unite].pluriel}` : `${line.taille} · ${line.couleur}`}
+          </span>
+        </button>
+        {/* Acheté en gros, vendu au détail : un clic ajoute le contenu d'un carton */}
+        {colis && (
+          <button
+            type="button"
+            onClick={() => onChange(index, "quantite", arrondiQuantite(line.quantite + colis.contenu))}
+            className="rounded-md border border-dashed border-border px-2 py-1 text-[11px] font-medium text-text-muted transition-colors duration-150 hover:border-text-dim hover:text-text"
+          >
+            + 1 {UNITES[colis.unite].singulier} ({formatQuantite(colis.contenu, unite)})
+          </button>
+        )}
+      </div>
 
-      {/* Quantité — saisie libre, validation au blur */}
-      <Input
-        inputMode="numeric"
-        size="sm"
-        variant="bordered"
-        value={qtyInput}
-        onValueChange={handleQtyChange}
-        onBlur={handleQtyBlur}
-        classNames={{ input: "text-center font-mono text-sm" }}
-        aria-label={`Quantité ligne ${index + 1}`}
+      {/* Quantité : entière ou décimale selon l'unité */}
+      <QuantiteInput
+        value={line.quantite}
+        unite={unite}
+        onChange={(q) => onChange(index, "quantite", q)}
+        ariaLabel={`Quantité ligne ${index + 1}`}
       />
 
       {/* Prix unitaire */}

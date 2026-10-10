@@ -24,7 +24,7 @@ export interface AppError {
   details?: Record<string, unknown>;
 }
 
-import type { PlanAbonnement, StatutAbonnement, StatutBoutique } from "./enums";
+import type { PlanAbonnement, StatutAbonnement, StatutBoutique, TypeCommerce } from "./enums";
 
 export interface Boutique {
   id: string;
@@ -38,6 +38,8 @@ export interface Boutique {
   logoUrl: string | null;
   isActive: boolean;
   statut: StatutBoutique;
+  /** Absent sur les boutiques créées avant les types de commerce : elles sont traitées comme VETEMENTS. */
+  typeCommerce?: TypeCommerce | null;
   createdAt: string;
   updatedAt: string;
   /** Présent uniquement sur les endpoints qui l'incluent (ex: /boutiques/me, super-admin) */

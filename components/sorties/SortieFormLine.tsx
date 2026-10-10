@@ -1,7 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Button, Input } from "@heroui/react";
+import { QuantiteInput } from "@/components/common/QuantiteInput";
+import { formatQuantite, isVarianteUnique } from "@/lib/unites";
+import { cn } from "@/lib/utils";
+import { NatureProduit, type Unite } from "@/types";
 export interface SortieFormLineData {
   varianteId: string;
   produitNom: string;
@@ -10,6 +13,10 @@ export interface SortieFormLineData {
   quantiteStock: number;
   quantite: number;
   prixUnitaire: string;
+  unite: Unite;
+  nature: NatureProduit;
+  /** Friperie : pièce unique, quantité fixée à 1. */
+  pieceUnique: boolean;
 }
 
 interface SortieFormLineProps {
@@ -22,30 +29,8 @@ interface SortieFormLineProps {
 
 export function SortieFormLine({ line, index, onPickVariante, onChange, onRemove }: SortieFormLineProps) {
   const sousTotal = (line.quantite * parseFloat(line.prixUnitaire || "0")).toFixed(0);
-
-  const [qtyInput, setQtyInput] = useState(String(line.quantite));
-
-  useEffect(() => {
-    setQtyInput(String(line.quantite));
-  }, [line.quantite]);
-
-  const handleQtyChange = (val: string) => {
-    if (/^\d*$/.test(val)) setQtyInput(val);
-  };
-
-  const handleQtyBlur = () => {
-    const n = parseInt(qtyInput, 10);
-    if (isNaN(n) || n < 1) {
-      onChange(index, "quantite", 1);
-      setQtyInput("1");
-    } else if (n > line.quantiteStock) {
-      onChange(index, "quantite", line.quantiteStock);
-      setQtyInput(String(line.quantiteStock));
-    } else {
-      onChange(index, "quantite", n);
-      setQtyInput(String(n));
-    }
-  };
+  const plat = line.nature === NatureProduit.PLAT;
+  const unique = isVarianteUnique(line);
 
   return (
     <div className="grid grid-cols-[1fr_70px_90px_32px] items-center gap-1.5 rounded-lg border border-border/60 bg-[var(--color-surface-high)] px-3 py-2 sm:grid-cols-[1fr_80px_100px_80px_32px] sm:gap-2">
@@ -54,26 +39,35 @@ export function SortieFormLine({ line, index, onPickVariante, onChange, onRemove
         type="button"
         className="flex flex-col items-start text-left"
         onClick={onPickVariante}
-        aria-label="Changer la variante"
+        aria-label="Changer l'article"
       >
         <span className="text-sm font-medium text-text">{line.produitNom}</span>
         <span className="font-mono text-xs text-text-muted">
-          {line.taille} · {line.couleur}
-          <span className="ml-2 text-[var(--color-out)]">stock: {line.quantiteStock}</span>
+          {!unique && `${line.taille} · ${line.couleur}`}
+          {plat ? (
+            <span className={unique ? "" : "ml-2"}>préparé à la commande</span>
+          ) : (
+            <span className={cn("text-[var(--color-out)]", !unique && "ml-2")}>
+              stock : {formatQuantite(line.quantiteStock, line.unite)}
+            </span>
+          )}
         </span>
       </button>
 
-      {/* Quantité — saisie libre, validation au blur */}
-      <Input
-        size="sm"
-        variant="bordered"
-        inputMode="numeric"
-        value={qtyInput}
-        onValueChange={handleQtyChange}
-        onBlur={handleQtyBlur}
-        classNames={{ input: "text-center [font-family:var(--font-mono)] text-sm" }}
-        aria-label={`Quantité ligne ${index + 1}`}
-      />
+      {/* Quantité : entière ou décimale selon l'unité ; un plat n'est pas plafonné par un stock ; une pièce unique vaut 1 */}
+      {line.pieceUnique ? (
+        <span className="text-center text-xs text-text-muted" aria-label={`Quantité ligne ${index + 1} : 1, pièce unique`}>
+          1 · unique
+        </span>
+      ) : (
+        <QuantiteInput
+          value={line.quantite}
+          unite={line.unite}
+          max={plat ? undefined : line.quantiteStock}
+          onChange={(q) => onChange(index, "quantite", q)}
+          ariaLabel={`Quantité ligne ${index + 1}`}
+        />
+      )}
 
       {/* Prix unitaire */}
       <Input

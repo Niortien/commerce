@@ -2,7 +2,8 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import type { StatutBoutique } from "@/types";
+import type { StatutBoutique, TypeCommerce } from "@/types";
+import { COMMERCE_PROFILES } from "@/lib/commerce";
 import {
   changerStatutBoutique,
   deleteSuperAdminBoutique,
@@ -43,6 +44,20 @@ export function useUpdateSuperAdminBoutique() {
       toast.success("Boutique mise à jour");
     },
     onError: () => toast.error("Erreur lors de la mise à jour"),
+  });
+}
+
+/** Seul le Super Admin change le type de commerce : les pages et le vocabulaire de la boutique suivent. */
+export function useChangerTypeCommerce() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, typeCommerce }: { id: string; typeCommerce: TypeCommerce }) =>
+      updateSuperAdminBoutique(id, { typeCommerce }),
+    onSuccess: (_res, { typeCommerce }) => {
+      invalidateBoutiques(qc);
+      toast.success(`Type de commerce changé : ${COMMERCE_PROFILES[typeCommerce].label}`);
+    },
+    onError: () => toast.error("Le type de commerce n'a pas pu être changé"),
   });
 }
 

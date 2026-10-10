@@ -29,16 +29,7 @@ export function useCreateSortie() {
         toast.error("Erreur inattendue");
         return;
       }
-      if (error.code === 422 && error.details) {
-        const disponible = error.details.disponible as number | undefined;
-        const demande = error.details.demande as number | undefined;
-        toast.error(`Stock insuffisant : ${disponible ?? 0} dispo, ${demande ?? 0} demandé`);
-        return;
-      }
-      if (error.code === 409) {
-        toast.error("Ouvre d'abord une session de caisse");
-        return;
-      }
+      // Le serveur explique déjà le blocage (stock, caisse fermée, plafond de crédit…) : on affiche son message.
       toast.error(error.message);
     },
     onSuccess: async () => {
@@ -46,6 +37,7 @@ export function useCreateSortie() {
       await qc.invalidateQueries({ queryKey: ["stock"] });
       await qc.invalidateQueries({ queryKey: ["caisse"] });
       await qc.invalidateQueries({ queryKey: produitKeys.all });
+      await qc.invalidateQueries({ queryKey: ["clients"] });
     },
   });
 }
@@ -59,6 +51,7 @@ export function useAnnulerSortie() {
       await qc.invalidateQueries({ queryKey: ["stock"] });
       await qc.invalidateQueries({ queryKey: ["caisse"] });
       await qc.invalidateQueries({ queryKey: produitKeys.all });
+      await qc.invalidateQueries({ queryKey: ["clients"] });
     },
     onError: (error) => {
       if (isAppError(error)) toast.error(error.message);

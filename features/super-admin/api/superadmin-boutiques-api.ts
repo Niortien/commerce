@@ -1,5 +1,5 @@
 import { apiDelete, apiGet, apiPatch, apiPost } from "@/lib/api";
-import type { Boutique, PlanAbonnement, StatutBoutique } from "@/types";
+import type { Boutique, PlanAbonnement, StatutBoutique, TypeCommerce } from "@/types";
 
 export interface RegisterBoutiqueBody {
   nom: string;
@@ -10,6 +10,7 @@ export interface RegisterBoutiqueBody {
   telephone?: string;
   adminEmail: string;
   adminPassword: string;
+  typeCommerce: TypeCommerce;
   plan?: PlanAbonnement;
   dureeJours?: number;
 }
@@ -22,9 +23,17 @@ export interface UpdateBoutiqueBody {
   email?: string;
   telephone?: string;
   logoUrl?: string;
+  /** Réservé au Super Admin : change les pages et le vocabulaire de la boutique. */
+  typeCommerce?: TypeCommerce;
 }
 
-export const getSuperAdminBoutiques = (params?: { statut?: StatutBoutique; search?: string }) =>
+export type SuperAdminBoutiquesFilters = {
+  statut?: StatutBoutique;
+  search?: string;
+  typeCommerce?: TypeCommerce;
+};
+
+export const getSuperAdminBoutiques = (params?: SuperAdminBoutiquesFilters) =>
   apiGet<Boutique[]>("/super-admin/boutiques", params);
 
 export const getSuperAdminBoutique = (id: string) =>
