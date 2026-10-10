@@ -26,6 +26,7 @@ function toAppError(error: AxiosError<ApiErrorResponse>): AppError {
         ? "Le serveur met trop de temps à répondre. Réessaie dans quelques secondes."
         : "Connexion impossible. Vérifie ta connexion internet.",
       details: undefined,
+      reseau: true,
     };
   }
 
@@ -123,6 +124,11 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch (refreshError) {
         notifyPendingRequests(null);
+        // Réseau coupé pendant le rafraîchissement : on garde la session (les ventes hors connexion
+        // attendent ce compte) ; la prochaine demande réessaiera.
+        if (axios.isAxiosError(refreshError) && !refreshError.response) {
+          return Promise.reject(toAppError(refreshError));
+        }
         useAuthStore.getState().clearAuth();
 
         if (typeof window !== "undefined") {

@@ -30,7 +30,25 @@ export interface CreateSortieBody {
   echeanceJours?: number;
   acompteMontant?: string;
   acompteMode?: ModePaiement;
+  /** Référence créée sur l'appareil : un renvoi de la même vente n'est pas compté deux fois. */
+  clientRef?: string;
 }
+
+/** Vente faite sans internet, envoyée au retour du réseau, avec son paiement. */
+export interface VenteHorsLigneBody {
+  clientRef: string;
+  venduLe: string;
+  modePaiement: ModePaiement;
+  montantPaye?: string;
+  remiseMontant?: string;
+  notes?: string;
+  modeService?: ModeService;
+  tableLabel?: string;
+  lignes: Array<{ varianteId: string; quantite: number; prixUnitaire: string }>;
+}
+
+export const envoyerVenteHorsLigne = (body: VenteHorsLigneBody) =>
+  apiPost<Sortie, VenteHorsLigneBody>("/sorties/hors-ligne", body);
 
 export const getSorties = (params?: SortiesListParams) =>
   apiGet<Sortie[]>("/sorties", params as Record<string, unknown> | undefined);

@@ -1,5 +1,8 @@
 import {
+  IconBarcode,
   IconBoxSeam,
+  IconCloudOff,
+  IconFileSpreadsheet,
   IconBrandWhatsapp,
   IconCashRegister,
   IconChartLine,
@@ -19,6 +22,21 @@ const FEATURES = [
     icon: IconCashRegister,
     title: "Caisse en temps réel",
     text: "Sessions de caisse, ventes et reçus 80 mm. L'activité de l'équipe remonte en direct dans le back-office.",
+  },
+  {
+    icon: IconCloudOff,
+    title: "La caisse ne s'arrête pas sans internet",
+    text: "Coupure réseau en pleine journée ? On continue à vendre : les ventes sont gardées sur le téléphone et envoyées toutes seules au retour d'internet, sans doublon.",
+  },
+  {
+    icon: IconBarcode,
+    title: "Codes-barres",
+    text: "Scannez l'étiquette avec la caméra du téléphone ou un lecteur USB : l'article s'ajoute à la vente en une seconde.",
+  },
+  {
+    icon: IconFileSpreadsheet,
+    title: "Catalogue importé d'un coup",
+    text: "Vos 300 articles dans un tableau Excel deviennent votre catalogue et votre stock de départ en un seul envoi, avec un aperçu avant de valider.",
   },
   {
     icon: IconPackageImport,

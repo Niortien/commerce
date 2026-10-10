@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Button, Input, Spinner } from "@heroui/react";
+import { onlineManager } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import { getMotionVariant, panelSlide } from "@/lib/motionVariants";
@@ -24,6 +25,14 @@ import { CREDIT_VIDE, VenteCreditFields, erreurCredit, versOptionsCredit, type C
 import { useClients } from "@/features/clients/query/clients-queries";
 import { echeanceDans } from "@/lib/credit";
 import type { RecuCredit } from "./RecuPrint";
+import { useEnLigne } from "@/hooks/useHorsLigne";
+import { useBoutiqueId } from "@/hooks/useBoutiqueId";
+import { nouvelleRefVente, useHorsLigneStore } from "@/stores/horsLigneStore";
+
+/** Le serveur n'a pas répondu : la vente part dans la file hors connexion. */
+function erreurReseau(e: unknown): boolean {
+  return typeof e === "object" && e !== null && "reseau" in e && e.reseau === true;
+}
 
 interface RecuData {
   reference: string;
@@ -54,14 +63,19 @@ export function SortieCreatePanel({ isOpen, onClose }: SortieCreatePanelProps) {
   const createSortieMutation = useCreateSortie();
   const addTransactionMutation = useAddTransaction();
   const { data: activeSessionData } = useActiveSession();
-  const hasActiveSession = !!(activeSessionData?.data);
+  const enLigne = useEnLigne();
+  const boutiqueId = useBoutiqueId();
+  const caisseOuverteHorsLigne = useHorsLigneStore((s) => s.caisseOuverte);
+  const ajouterVenteHorsLigne = useHorsLigneStore((s) => s.ajouterVente);
+  // Sans réseau, on se fie au dernier état connu de la caisse.
+  const hasActiveSession = !!(activeSessionData?.data) || (!enLigne && caisseOuverteHorsLigne);
   const typeCommerce = useTypeCommerce();
   const isRestaurant = typeCommerce === TypeCommerce.RESTAURANT;
   // Quincaillerie : un client pro peut emporter la marchandise et payer plus tard.
   const creditPossible = typeCommerce === TypeCommerce.QUINCAILLERIE;
   const [reglement, setReglement] = useState("COMPTANT");
   const [credit, setCredit] = useState<CreditSaisie>(CREDIT_VIDE);
-  const { data: clientsRes } = useClients({ actifs: true });
+  const { data: clientsRes } = useClients({ actifs: true }, creditPossible);
   const [modeService, setModeService] = useState<ModeService>(ModeService.SUR_PLACE);
   const [tableLabel, setTableLabel] = useState("");
 
@@ -313,10 +327,15 @@ export function SortieCreatePanel({ isOpen, onClose }: SortieCreatePanelProps) {
 
   const handleVenteSubmit = async () => {
     if (aCredit) {
+      if (!onlineManager.isOnline()) {
+        toast.error("La vente à crédit demande internet : encaisse comptant ou attends le retour du réseau.");
+        return;
+      }
       await handleVenteCredit();
       return;
     }
     if (!paiementMode || montantInsuffisant) return;
+    const modePaye = paiementMode;
 
     const recuNum = parseFloat(paiementMontantRecu || "0");
     const totalNum = parseFloat(totalMontant || "0");
@@ -325,61 +344,105 @@ export function SortieCreatePanel({ isOpen, onClose }: SortieCreatePanelProps) {
         ? (recuNum - totalNum).toFixed(0)
         : undefined;
 
-    try {
-      const { data: sortie } = await createSortieMutation.mutateAsync({
-        type: TypeSortie.VENTE,
-        notes: sortieNotes.trim() || undefined,
-        remiseMontant: hasRemise ? parseFloat(remiseMontant).toFixed(2) : undefined,
-        modeService: isRestaurant ? modeService : undefined,
-        tableLabel: isRestaurant && modeService === ModeService.SUR_PLACE ? tableLabel.trim() || undefined : undefined,
-        lignes: lines.map((l) => ({
-          varianteId: l.varianteId,
-          quantite: l.quantite,
-          prixUnitaire: parseFloat(l.prixUnitaire || "0").toFixed(2),
-        })),
-      });
-
-      let transactionRef: string | undefined;
-      try {
-        const { data: tx } = await addTransactionMutation.mutateAsync({
-          montant: sortie.totalMontant,
-          modePaiement: paiementMode,
-          sortieId: sortie.id,
-          reference: paiementRef || undefined,
-          notes: paiementNotes || undefined,
-        });
-        transactionRef = tx.reference ?? undefined;
-      } catch {
-        toast("Paiement non enregistré — vente créée", { icon: "⚠️" });
-      }
-
-      const recuLignes: RecuLigne[] = lines.map((l) => ({
-        produitNom: l.produitNom,
-        // Produit sans taille ni couleur : le reçu montre son unité (kg, m, portion…).
-        taille: isVarianteUnique(l) ? UNITES[l.unite].singulier : l.taille,
-        couleur: isVarianteUnique(l) ? "" : l.couleur,
+    const clientRef = nouvelleRefVente();
+    const remise = hasRemise ? parseFloat(remiseMontant).toFixed(2) : undefined;
+    const corps = {
+      notes: sortieNotes.trim() || undefined,
+      remiseMontant: remise,
+      modeService: isRestaurant ? modeService : undefined,
+      tableLabel: isRestaurant && modeService === ModeService.SUR_PLACE ? tableLabel.trim() || undefined : undefined,
+      lignes: lines.map((l) => ({
+        varianteId: l.varianteId,
         quantite: l.quantite,
-        prixUnitaire: l.prixUnitaire,
-        sousTotal: (l.quantite * parseFloat(l.prixUnitaire || "0")).toFixed(0),
-      }));
+        prixUnitaire: parseFloat(l.prixUnitaire || "0").toFixed(2),
+      })),
+    };
 
+    const recuLignes: RecuLigne[] = lines.map((l) => ({
+      produitNom: l.produitNom,
+      // Produit sans taille ni couleur : le reçu montre son unité (kg, m, portion…).
+      taille: isVarianteUnique(l) ? UNITES[l.unite].singulier : l.taille,
+      couleur: isVarianteUnique(l) ? "" : l.couleur,
+      quantite: l.quantite,
+      prixUnitaire: l.prixUnitaire,
+      sousTotal: (l.quantite * parseFloat(l.prixUnitaire || "0")).toFixed(0),
+    }));
+
+    /** Pas de réseau : la vente est gardée sur l'appareil et partira toute seule au retour d'internet. */
+    const garderHorsLigne = () => {
+      if (!boutiqueId) return;
+      const venduLe = new Date().toISOString();
+      ajouterVenteHorsLigne({
+        boutiqueId,
+        corps: { ...corps, clientRef, venduLe, modePaiement: modePaye },
+        resume: lines.map((l) => `${l.quantite} × ${l.produitNom}`).join(", "),
+        total: totalMontant,
+        erreur: null,
+      });
       setRecuData({
-        reference: sortie.reference,
-        date: sortie.createdAt,
+        reference: `HL-${clientRef.slice(0, 8).toUpperCase()}`,
+        date: venduLe,
         lignes: recuLignes,
-        totalMontant: sortie.totalMontant,
-        modePaiement: paiementMode,
-        transactionReference: transactionRef,
+        totalMontant,
+        modePaiement: modePaye,
+        transactionReference: "hors connexion, envoi en attente",
         montantRecu: paiementMontantRecu || undefined,
         monnaieRendue,
-        remiseMontant: sortie.remiseMontant ?? undefined,
-        totalAvantRemise: sortie.totalAvantRemise ?? undefined,
+        remiseMontant: remise,
+        totalAvantRemise: hasRemise ? totalAvantRemise.toFixed(2) : undefined,
       });
       setRecuOpen(true);
-      toast.success("Vente enregistrée !");
-    } catch {
-      // Error toast shown by mutation onError
+      toast.success("Pas de réseau : vente gardée sur l'appareil. Elle sera envoyée dès le retour d'internet.");
+    };
+
+    if (!onlineManager.isOnline()) {
+      garderHorsLigne();
+      return;
     }
+
+    let sortie;
+    try {
+      ({ data: sortie } = await createSortieMutation.mutateAsync({ type: TypeSortie.VENTE, clientRef, ...corps }));
+    } catch (e) {
+      // Le serveur n'a pas répondu : la même référence évite un doublon si la vente était quand même arrivée.
+      if (erreurReseau(e)) garderHorsLigne();
+      // Sinon le message du serveur est affiché par la mutation (stock, caisse…).
+      return;
+    }
+
+    let transactionRef: string | undefined;
+    try {
+      const { data: tx } = await addTransactionMutation.mutateAsync({
+        montant: sortie.totalMontant,
+        modePaiement: modePaye,
+        sortieId: sortie.id,
+        reference: paiementRef || undefined,
+        notes: paiementNotes || undefined,
+      });
+      transactionRef = tx.reference ?? undefined;
+    } catch (e) {
+      if (erreurReseau(e)) {
+        // La vente est arrivée, pas son paiement : le renvoi complétera le paiement sans doubler la vente.
+        garderHorsLigne();
+        return;
+      }
+      toast("Paiement non enregistré — vente créée", { icon: "⚠️" });
+    }
+
+    setRecuData({
+      reference: sortie.reference,
+      date: sortie.createdAt,
+      lignes: recuLignes,
+      totalMontant: sortie.totalMontant,
+      modePaiement: modePaye,
+      transactionReference: transactionRef,
+      montantRecu: paiementMontantRecu || undefined,
+      monnaieRendue,
+      remiseMontant: sortie.remiseMontant ?? undefined,
+      totalAvantRemise: sortie.totalAvantRemise ?? undefined,
+    });
+    setRecuOpen(true);
+    toast.success("Vente enregistrée !");
   };
 
   const handleRecuClose = () => {

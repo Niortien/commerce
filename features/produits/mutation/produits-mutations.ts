@@ -9,12 +9,14 @@ import {
   createProduit,
   deleteVariante,
   deleteProduit,
+  importerCatalogue,
   removeProduitImage,
   saveRecette,
   updateProduit,
   updateVariante,
   type AdjustStockBody,
   type CreateProduitBody,
+  type ImportCatalogueBody,
   type RecetteBody,
   type UpdateProduitBody,
   type UpdateVarianteBody,
@@ -116,5 +118,33 @@ export function useDeleteVariante(produitId: string) {
       await qc.invalidateQueries({ queryKey: produitKeys.detail(produitId) });
     },
     onError: (err) => toast.error((err as unknown as AppError).message ?? "Impossible de supprimer la variante"),
+  });
+}
+
+/** Code-barres d'une variante (null pour l'effacer). Le serveur refuse un code déjà pris (409). */
+export function useCodeBarreVariante() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, codeBarre }: { id: string; codeBarre: string | null }) => updateVariante(id, { codeBarre }),
+    onSuccess: async () => {
+      await qc.invalidateQueries({ queryKey: produitKeys.all });
+    },
+  });
+}
+
+/** Import d'un catalogue : simulation (aperçu) puis import réel. */
+export function useImporterCatalogue() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (body: ImportCatalogueBody) => importerCatalogue(body),
+    onSuccess: async (res) => {
+      if (res.data.simulation) return;
+      await Promise.all([
+        qc.invalidateQueries({ queryKey: produitKeys.all }),
+        qc.invalidateQueries({ queryKey: ["stock"] }),
+        qc.invalidateQueries({ queryKey: ["entrees"] }),
+        qc.invalidateQueries({ queryKey: ["categories"] }),
+      ]);
+    },
   });
 }

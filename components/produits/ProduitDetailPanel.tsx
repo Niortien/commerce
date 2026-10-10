@@ -16,6 +16,7 @@ import { getMotionVariant, panelSlide } from "@/lib/motionVariants";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useCategoriesList, produitKeys } from "@/features/produits/query/produits-queries";
 import { useCreateProduit, useUpdateProduit } from "@/features/produits/mutation/produits-mutations";
+import { CodesBarresVariantes } from "./CodesBarresVariantes";
 import { addVarianteToProduit, adjustVarianteStock, deleteVariante, updateVariante } from "@/features/produits/api/produits-api";
 import type { Produit } from "@/types";
 
@@ -726,6 +727,8 @@ export function ProduitDetailPanel({ produit, onClose }: ProduitDetailPanelProps
             </div>
           )}
         </section>
+
+        {!isNew && produit?.variantes && <CodesBarresVariantes variantes={produit.variantes} />}
 
         {/* SEUIL ALERTE */}
         <section className="rounded-lg border border-border/80 bg-[var(--color-surface-high)] p-4">

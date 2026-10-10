@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@heroui/react";
 import { useRouter } from "next/navigation";
-import { IconAlertCircle, IconPlus, IconRosetteDiscount, IconShirt, IconStack2 } from "@tabler/icons-react";
+import { IconAlertCircle, IconFileSpreadsheet, IconPlus, IconRosetteDiscount, IconShirt, IconStack2 } from "@tabler/icons-react";
 import { CountUp } from "@/components/common/CountUp";
 import { EmptyRiver } from "@/components/common/EmptyRiver";
 import { PageHero } from "@/components/common/PageHero";
@@ -11,8 +11,10 @@ import { PageWrapper } from "@/components/common/PageWrapper";
 import { SegmentedControl } from "@/components/common/SegmentedControl";
 import { StatTile } from "@/components/common/StatTile";
 import { useProduitsList } from "@/features/produits/query/produits-queries";
-import { TypeCommerce, type AppError } from "@/types";
+import { Role, TypeCommerce, type AppError } from "@/types";
 import { NouvelArticleModal } from "@/components/common/NouvelArticleModal";
+import { useAuthStore } from "@/stores/authStore";
+import { ImportCatalogueModal } from "@/components/common/ImportCatalogueModal";
 import { useTypeCommerce } from "@/hooks/useTypeCommerce";
 import { COMMERCE_PROFILES } from "@/lib/commerce";
 import { useUiStore } from "@/stores/uiStore";
@@ -38,6 +40,8 @@ export function ProduitsView() {
   const vetements = typeCommerce === TypeCommerce.VETEMENTS;
   const friperie = typeCommerce === TypeCommerce.FRIPERIE;
   const [nouvelArticleOpen, setNouvelArticleOpen] = useState(false);
+  const [importOpen, setImportOpen] = useState(false);
+  const estAdmin = useAuthStore((s) => s.user?.role === Role.ADMIN);
   // Friperie : les pièces vendues restent dans l'historique mais ne doivent pas encombrer le rayon.
   const [disponibilite, setDisponibilite] = useState<Disponibilite>("EN_RAYON");
 
@@ -84,13 +88,25 @@ export function ProduitsView() {
         title={profile.vocab.produits}
         description="Votre catalogue : fiches, variantes, prix et promotions. Touchez un produit pour l'ouvrir."
         actions={
-          <Button
-            className="min-h-11 bg-accent font-semibold text-white"
-            startContent={<IconPlus size={18} aria-hidden />}
-            onPress={() => (vetements ? setPanelId("new") : setNouvelArticleOpen(true))}
-          >
-            {vetements ? "Nouveau produit" : `Ajouter : ${profile.vocab.produits.toLowerCase()}`}
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            {estAdmin && (
+              <Button
+                variant="flat"
+                className="min-h-11 font-semibold"
+                startContent={<IconFileSpreadsheet size={18} aria-hidden />}
+                onPress={() => setImportOpen(true)}
+              >
+                Importer depuis Excel
+              </Button>
+            )}
+            <Button
+              className="min-h-11 bg-accent font-semibold text-white"
+              startContent={<IconPlus size={18} aria-hidden />}
+              onPress={() => (vetements ? setPanelId("new") : setNouvelArticleOpen(true))}
+            >
+              {vetements ? "Nouveau produit" : `Ajouter : ${profile.vocab.produits.toLowerCase()}`}
+            </Button>
+          </div>
         }
       >
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
@@ -116,6 +132,23 @@ export function ProduitsView() {
           />
         </div>
       </PageHero>
+
+      {estAdmin && !isLoading && !isFiltering && produits.length < 15 && (
+        <div className="flex flex-col gap-3 rounded-2xl border border-border bg-surface p-4 sm:flex-row sm:items-center sm:gap-4">
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-in-dim text-in-text">
+            <IconFileSpreadsheet size={22} aria-hidden />
+          </span>
+          <p className="min-w-0 flex-1 text-sm text-text-muted">
+            <span className="block font-semibold text-text">Ta liste d&apos;articles est déjà dans Excel ?</span>
+            Importe-la d&apos;un coup au lieu de tout saisir : articles, catégories et stock de départ en un seul envoi.
+          </p>
+          <Button className="min-h-11 bg-in font-semibold text-white" onPress={() => setImportOpen(true)}>
+            Importer mon fichier
+          </Button>
+        </div>
+      )}
+
+      {estAdmin && <ImportCatalogueModal isOpen={importOpen} onClose={() => setImportOpen(false)} />}
 
       {!vetements && (
         <NouvelArticleModal

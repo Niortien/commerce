@@ -20,6 +20,7 @@ import {
   useUpdateProduit,
   useAdjustStock,
 } from "@/features/produits/mutation/produits-mutations";
+import { CodesBarresVariantes } from "./CodesBarresVariantes";
 import { ProduitDetailPanel } from "./ProduitDetailPanel";
 import { PromoInlineForm, type PromoFormData } from "@/components/promotions/PromoInlineForm";
 import { NatureProduit, type ProduitImage, type TypeMouvement, type Variante } from "@/types";
@@ -473,6 +474,8 @@ export function ProduitDetailView({ id }: ProduitDetailViewProps) {
             </div>
           </div>
         )}
+
+        {!plat && produit.variantes && <CodesBarresVariantes variantes={produit.variantes} />}
 
         {/* mouvements de stock */}
         <div className="rounded-xl border border-border/80 bg-surface p-4">

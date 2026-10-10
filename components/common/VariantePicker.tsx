@@ -1,9 +1,17 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Spinner } from "@heroui/react";
+import { onlineManager } from "@tanstack/react-query";
+import { IconBarcode } from "@tabler/icons-react";
+import toast from "react-hot-toast";
+import { ScanCodeBarre } from "@/components/common/ScanCodeBarre";
 import { StockBadge } from "@/components/common/StockBadge";
 import { useProduitsList } from "@/features/produits/query/produits-queries";
+import { getVarianteParCode } from "@/features/produits/api/produits-api";
+import { useEnLigne } from "@/hooks/useHorsLigne";
+import { useBoutiqueId } from "@/hooks/useBoutiqueId";
+import { useHorsLigneStore } from "@/stores/horsLigneStore";
 import { formatQuantite, isVarianteUnique, natureDe, uniteDe } from "@/lib/unites";
 import { libelleChoix } from "@/lib/balles";
 import { NatureProduit, type Produit, type Unite, type Variante } from "@/types";
@@ -69,16 +77,39 @@ export function VariantePicker({
   const [search, setSearch] = useState("");
   const [expandedProduitId, setExpandedProduitId] = useState<string | null>(null);
   const [addedCount, setAddedCount] = useState(0);
+  const [scanOuvert, setScanOuvert] = useState(false);
+  const [rechercheCode, setRechercheCode] = useState(false);
 
-  const { data, isLoading } = useProduitsList({ limit: 200 });
-  const produits = data?.data;
+  const enLigne = useEnLigne();
+  const boutiqueId = useBoutiqueId();
+  const { data, isLoading: chargement } = useProduitsList({ limit: 200 });
+  const catalogue = useHorsLigneStore((s) => s.catalogue);
+  const boutiqueCatalogue = useHorsLigneStore((s) => s.boutiqueId);
+  // Sans réseau : la copie du catalogue gardée sur l'appareil.
+  const copie = boutiqueCatalogue === boutiqueId && catalogue.length > 0 ? catalogue : undefined;
+  const produits = enLigne ? (data?.data ?? copie) : (copie ?? data?.data);
+  const memoriserCatalogue = useHorsLigneStore((s) => s.memoriserCatalogue);
+
+  // Liste complète reçue en ligne : on rafraîchit la copie gardée pour vendre sans réseau.
+  useEffect(() => {
+    const total = data?.meta.total;
+    if (enLigne && boutiqueId && data && total !== undefined && total <= data.data.length) {
+      memoriserCatalogue(boutiqueId, data.data);
+    }
+  }, [enLigne, boutiqueId, data, memoriserCatalogue]);
+  const isLoading = enLigne && chargement && !produits;
 
   const filtered = useMemo(() => {
     if (!produits) return [];
     const exclue = usage === "vente" || usage === "devis" ? NatureProduit.INGREDIENT : NatureProduit.PLAT;
     const q = search.toLowerCase().trim();
     return produits.filter(
-      (p) => natureDe(p) !== exclue && (!q || p.nom.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q))
+      (p) =>
+        natureDe(p) !== exclue &&
+        (!q ||
+          p.nom.toLowerCase().includes(q) ||
+          p.sku.toLowerCase().includes(q) ||
+          (p.variantes ?? []).some((v) => v.codeBarre?.toLowerCase() === q))
     );
   }, [produits, search, usage]);
 
@@ -96,6 +127,38 @@ export function VariantePicker({
     setAddedCount((n) => n + 1);
     setSearch("");
     setExpandedProduitId(null);
+  };
+
+  /**
+   * Code-barres lu (lecteur USB qui tape le code puis Entrée, ou caméra) : on ajoute directement
+   * l'article. On cherche d'abord dans la liste déjà chargée (marche aussi hors connexion).
+   */
+  const choisirParCode = async (brut: string) => {
+    const code = brut.trim();
+    if (!code) return;
+    const local = (produits ?? []).flatMap((p) => (p.variantes ?? []).map((v) => ({ p, v }))).find(({ v }) => v.codeBarre === code);
+    let trouve: { p: Produit; v: Variante } | undefined = local;
+    if (!trouve && onlineManager.isOnline()) {
+      setRechercheCode(true);
+      try {
+        const { data: v } = await getVarianteParCode(code);
+        trouve = { p: v.produit, v };
+      } catch {
+        // Code inconnu : message ci-dessous.
+      } finally {
+        setRechercheCode(false);
+      }
+    }
+    if (!trouve) {
+      toast.error(`Aucun article avec le code ${code}. Ajoute ce code à l'article dans Produits.`);
+      return;
+    }
+    if (isIndisponible(trouve.p, trouve.v)) {
+      toast.error(`« ${trouve.p.nom} » n'est pas disponible (rupture ou déjà dans la liste).`);
+      return;
+    }
+    handleSelect(toSelection(trouve.p, trouve.v));
+    toast.success(`${trouve.p.nom} ajouté`);
   };
 
   const handleDone = () => {
@@ -130,13 +193,44 @@ export function VariantePicker({
           {usage === "ingredient" ? "Choisir un ingrédient" : "Choisir un article"}
         </ModalHeader>
         <ModalBody className="pb-4">
-          <Input
-            autoFocus
-            placeholder="Rechercher un produit (nom ou SKU)…"
-            value={search}
-            onValueChange={setSearch}
-            variant="bordered"
-            classNames={{ input: "text-sm" }}
+          <div className="flex gap-2">
+            <Input
+              autoFocus
+              aria-label="Rechercher un article ou scanner son code-barres"
+              placeholder="Nom, SKU ou code-barres…"
+              value={search}
+              onValueChange={setSearch}
+              onKeyDown={(e) => {
+                // Les lecteurs de codes-barres tapent le code puis Entrée.
+                if (e.key === "Enter" && /^[0-9A-Za-z-]{4,}$/.test(search.trim()) && !filtered.some((p) => p.nom.toLowerCase() === search.trim().toLowerCase())) {
+                  e.preventDefault();
+                  void choisirParCode(search);
+                }
+              }}
+              endContent={rechercheCode ? <Spinner size="sm" color="warning" /> : null}
+              variant="bordered"
+              classNames={{ input: "text-sm" }}
+            />
+            <Button
+              isIconOnly
+              variant="flat"
+              aria-label="Scanner un code-barres avec la caméra"
+              className="shrink-0"
+              onPress={() => setScanOuvert(true)}
+            >
+              <IconBarcode size={20} aria-hidden />
+            </Button>
+          </div>
+          {!enLigne && (
+            <p className="text-xs text-return-text">Hors connexion : stock tel qu&apos;il était à la dernière connexion.</p>
+          )}
+          <ScanCodeBarre
+            isOpen={scanOuvert}
+            onClose={() => setScanOuvert(false)}
+            onCode={(code) => {
+              setScanOuvert(false);
+              void choisirParCode(code);
+            }}
           />
 
           {isLoading && (

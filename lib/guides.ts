@@ -735,6 +735,56 @@ export function getGuide(type: TypeCommerce): Guide {
     ],
   };
 
+  const rapide: SectionGuide = {
+    id: "rapide",
+    titre: "Aller vite : importer, scanner, vendre sans internet",
+    intro:
+      "Trois outils pour gagner du temps. Ils ne sont pas obligatoires, mais quand tu as beaucoup d'articles ou un réseau qui coupe, ils changent la vie.",
+    etapes: [
+      {
+        titre: "Importer tout ton catalogue d'un coup",
+        texte:
+          "Au lieu de créer 300 articles un par un, tu les écris dans un tableau Excel (ou Google Sheets) et tu l'envoies. L'application crée les articles, les catégories qui manquent et ton stock de départ en une seule fois.",
+        gestes: [
+          friperie ? `Ouvre « ${nomProduits} » et touche « Importer ».` : `Ouvre « ${nomProduits} » (ou « ${nomEntrees} ») et touche « Importer ».`,
+          "Touche « Modèle » : un fichier d'exemple se télécharge, avec les bonnes colonnes.",
+          "Remplis-le : une ligne par article. Même nom sur deux lignes = deux tailles ou deux couleurs du même article.",
+          "Touche « Choisir le fichier » et prends ton fichier Excel (.xlsx) ou CSV. L'application vérifie tout et te montre ce qu'elle va créer, sans rien enregistrer.",
+          "Si tout est bon, touche « Importer ». Les lignes avec une erreur sont mises de côté, avec leur numéro.",
+        ],
+        astuce: "Tu peux réimporter le même fichier corrigé : les articles déjà créés ne sont pas doublés, leur quantité s'ajoute au stock.",
+        attention: "L'import est réservé à l'admin.",
+        page: P.produits(nomProduits),
+      },
+      {
+        titre: "Scanner les codes-barres",
+        texte:
+          "Un code-barres, ce sont les petites barres noires sur l'étiquette. Une fois enregistré sur un article, il suffit de le scanner à la caisse : l'article s'ajoute tout seul à la vente.",
+        gestes: [
+          "Ouvre l'article dans « " + nomProduits + " » et descends jusqu'à « Codes-barres ».",
+          "Scanne l'étiquette avec le bouton caméra (ou un lecteur branché au téléphone ou à l'ordinateur), puis « OK ».",
+          "À la caisse, dans « + Ajouter un article », scanne le code : l'article est ajouté.",
+        ],
+        astuce:
+          "Un lecteur USB ou Bluetooth coûte peu cher et va plus vite que la caméra. Il « tape » le code tout seul dans le champ de recherche.",
+        page: P.produits(nomProduits),
+      },
+      {
+        titre: "Vendre quand internet coupe",
+        texte:
+          "Si le réseau tombe en pleine journée, continue à vendre normalement. Un bandeau « Hors connexion » s'affiche : les ventes sont gardées dans le téléphone et partent toutes seules dès que le réseau revient. Chaque vente n'est comptée qu'une fois, même si l'envoi est répété.",
+        gestes: [
+          "Avant la coupure, la caisse doit avoir été ouverte et la page « Sorties » ouverte au moins une fois sur ce téléphone.",
+          "Vends comme d'habitude. Le reçu indique « hors connexion, envoi en attente ».",
+          "Au retour d'internet, un message confirme l'envoi. Touche « Voir » dans le bandeau pour suivre les ventes en attente.",
+        ],
+        attention:
+          "Sans internet, la vente à crédit n'est pas possible, et le stock affiché est celui de la dernière connexion. Si une vente est refusée à l'envoi (pièce déjà vendue sur un autre téléphone, par exemple), elle reste dans « Voir » : renvoie-la ou abandonne-la.",
+        page: P.sorties,
+      },
+    ],
+  };
+
   const regulier: SectionGuide = {
     id: "regulier",
     titre: "Chaque semaine : garder la boutique en forme",
@@ -800,7 +850,7 @@ export function getGuide(type: TypeCommerce): Guide {
     titre: `Guide ${profile.label.toLowerCase() === "autre commerce" ? "de ton commerce" : `: ${profile.label}`}`,
     accroche: `Comment utiliser Mon Djossi dans ${type === TypeCommerce.AUTRE ? "ton commerce" : `ton commerce de type « ${profile.label} »`}, étape par étape, dans le bon ordre.`,
     image: m.image,
-    sections: [comprendre, installation, journee, ...m.sections, regulier],
+    sections: [comprendre, installation, journee, rapide, ...m.sections, regulier],
     pages,
     lexique: [
       { mot: "Stock", sens: "Ce qui te reste à vendre." },
@@ -808,6 +858,8 @@ export function getGuide(type: TypeCommerce): Guide {
       { mot: "Sortie", sens: "Ce qui quitte la boutique (vente, perte, don). Le stock baisse." },
       { mot: "Seuil d'alerte", sens: "Le nombre en dessous duquel l'application te prévient." },
       { mot: "Session de caisse", sens: "Une journée de vente, entre « Commencer » et « Terminer la journée »." },
+      { mot: "Code-barres", sens: "Les barres noires d'une étiquette. Scanné à la caisse, il ajoute l'article tout seul." },
+      { mot: "Hors connexion", sens: "Sans internet. Les ventes sont gardées dans le téléphone et envoyées au retour du réseau." },
       ...m.lexique,
     ],
     faq: [
@@ -819,7 +871,15 @@ export function getGuide(type: TypeCommerce): Guide {
         q: "Mon caissier peut-il voir mes bénéfices ou supprimer une vente ?",
         r: "Non. Les réglages, les caissiers, les annulations et les ajustements de stock sont réservés à l'admin.",
       },
-      { q: "Ça marche sur téléphone ?", r: "Oui. Tout fonctionne sur téléphone, tablette et ordinateur, dans le navigateur." },
+      { q: "Ça marche sur téléphone ?", r: "Oui. Tout fonctionne sur téléphone, tablette et ordinateur, dans le navigateur. Tu peux aussi l'ajouter à l'écran d'accueil comme une application." },
+      {
+        q: "Et si internet coupe pendant que je vends ?",
+        r: "Continue à vendre : les ventes sont gardées dans le téléphone et envoyées toutes seules au retour du réseau, sans doublon. Seule la vente à crédit attend internet.",
+      },
+      {
+        q: "J'ai des centaines d'articles, je dois tout taper ?",
+        r: "Non : remplis le modèle Excel et utilise « Importer » dans la page des produits. Articles, catégories et stock de départ sont créés d'un coup.",
+      },
       ...m.faq,
     ],
   };

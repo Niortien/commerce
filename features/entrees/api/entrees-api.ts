@@ -20,6 +20,7 @@ export interface NewProduitForEntree {
   couleur: string;
   seuilAlerte?: number;
   imageUrl?: string;
+  codeBarre?: string;
   /** Hors vêtements : unité et nature du nouvel article (taille « Unique »). */
   unite?: Unite;
   nature?: NatureProduit;

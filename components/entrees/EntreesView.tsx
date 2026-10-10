@@ -3,7 +3,10 @@
 import { useMemo, useState } from "react";
 import { Button } from "@heroui/react";
 import { getLocalTimeZone, today } from "@internationalized/date";
-import { IconCoins, IconPackageImport, IconPlus, IconTruckDelivery } from "@tabler/icons-react";
+import { IconCoins, IconFileSpreadsheet, IconPackageImport, IconPlus, IconTruckDelivery } from "@tabler/icons-react";
+import { ImportCatalogueModal } from "@/components/common/ImportCatalogueModal";
+import { useAuthStore } from "@/stores/authStore";
+import { Role } from "@/types";
 import { CountUp } from "@/components/common/CountUp";
 import { CurrencyDisplay } from "@/components/common/CurrencyDisplay";
 import { PageHero } from "@/components/common/PageHero";
@@ -19,6 +22,8 @@ const isAnnulee = (notes: string | null | undefined) => notes?.includes("[ANNULE
 
 export function EntreesView() {
   const [panelOpen, setPanelOpen] = useState(false);
+  const [importOpen, setImportOpen] = useState(false);
+  const estAdmin = useAuthStore((s) => s.user?.role === Role.ADMIN);
   const now = useMemo(() => today(getLocalTimeZone()), []);
   const [dateRange, setDateRange] = useState<DateRange>({ start: now, end: now });
 
@@ -40,6 +45,7 @@ export function EntreesView() {
   return (
     <>
       <EntreeCreatePanel isOpen={panelOpen} onClose={() => setPanelOpen(false)} />
+      {estAdmin && <ImportCatalogueModal isOpen={importOpen} onClose={() => setImportOpen(false)} />}
 
       <PageWrapper>
         <PageHero
@@ -49,13 +55,25 @@ export function EntreesView() {
           title="Entrées"
           description="Chaque réception de marchandise, avec son fournisseur et son coût. Le stock se met à jour à l'enregistrement."
           actions={
-            <Button
-              className="min-h-11 bg-in font-semibold text-white"
-              startContent={<IconPlus size={18} aria-hidden />}
-              onPress={() => setPanelOpen(true)}
-            >
-              Nouvelle entrée
-            </Button>
+            <div className="flex flex-wrap gap-2">
+              {estAdmin && (
+                <Button
+                  variant="flat"
+                  className="min-h-11 font-semibold"
+                  startContent={<IconFileSpreadsheet size={18} aria-hidden />}
+                  onPress={() => setImportOpen(true)}
+                >
+                  Importer depuis Excel
+                </Button>
+              )}
+              <Button
+                className="min-h-11 bg-in font-semibold text-white"
+                startContent={<IconPlus size={18} aria-hidden />}
+                onPress={() => setPanelOpen(true)}
+              >
+                Nouvelle entrée
+              </Button>
+            </div>
           }
         >
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">

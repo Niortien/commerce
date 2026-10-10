@@ -24,6 +24,7 @@ export const nouvelArticleSchema = z
     prixAchat: montant.optional(),
     quantite,
     seuilAlerte: quantite,
+    codeBarre: z.string().trim().max(64, "64 caractères au plus").optional(),
     conditionnementUnite: z.nativeEnum(Unite).optional(),
     conditionnementQuantite: z.preprocess(
       (v) => (v === "" || v === undefined || v === null ? undefined : typeof v === "string" ? Number(v.replace(",", ".")) : v),

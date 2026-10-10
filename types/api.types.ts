@@ -22,6 +22,8 @@ export interface AppError {
   code: number;
   message: string;
   details?: Record<string, unknown>;
+  /** Le serveur n'a pas répondu (pas de réseau, délai dépassé) : la demande a pu arriver ou non. */
+  reseau?: boolean;
 }
 
 import type { PlanAbonnement, StatutAbonnement, StatutBoutique, TypeCommerce } from "./enums";

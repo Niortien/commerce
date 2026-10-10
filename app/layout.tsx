@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { JetBrains_Mono, Inter, Plus_Jakarta_Sans } from "next/font/google";
 import { Providers } from "@/providers";
 import { ThemeInit } from "@/components/common/ThemeInit";
+import { ServiceWorkerInit } from "@/components/common/ServiceWorkerInit";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
@@ -93,6 +94,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-full bg-base text-text font-body flex flex-col">
         <ThemeInit />
+        <ServiceWorkerInit />
         <Providers>{children}</Providers>
       </body>
     </html>

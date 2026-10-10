@@ -24,7 +24,9 @@ export function useCreateSortie() {
   const boutiqueId = useBoutiqueId();
   return useMutation({
     mutationFn: (body: CreateSortieBody) => createSortie(body, boutiqueId),
-    onError: (error) => {
+    onError: (error, body) => {
+      // Vente sans réponse du serveur : la caisse la garde hors connexion, pas besoin d'alarmer.
+      if (isAppError(error) && error.reseau && body.clientRef) return;
       if (!isAppError(error)) {
         toast.error("Erreur inattendue");
         return;

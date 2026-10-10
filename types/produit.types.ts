@@ -27,6 +27,8 @@ export interface Variante {
   produitId: string;
   taille: string;
   couleur: string;
+  /** Code-barres lu au scanner ou à la caméra (unique dans la boutique). */
+  codeBarre?: string | null;
   quantiteStock: number;
   seuilAlerte: number;
   boutiqueId: string | null;

@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import { useCategoriesList } from "@/features/produits/query/produits-queries";
 import { useCreateProduit } from "@/features/produits/mutation/produits-mutations";
 import type { NewProduitForEntree } from "@/features/entrees/api/entrees-api";
+import { ChampCodeBarre } from "@/components/common/ChampCodeBarre";
 import { useTypeCommerce } from "@/hooks/useTypeCommerce";
 import { COMMERCE_PROFILES } from "@/lib/commerce";
 import { UNITES, UNITES_LISTE, VARIANTE_UNIQUE, isUniteEntiere } from "@/lib/unites";
@@ -70,6 +71,7 @@ export function NouvelArticleModal({ isOpen, onClose, mode, onCreated, onAddLine
   const nature = useWatch({ control, name: "nature" });
   const unite = useWatch({ control, name: "unite" });
   const conditionnementUnite = useWatch({ control, name: "conditionnementUnite" });
+  const codeBarre = useWatch({ control, name: "codeBarre" });
   const plat = nature === NatureProduit.PLAT;
   const ingredient = nature === NatureProduit.INGREDIENT;
 
@@ -103,6 +105,7 @@ export function NouvelArticleModal({ isOpen, onClose, mode, onCreated, onAddLine
           seuilAlerte: values.seuilAlerte,
           unite: values.unite,
           nature: values.nature,
+          codeBarre: values.codeBarre || undefined,
         },
         quantite: values.quantite,
         prixUnitaire: prixAchat,
@@ -126,6 +129,7 @@ export function NouvelArticleModal({ isOpen, onClose, mode, onCreated, onAddLine
             ...VARIANTE_UNIQUE,
             quantiteStock: plat ? 0 : values.quantite,
             seuilAlerte: plat ? 0 : values.seuilAlerte,
+            codeBarre: plat ? undefined : values.codeBarre || undefined,
           },
         ],
       });
@@ -277,6 +281,13 @@ export function NouvelArticleModal({ isOpen, onClose, mode, onCreated, onAddLine
                   errorMessage={errors.seuilAlerte?.message}
                   {...register("seuilAlerte")}
                 />
+                <div className="sm:col-span-2">
+                  <ChampCodeBarre
+                    valeur={codeBarre ?? ""}
+                    onChange={(v) => setValue("codeBarre", v, { shouldValidate: true })}
+                    erreur={errors.codeBarre?.message}
+                  />
+                </div>
               </>
             )}
 

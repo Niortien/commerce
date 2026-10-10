@@ -10,12 +10,13 @@ export const clientKeys = {
   detail: (id: string) => ["clients", "detail", id] as const,
 };
 
-export function useClients(params: ClientsListParams = {}) {
+/** actif = false : la boutique n'est pas une quincaillerie, la liste n'existe pas pour elle. */
+export function useClients(params: ClientsListParams = {}, actif = true) {
   const token = useAuthStore((s) => s.accessToken);
   return useQuery({
     queryKey: clientKeys.list(params),
     queryFn: () => getClients(params),
-    enabled: !!token,
+    enabled: !!token && actif,
   });
 }
 

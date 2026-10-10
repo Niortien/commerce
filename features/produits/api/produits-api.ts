@@ -38,6 +38,7 @@ export interface CreateProduitBody {
     couleur: string;
     quantiteStock: number;
     seuilAlerte: number;
+    codeBarre?: string;
   }>;
 }
 
@@ -64,13 +65,49 @@ export interface AddVarianteBody {
   couleur: string;
   quantiteStock?: number;
   seuilAlerte?: number;
+  codeBarre?: string;
 }
 
 export interface UpdateVarianteBody {
   taille?: string;
   couleur?: string;
   seuilAlerte?: number;
+  codeBarre?: string | null;
 }
+
+/** Une ligne du fichier importé, telle que lue (le serveur vérifie et signale les erreurs). */
+export interface LigneImportCatalogue {
+  nom: string;
+  categorie: string;
+  prixVente: string;
+  prixAchat?: string;
+  quantite?: string;
+  unite?: string;
+  taille?: string;
+  couleur?: string;
+  codeBarre?: string;
+  seuilAlerte?: string;
+}
+
+export interface ImportCatalogueBody {
+  lignes: LigneImportCatalogue[];
+  /** true : tout vérifier sans rien enregistrer (aperçu). */
+  simulation?: boolean;
+  fournisseur?: string;
+}
+
+export interface RapportImportCatalogue {
+  produitsCrees: number;
+  variantesCreees: number;
+  stocksAjoutes: number;
+  categoriesCreees: number;
+  entreeReference: string | null;
+  erreurs: Array<{ ligne: number; message: string }>;
+  simulation: boolean;
+}
+
+/** Variante retrouvée par son code-barres, avec son produit. */
+export type VarianteAvecProduit = Variante & { produit: Produit };
 
 export interface AdjustStockBody {
   motif: string;
@@ -128,6 +165,12 @@ export const getRecette = (produitId: string) =>
 /** Remplace toute la fiche technique (réservé à l'admin). */
 export const saveRecette = (produitId: string, body: RecetteBody) =>
   apiPut<Recette[], RecetteBody>(`/produits/${produitId}/recette`, body);
+
+export const getVarianteParCode = (code: string) =>
+  apiGet<VarianteAvecProduit>(`/variantes/code/${encodeURIComponent(code)}`);
+
+export const importerCatalogue = (body: ImportCatalogueBody) =>
+  apiPost<RapportImportCatalogue, ImportCatalogueBody>("/produits/import", body);
 
 export const deleteVariante = (id: string) =>
   apiDelete<void>(`/variantes/${id}`);

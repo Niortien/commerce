@@ -15,6 +15,14 @@ const FAQ = [
     a: "Chaque type de commerce a son guide pas à pas, écrit avec des mots simples : il explique chaque page dans l'ordre où vous allez vous en servir. Il est disponible sur ce site (rubrique Guides) et dans l'application (menu « Guide »).",
   },
   {
+    q: "Que se passe-t-il si internet coupe pendant la journée ?",
+    a: "La caisse continue de fonctionner : les ventes sont enregistrées sur le téléphone et envoyées automatiquement dès que le réseau revient, sans jamais être comptées deux fois. Seule la vente à crédit attend le retour d'internet.",
+  },
+  {
+    q: "J'ai déjà des centaines d'articles, dois-je tout ressaisir ?",
+    a: "Non. Remplissez le modèle Excel fourni (une ligne par article) et importez-le : articles, catégories et stock de départ sont créés d'un coup. Les codes-barres de vos étiquettes peuvent être ajoutés dans le même fichier.",
+  },
+  {
     q: "Puis-je vendre à crédit à mes clients professionnels ?",
     a: "Oui, en quincaillerie : vous créez la fiche du client avec un plafond, vous vendez à crédit avec ou sans acompte, et l'application suit les échéances, les retards et les règlements, qui entrent dans la caisse du jour.",
   },
