@@ -7,6 +7,7 @@ import {
   IconCoin,
   IconDiscount,
   IconFileInvoice,
+  IconHistory,
   IconLayoutDashboard,
   IconMessageCircle,
   IconPackageExport,
@@ -112,6 +113,7 @@ export function getSuperAdminNav(secteur: TypeCommerce | "TOUS"): NavSection[] {
         },
         { href: "/super-admin/utilisateurs", label: "Utilisateurs", icon: IconUsers },
         { href: "/super-admin/messages", label: "Messages", icon: IconMessageCircle, badge: "chat" },
+        { href: "/super-admin/audit", label: "Journal d'audit", icon: IconHistory },
       ],
     },
   ];

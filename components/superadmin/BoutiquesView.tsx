@@ -4,6 +4,10 @@ import { useState } from "react";
 import Link from "next/link";
 import {
   Button,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
   Input,
   Modal,
   ModalBody,
@@ -14,7 +18,7 @@ import {
   SelectItem,
   useDisclosure,
 } from "@heroui/react";
-import { IconCash, IconChartLine, IconPlus, IconRefresh, IconUsers } from "@tabler/icons-react";
+import { IconCash, IconChartLine, IconEye, IconPlus, IconRefresh, IconUsers } from "@tabler/icons-react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSuperAdminBoutiques } from "@/features/super-admin/query/superadmin-queries";
@@ -41,12 +45,14 @@ import { CommerceTypePicker } from "@/components/common/CommerceTypePicker";
 import { ConfirmModal } from "@/components/common/ConfirmModal";
 import { COMMERCE_PROFILES, TYPES_COMMERCE, isTypeCommerce, resolveTypeCommerce } from "@/lib/commerce";
 import { useSectorStore } from "@/stores/sectorStore";
+import { useConsultation } from "@/hooks/useConsultation";
 import { PlanAbonnement, StatutBoutique, TypeCommerce, type Boutique } from "@/types";
 
 const STATUT_OPTIONS = Object.values(StatutBoutique);
 
 export function BoutiquesView() {
   const { data: res, isLoading } = useSuperAdminBoutiques();
+  const consultation = useConsultation();
   // Le Super Admin ne voit que le secteur choisi dans la barre latérale (ou toute la plateforme).
   const secteur = useSectorStore((s) => s.secteur);
   const profile = secteur === "TOUS" ? null : COMMERCE_PROFILES[secteur];
@@ -229,7 +235,33 @@ export function BoutiquesView() {
                       <SelectItem key={t}>{COMMERCE_PROFILES[t].label}</SelectItem>
                     ))}
                   </Select>
-                  <div className="flex gap-2 sm:ml-auto">
+                  <div className="flex flex-wrap gap-2 sm:ml-auto">
+                    {/* Voir ce que voient l'admin ou les caissiers de la boutique, sans rien pouvoir modifier. */}
+                    <Dropdown>
+                      <DropdownTrigger>
+                        <Button
+                          variant="bordered"
+                          className="min-h-11 flex-1 font-medium sm:flex-none"
+                          startContent={<IconEye size={16} aria-hidden />}
+                          isLoading={consultation.isPending}
+                        >
+                          Voir l&apos;espace
+                        </Button>
+                      </DropdownTrigger>
+                      <DropdownMenu
+                        aria-label={`Ouvrir un espace de ${b.nom}`}
+                        onAction={(cle) =>
+                          consultation.ouvrirBoutique({ boutiqueId: b.id, role: cle === "CAISSIER" ? "CAISSIER" : "ADMIN" })
+                        }
+                      >
+                        <DropdownItem key="ADMIN" description="Tableau de bord, réglages, rapports">
+                          Espace admin
+                        </DropdownItem>
+                        <DropdownItem key="CAISSIER" description="Caisse et ventes">
+                          Espace caissier
+                        </DropdownItem>
+                      </DropdownMenu>
+                    </Dropdown>
                     <Button
                       as={Link}
                       href={`/super-admin/boutiques/${b.id}/activite`}

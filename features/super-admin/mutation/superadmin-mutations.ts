@@ -16,7 +16,6 @@ import {
   deleteSuperAdminUser,
   updateSuperAdminUser,
 } from "../api/superadmin-users-api";
-import { superAdminKeys } from "../query/superadmin-queries";
 
 function invalidateBoutiques(qc: ReturnType<typeof useQueryClient>) {
   void qc.invalidateQueries({ queryKey: ["super-admin", "boutiques"] });

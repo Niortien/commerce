@@ -28,6 +28,8 @@ import {
   useDeleteSuperAdminUser,
 } from "@/features/super-admin/mutation/superadmin-mutations";
 import { PhoneLink } from "@/components/common/PhoneLink";
+import { IconEye } from "@tabler/icons-react";
+import { useConsultation } from "@/hooks/useConsultation";
 import { createSuperAdminUserSchema, type CreateSuperAdminUserInput } from "@/lib/validators/superadmin.schema";
 import { COMMERCE_PROFILES, resolveTypeCommerce } from "@/lib/commerce";
 import { useSectorStore } from "@/stores/sectorStore";
@@ -56,6 +58,7 @@ export function UtilisateursView() {
   const usersSecteur = profile ? tousUsers.filter((u) => u.boutiqueId != null && idsSecteur.has(u.boutiqueId)) : tousUsers;
   const users = roleFilter === "ALL" ? usersSecteur : usersSecteur.filter((u) => u.role === roleFilter);
 
+  const consultation = useConsultation();
   const createMutation = useCreateSuperAdminUser();
   const deleteMutation = useDeleteSuperAdminUser();
 
@@ -140,15 +143,29 @@ export function UtilisateursView() {
               </TableCell>
               <TableCell>{u.boutique?.nom ?? "—"}</TableCell>
               <TableCell>
-                <Button
-                  size="sm"
-                  variant="flat"
-                  color="danger"
-                  isLoading={deleteMutation.isPending}
-                  onPress={() => deleteMutation.mutate(u.id)}
-                >
-                  Supprimer
-                </Button>
+                <div className="flex flex-wrap gap-2">
+                  {/* Voir ce que voit ce compte, sans pouvoir rien modifier. */}
+                  {(u.role === "ADMIN" || u.role === "CAISSIER") && u.boutiqueId && (
+                    <Button
+                      size="sm"
+                      variant="flat"
+                      startContent={<IconEye size={16} aria-hidden />}
+                      isLoading={consultation.isPending}
+                      onPress={() => consultation.ouvrirUtilisateur(u.id)}
+                    >
+                      Voir son espace
+                    </Button>
+                  )}
+                  <Button
+                    size="sm"
+                    variant="flat"
+                    color="danger"
+                    isLoading={deleteMutation.isPending}
+                    onPress={() => deleteMutation.mutate(u.id)}
+                  >
+                    Supprimer
+                  </Button>
+                </div>
               </TableCell>
             </TableRow>
           ))}

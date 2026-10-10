@@ -74,6 +74,15 @@ api.interceptors.response.use(
     const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
     const statusCode = error.response?.status;
 
+    // Consultation du Super Admin expirée : il retrouve sa propre session, sans se reconnecter.
+    if (statusCode === 401 && useAuthStore.getState().consultation) {
+      useAuthStore.getState().terminerConsultation();
+      if (typeof window !== "undefined") {
+        window.location.href = "/super-admin/boutiques";
+      }
+      return Promise.reject(toAppError(error));
+    }
+
     if (statusCode === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 

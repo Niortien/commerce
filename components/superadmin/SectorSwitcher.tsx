@@ -6,8 +6,8 @@ import { useSuperAdminBoutiques } from "@/features/super-admin/query/superadmin-
 import { COMMERCE_PROFILES, TYPES_COMMERCE, resolveTypeCommerce, sectorStyle } from "@/lib/commerce";
 import { cn } from "@/lib/utils";
 import { useSectorStore, type Secteur } from "@/stores/sectorStore";
+import { TypeCommerce } from "@/types";
 
-const SECTEURS: Secteur[] = ["TOUS", ...TYPES_COMMERCE];
 
 /**
  * Choix du secteur du Super Admin, dans la barre latérale : les pages n'affichent plus que les commerces
@@ -27,6 +27,12 @@ export function SectorSwitcher({ onSelect }: { onSelect?: () => void }) {
       : s === "TOUS"
         ? boutiques.length
         : boutiques.filter((b) => resolveTypeCommerce(b.typeCommerce) === s).length;
+
+  // Les métiers à modules restent toujours visibles ; les autres types, seulement s'ils ont des boutiques.
+  const SECTEURS: Secteur[] = [
+    "TOUS",
+    ...TYPES_COMMERCE.filter((t) => COMMERCE_PROFILES[t].moduleMetier || t === TypeCommerce.VETEMENTS || t === secteur || (count(t) ?? 0) > 0),
+  ];
 
   const choose = (s: Secteur) => {
     setSecteur(s);
