@@ -36,7 +36,7 @@ const MOMENTS = [
 /** « Votre nouvelle routine » : un point or parcourt la journée et allume chaque moment tour à tour. */
 export function MarketingDay() {
   return (
-    <section className="mt-[clamp(72px,10vw,128px)] bg-[#0F172A] py-[clamp(72px,9vw,120px)] text-[#F2F5EF]">
+    <section className="mt-[clamp(72px,10vw,128px)] border-y border-[color:var(--mk-night-border)] bg-[var(--mk-night)] py-[clamp(72px,9vw,120px)] text-[#F2F5EF]">
       <div className="mx-auto max-w-6xl px-4 md:px-6">
         <Reveal>
           <SectionHeading

@@ -38,7 +38,7 @@ export function MarketingPhone() {
   return (
     <div>
       <div aria-hidden className="relative mx-auto h-[660px] w-full max-w-[500px]">
-        <div className="mk-phone absolute left-1/2 top-2.5 -ml-[150px] h-[620px] w-[300px] rounded-[48px] bg-[#0F172A] p-[11px] shadow-[0_60px_110px_-50px_rgba(15,29,51,0.55)]">
+        <div className="mk-phone absolute left-1/2 top-2.5 -ml-[150px] h-[620px] w-[300px] rounded-[48px] bg-[#0F172A] p-[11px] ring-1 ring-transparent dark:ring-white/15 shadow-[0_60px_110px_-50px_rgba(15,29,51,0.55)]">
           <div className="flex h-full w-full flex-col gap-3 overflow-hidden rounded-[38px] bg-base px-4 pb-4 pt-[26px]">
             <div className="rounded-[20px] border border-border bg-surface p-3.5">
               <p className="text-xs font-semibold text-text-muted">Ventes du jour</p>

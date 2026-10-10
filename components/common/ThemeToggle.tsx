@@ -1,8 +1,19 @@
 "use client";
 
-import { IconMoon, IconSun } from "@tabler/icons-react";
+import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/react";
+import { IconDeviceDesktop, IconMoon, IconSun, type Icon } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
-import { useThemeStore } from "@/stores/themeStore";
+import { useThemeStore, type ThemePreference } from "@/stores/themeStore";
+
+const OPTIONS: Array<{ cle: ThemePreference; label: string; icon: Icon }> = [
+  { cle: "light", label: "Clair", icon: IconSun },
+  { cle: "dark", label: "Sombre", icon: IconMoon },
+  { cle: "system", label: "Système", icon: IconDeviceDesktop },
+];
+
+function isPreference(valeur: unknown): valeur is ThemePreference {
+  return OPTIONS.some((o) => o.cle === valeur);
+}
 
 interface ThemeToggleProps {
   className?: string;
@@ -10,26 +21,79 @@ interface ThemeToggleProps {
   onDark?: boolean;
 }
 
+/** Choix du thème en trois boutons : clair, sombre, ou celui de l'appareil. */
 export function ThemeToggle({ className = "", onDark = false }: ThemeToggleProps) {
   const theme = useThemeStore((s) => s.theme);
-  const toggleTheme = useThemeStore((s) => s.toggleTheme);
-  const isDark = theme === "dark";
+  const setTheme = useThemeStore((s) => s.setTheme);
 
   return (
-    <button
-      type="button"
-      onClick={toggleTheme}
-      aria-label={isDark ? "Passer en thème clair" : "Passer en thème sombre"}
+    <div
+      role="radiogroup"
+      aria-label="Thème d'affichage"
       className={cn(
-        "flex min-h-10 cursor-pointer items-center gap-2.5 rounded-md px-3 py-2 text-sm font-medium transition-colors duration-150",
-        onDark
-          ? "text-sidebar-muted hover:bg-sidebar-hover hover:text-sidebar-text"
-          : "border border-border text-text-muted hover:bg-surface-high hover:text-text",
+        "grid grid-cols-3 gap-1 rounded-lg p-1",
+        onDark ? "bg-sidebar-hover/60" : "border border-border bg-surface",
         className
       )}
     >
-      {isDark ? <IconSun size={16} className="shrink-0" aria-hidden /> : <IconMoon size={16} className="shrink-0" aria-hidden />}
-      {isDark ? "Thème clair" : "Thème sombre"}
-    </button>
+      {OPTIONS.map(({ cle, label, icon: OptionIcon }) => {
+        const actif = theme === cle;
+        return (
+          <button
+            key={cle}
+            type="button"
+            role="radio"
+            aria-checked={actif}
+            onClick={() => setTheme(cle)}
+            className={cn(
+              "flex min-h-9 cursor-pointer items-center justify-center gap-1.5 rounded-md px-2 text-xs font-medium transition-colors duration-150 focus-visible:outline-accent",
+              onDark
+                ? actif
+                  ? "bg-sidebar-active text-sidebar-text"
+                  : "text-sidebar-muted hover:text-sidebar-text"
+                : actif
+                  ? "bg-surface-high text-text"
+                  : "text-text-muted hover:text-text"
+            )}
+          >
+            <OptionIcon size={15} aria-hidden className="shrink-0" />
+            {label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+/** Version compacte pour la barre du site : une icône qui ouvre les trois choix. */
+export function ThemeMenu({ className }: { className?: string }) {
+  const theme = useThemeStore((s) => s.theme);
+  const setTheme = useThemeStore((s) => s.setTheme);
+  const actuel = OPTIONS.find((o) => o.cle === theme) ?? OPTIONS[2];
+  const ActuelIcon = actuel.icon;
+
+  return (
+    <Dropdown placement="bottom-end">
+      <DropdownTrigger>
+        <Button isIconOnly variant="light" className={cn("min-h-11 min-w-11 text-text", className)} aria-label={`Thème : ${actuel.label}. Changer le thème`}>
+          <ActuelIcon size={20} aria-hidden />
+        </Button>
+      </DropdownTrigger>
+      <DropdownMenu
+        aria-label="Thème d'affichage"
+        selectionMode="single"
+        selectedKeys={[theme]}
+        disallowEmptySelection
+        onAction={(cle) => {
+          if (isPreference(cle)) setTheme(cle);
+        }}
+      >
+        {OPTIONS.map(({ cle, label, icon: OptionIcon }) => (
+          <DropdownItem key={cle} startContent={<OptionIcon size={16} aria-hidden />}>
+            {label}
+          </DropdownItem>
+        ))}
+      </DropdownMenu>
+    </Dropdown>
   );
 }

@@ -10,7 +10,7 @@ const TESTIMONIALS = [
       "Grâce à Mon Djossi, nous suivons mieux nos finances, le stock de nos produits et nos recettes. Je vois mes ventes et mes alertes en temps réel, même quand je ne suis pas à la boutique.",
     name: "Le gérant",
     role: "Dri Valé · streetwear, Abidjan",
-    avatar: "bg-[#0F172A]",
+    avatar: "bg-[var(--mk-ink)]",
   },
   {
     quote:

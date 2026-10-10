@@ -1,25 +1,25 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
+/** Thème appliqué à l'écran. */
 export type BackofficeTheme = "light" | "dark";
+/** Choix de l'utilisateur : un thème fixe, ou celui de son appareil. */
+export type ThemePreference = BackofficeTheme | "system";
 
 interface ThemeState {
-  theme: BackofficeTheme;
-  setTheme: (theme: BackofficeTheme) => void;
-  toggleTheme: () => void;
+  theme: ThemePreference;
+  setTheme: (theme: ThemePreference) => void;
 }
 
 /**
- * Thème du back-office (admin/staff) — distinct du thème du storefront
- * public (voir vitrineStore), qui garde son identité noir + or figée.
- * Persisté en localStorage pour survivre à la fermeture du navigateur.
+ * Thème du site et du back-office, partagé, persisté en localStorage.
+ * Par défaut « system » : on suit le réglage clair/sombre du téléphone ou de l'ordinateur.
  */
 export const useThemeStore = create<ThemeState>()(
   persist(
     (set) => ({
-      theme: "light",
+      theme: "system",
       setTheme: (theme) => set({ theme }),
-      toggleTheme: () => set((state) => ({ theme: state.theme === "light" ? "dark" : "light" })),
     }),
     {
       name: "backoffice-theme",
@@ -27,3 +27,10 @@ export const useThemeStore = create<ThemeState>()(
     }
   )
 );
+
+/** Thème réellement affiché pour une préférence, d'après le réglage de l'appareil. */
+export function resoudreTheme(preference: ThemePreference): BackofficeTheme {
+  if (preference !== "system") return preference;
+  if (typeof window === "undefined") return "light";
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}

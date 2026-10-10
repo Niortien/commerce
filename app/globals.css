@@ -3,6 +3,12 @@
 @tailwind utilities;
 
 :root {
+  /* Contrôles natifs (dates, barres de défilement) et thème : voir :root.dark. */
+  color-scheme: light;
+  /* Site de présentation : encre des pastilles et bandes « nuit », adaptées au thème. */
+  --mk-ink:          #0F172A;
+  --mk-night:        #0F172A;
+  --mk-night-border: transparent;
   /* ════════════════════════════════════════════════════════════
      Palette Back-office — bleu azur + marine, fond clair
      (
@@ -250,6 +256,11 @@
    palette noir + or indépendante de cette classe.
    ════════════════════════════════════════════════════════════ */
 :root.dark {
+  color-scheme: dark;
+  /* En sombre, la bande « nuit » se détache du fond par une teinte plus claire et un filet. */
+  --mk-ink:          #334155;
+  --mk-night:        #111A2E;
+  --mk-night-border: rgba(255, 255, 255, 0.08);
   --sector-vetements:     var(--sector-vetements-soft);
   --sector-restaurant:    var(--sector-restaurant-soft);
   --sector-quincaillerie: var(--sector-quincaillerie-soft);
@@ -491,6 +502,8 @@ input[type="number"] {
 .mk-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--color-accent-text); }
 .mk-eyebrow::before { content: ""; width: 18px; height: 3px; border-radius: 2px; background: #FFC531; }
 .mk-eyebrow-dark { color: #8FB2F0; }
+/* En sombre, le surlignage jaune s'atténue pour que le mot (texte clair) reste lisible. */
+.dark .mk-mark::before { opacity: .35; }
 
 .mk-mark { position: relative; z-index: 0; white-space: nowrap; }
 .mk-mark::before { content: ""; position: absolute; left: -.06em; right: -.06em; bottom: .04em; height: .38em; border-radius: .1em; background: #FFC531; z-index: -1; transform-origin: left; animation: mk-sweep .9s 1s cubic-bezier(.2,.7,.2,1) both; }

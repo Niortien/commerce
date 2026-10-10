@@ -6,7 +6,7 @@ import { Button } from "@heroui/react";
 import { motion, useScroll, useSpring } from "framer-motion";
 import { IconMenu2, IconX } from "@tabler/icons-react";
 import { BrandMark } from "@/components/common/BrandMark";
-import { ThemeToggle } from "@/components/common/ThemeToggle";
+import { ThemeMenu, ThemeToggle } from "@/components/common/ThemeToggle";
 
 // Ancres préfixées par « / » : elles mènent aussi à l'accueil depuis les pages de guides.
 const LINKS = [
@@ -55,6 +55,7 @@ export function MarketingNav() {
         </nav>
 
         <div className="hidden items-center gap-2 md:flex">
+          <ThemeMenu />
           <Button as={Link} href="/login" variant="light" className="font-medium text-text">
             Se connecter
           </Button>
@@ -96,7 +97,7 @@ export function MarketingNav() {
             <Button as={Link} href="/login" variant="bordered" className="font-medium">
               Se connecter
             </Button>
-            <ThemeToggle className="justify-center" />
+            <ThemeToggle />
           </div>
         </div>
       )}

@@ -26,10 +26,10 @@ export function MarketingLifecycle() {
               />
             </div>
             <div className="flex min-w-0 flex-[1_1_380px] flex-col gap-5">
-              <p className="mk-banner flex items-center gap-3 rounded-2xl bg-[#FFE9DB] px-4 py-3.5 text-[15px] font-semibold text-[#7A2E06]">
+              <p className="mk-banner flex items-center gap-3 rounded-2xl bg-return-dim px-4 py-3.5 text-[15px] font-semibold text-return-text">
                 <IconBellRinging size={20} aria-hidden className="shrink-0" />
                 Votre abonnement se termine dans 7 jours.
-                <a href="/login" className="ml-auto whitespace-nowrap font-extrabold text-[#7A2E06] underline-offset-2 hover:underline">
+                <a href="/login" className="ml-auto whitespace-nowrap font-extrabold text-return-text underline-offset-2 hover:underline">
                   Renouveler
                 </a>
               </p>
@@ -39,7 +39,7 @@ export function MarketingLifecycle() {
                     {i > 0 && <IconChevronRight size={16} aria-hidden className="text-text-dim" />}
                     <span
                       className={`rounded-full px-3.5 py-[7px] ${
-                        current ? "mk-glow bg-accent text-white" : warn ? "bg-[#FFE9DB] text-[#7A2E06]" : "bg-surface-high text-text-muted"
+                        current ? "mk-glow bg-accent text-white" : warn ? "bg-return-dim text-return-text" : "bg-surface-high text-text-muted"
                       }`}
                     >
                       {label}

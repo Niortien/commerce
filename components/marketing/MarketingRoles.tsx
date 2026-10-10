@@ -55,7 +55,7 @@ export function MarketingRoles() {
             <Reveal key={name} delay={i * 0.05} className="h-full">
               <article className="flex h-full flex-col gap-[18px] rounded-[28px] border border-border bg-surface p-7 md:p-9">
                 <div className="flex items-center gap-3">
-                  <span className="flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-full bg-[#0F172A] text-white">
+                  <span className="flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-full bg-[var(--mk-ink)] text-white">
                     <Icon size={22} aria-hidden />
                   </span>
                   <div>

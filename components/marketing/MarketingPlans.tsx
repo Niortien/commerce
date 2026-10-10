@@ -32,7 +32,7 @@ export function MarketingPlans() {
             return (
             <li key={plan.code}>
               <Reveal delay={i * 0.05} className="h-full">
-                <article className={`relative flex h-full flex-col rounded-[26px] border px-6 py-7 transition-[transform,box-shadow] duration-500 hover:-translate-y-2 hover:shadow-[0_36px_60px_-40px_rgba(15,29,51,0.5)] ${best ? "border-[#0F172A] bg-[#0F172A] text-white" : "border-border bg-surface"}`}>
+                <article className={`relative flex h-full flex-col rounded-[26px] border px-6 py-7 transition-[transform,box-shadow] duration-500 hover:-translate-y-2 hover:shadow-[0_36px_60px_-40px_rgba(15,29,51,0.5)] ${best ? "border-[color:var(--mk-night-border)] bg-[var(--mk-night)] text-white" : "border-border bg-surface"}`}>
                   {remise !== null && (
                     <span className={`absolute -top-[13px] right-5 rounded-full px-3 py-[5px] text-[13px] font-extrabold ${best ? "mk-wiggle bg-[#FFC531] text-[#0F172A]" : "bg-surface-high text-accent-text"}`}>
                       −{remise} %{best ? " · Le plus avantageux" : ""}

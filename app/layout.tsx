@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { JetBrains_Mono, Inter, Plus_Jakarta_Sans } from "next/font/google";
 import { Providers } from "@/providers";
 import { ThemeInit } from "@/components/common/ThemeInit";
@@ -11,7 +11,11 @@ const THEME_INIT_SCRIPT = `
 (function () {
   try {
     var raw = localStorage.getItem('backoffice-theme');
-    var theme = raw ? JSON.parse(raw).state.theme : 'light';
+    var preference = raw ? JSON.parse(raw).state.theme : 'system';
+    // « system » (par défaut) suit le réglage clair/sombre de l'appareil.
+    var theme = preference === 'system'
+      ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+      : preference;
     if (theme === 'dark') {
       document.documentElement.classList.remove('light');
       document.documentElement.classList.add('dark');
@@ -38,6 +42,14 @@ const monoFont = JetBrains_Mono({
   subsets: ["latin"],
   weight: ["400", "500"],
 });
+
+// Couleur de la barre du navigateur mobile, selon le thème de l'appareil.
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#F4F6FB" },
+    { media: "(prefers-color-scheme: dark)", color: "#0B1220" },
+  ],
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -71,6 +83,8 @@ export default function RootLayout({
 }>) {
   return (
     <html
+      // Le script de thème change la classe avant l'hydratation.
+      suppressHydrationWarning
       lang="fr"
       className={`${displayFont.variable} ${bodyFont.variable} ${monoFont.variable} h-full antialiased light`}
     >
