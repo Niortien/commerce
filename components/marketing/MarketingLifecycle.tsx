@@ -1,93 +1,61 @@
-import {
-  IconAlertTriangle,
-  IconArchive,
-  IconBellRinging,
-  IconCircleCheck,
-  IconClockHour4,
-  IconHourglassHigh,
-} from "@tabler/icons-react";
+import { IconBellRinging, IconChevronRight } from "@tabler/icons-react";
 import { Reveal } from "@/components/marketing/Reveal";
 import { SectionHeading } from "@/components/marketing/SectionHeading";
 
 // Reflète l'enum StatutBoutique du backend : EN_ATTENTE → ESSAI → ACTIF → SUSPENDU → ARCHIVE.
-const STEPS = [
-  {
-    icon: IconHourglassHigh,
-    code: "EN_ATTENTE",
-    title: "Inscription",
-    text: "La boutique est inscrite, par elle-même ou par le Super Admin, en attendant son activation.",
-    tone: "bg-white/10 text-slate-200",
-  },
-  {
-    icon: IconClockHour4,
-    code: "ESSAI",
-    title: "Essai",
-    text: "Accès à l'outil pendant une période d'essai dont la durée est fixée à l'inscription.",
-    tone: "bg-amber-400/15 text-amber-300",
-  },
-  {
-    icon: IconCircleCheck,
-    code: "ACTIF",
-    title: "Abonné",
-    text: "Abonnement en cours — mensuel, trimestriel ou annuel. Tout fonctionne.",
-    tone: "bg-emerald-400/15 text-emerald-300",
-  },
-  {
-    icon: IconAlertTriangle,
-    code: "SUSPENDU",
-    title: "Suspendu",
-    text: "Abonnement expiré ou compte désactivé : stock et caisse sont bloqués et une bannière explique pourquoi.",
-    tone: "bg-rose-400/15 text-rose-300",
-  },
-  {
-    icon: IconArchive,
-    code: "ARCHIVE",
-    title: "Archivé",
-    text: "Boutique clôturée : l'accès métier reste bloqué.",
-    tone: "bg-white/10 text-slate-200",
-  },
+const STATUTS = [
+  { code: "EN_ATTENTE", label: "En attente", text: "La boutique est inscrite, en attendant son activation." },
+  { code: "ESSAI", label: "Essai", text: "Accès à l'outil pendant une période d'essai dont la durée est fixée à l'inscription." },
+  { code: "ACTIF", label: "Actif", text: "Abonnement en cours — mensuel, trimestriel ou annuel. Tout fonctionne.", current: true },
+  { code: "SUSPENDU", label: "Suspendu", text: "Abonnement expiré ou compte désactivé : stock et caisse sont bloqués et une bannière explique pourquoi.", warn: true },
+  { code: "ARCHIVE", label: "Archivé", text: "Boutique clôturée : l'accès métier reste bloqué." },
 ];
 
+/** Cycle de vie d'une boutique selon son abonnement : bandeau d'alerte animé + statuts. */
 export function MarketingLifecycle() {
   return (
-    <section id="abonnements" className="scroll-mt-20 bg-sidebar py-16 text-sidebar-text md:py-24">
+    <section id="abonnements" className="scroll-mt-20 bg-base pt-[clamp(72px,10vw,128px)]">
       <div className="mx-auto max-w-6xl px-4 md:px-6">
         <Reveal>
-          <SectionHeading
-            onDark
-            eyebrow="Le cœur de Mon Djossi"
-            title="L'abonnement pilote ce que chaque boutique peut faire"
-            description="Le statut d'une boutique décide de l'accès à l'outil. Le Super Admin le change en un clic, et la boutique voit toujours où elle en est."
-          />
-        </Reveal>
-
-        <ol className="mt-10 grid gap-3 md:grid-cols-5">
-          {STEPS.map(({ icon: Icon, code, title, text, tone }, i) => (
-            <li key={code}>
-              <Reveal delay={i * 0.05} className="h-full">
-                <div className="flex h-full flex-col rounded-lg border border-sidebar-border bg-sidebar-hover p-4">
-                  <div className="flex items-center justify-between">
-                    <span className={`flex h-9 w-9 items-center justify-center rounded-md ${tone}`}>
-                      <Icon size={18} aria-hidden />
+          <div className="flex flex-wrap items-center gap-10 rounded-[28px] border border-border bg-surface p-6 md:p-12">
+            <div className="min-w-0 flex-[1_1_340px]">
+              <SectionHeading
+                eyebrow="Abonnement"
+                title="Pas de mauvaise surprise sur l'abonnement."
+                description="La plateforme Mon Djossi active, suspend ou renouvelle chaque boutique selon son abonnement. Les jours restants s'affichent dans votre menu et un bandeau vous prévient 7 jours avant l'échéance."
+              />
+            </div>
+            <div className="flex min-w-0 flex-[1_1_380px] flex-col gap-5">
+              <p className="mk-banner flex items-center gap-3 rounded-2xl bg-[#FFE9DB] px-4 py-3.5 text-[15px] font-semibold text-[#7A2E06]">
+                <IconBellRinging size={20} aria-hidden className="shrink-0" />
+                Votre abonnement se termine dans 7 jours.
+                <a href="/login" className="ml-auto whitespace-nowrap font-extrabold text-[#7A2E06] underline-offset-2 hover:underline">
+                  Renouveler
+                </a>
+              </p>
+              <ol aria-label="Statuts d'une boutique" className="flex flex-wrap items-center gap-2 text-sm font-bold">
+                {STATUTS.map(({ code, label, current, warn }, i) => (
+                  <li key={code} className="flex items-center gap-2">
+                    {i > 0 && <IconChevronRight size={16} aria-hidden className="text-text-dim" />}
+                    <span
+                      className={`rounded-full px-3.5 py-[7px] ${
+                        current ? "mk-glow bg-accent text-white" : warn ? "bg-[#FFE9DB] text-[#7A2E06]" : "bg-surface-high text-text-muted"
+                      }`}
+                    >
+                      {label}
                     </span>
-                    <span className="font-mono text-xs text-sidebar-muted">0{i + 1}</span>
+                  </li>
+                ))}
+              </ol>
+              <dl className="grid gap-3 text-sm leading-relaxed text-text-muted sm:grid-cols-2">
+                {STATUTS.filter((s) => s.code === "ESSAI" || s.code === "ACTIF" || s.code === "SUSPENDU").map(({ code, label, text }) => (
+                  <div key={code}>
+                    <dt className="font-bold text-text">{label}</dt>
+                    <dd>{text}</dd>
                   </div>
-                  <h3 className="mt-4 font-display text-md font-bold">{title}</h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-sidebar-muted">{text}</p>
-                  <p className="mt-auto pt-4 font-mono text-[11px] tracking-wide text-sidebar-muted">{code}</p>
-                </div>
-              </Reveal>
-            </li>
-          ))}
-        </ol>
-
-        <Reveal delay={0.1}>
-          <div className="mt-6 flex items-start gap-3 rounded-lg border border-sidebar-border bg-sidebar-hover p-4">
-            <IconBellRinging size={20} className="mt-0.5 shrink-0 text-sidebar-accent" aria-hidden />
-            <p className="text-sm leading-relaxed text-sidebar-muted">
-              <strong className="font-semibold text-sidebar-text">Aucune mauvaise surprise.</strong> L&apos;admin voit son
-              plan et le nombre de jours restants dans la navigation, et une bannière le prévient 7 jours avant l&apos;échéance.
-            </p>
+                ))}
+              </dl>
+            </div>
           </div>
         </Reveal>
       </div>

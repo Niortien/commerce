@@ -5,11 +5,22 @@ export enum Role {
 }
 
 /** Type de commerce d'une boutique : il décide des pages et du vocabulaire de son espace. */
+/**
+ * Type de commerce de la boutique. Restaurant, quincaillerie et friperie ont des modules métier ;
+ * les autres types utilisent les pages standard avec leur vocabulaire. VETEMENTS est l'ancien « MODE ».
+ */
 export enum TypeCommerce {
   VETEMENTS = "VETEMENTS",
   RESTAURANT = "RESTAURANT",
   QUINCAILLERIE = "QUINCAILLERIE",
   FRIPERIE = "FRIPERIE",
+  CHAUSSURES = "CHAUSSURES",
+  ALIMENTATION = "ALIMENTATION",
+  SUPERMARCHE = "SUPERMARCHE",
+  PHARMACIE = "PHARMACIE",
+  ELECTRONIQUE = "ELECTRONIQUE",
+  BEAUTE = "BEAUTE",
+  AUTRE = "AUTRE",
 }
 
 export enum StatutBoutique {
@@ -32,16 +43,6 @@ export enum StatutAbonnement {
   EXPIRE = "EXPIRE",
   SUSPENDU = "SUSPENDU",
   ANNULE = "ANNULE",
-}
-
-export enum Taille {
-  XS = "XS",
-  S = "S",
-  M = "M",
-  L = "L",
-  XL = "XL",
-  XXL = "XXL",
-  XXXL = "XXXL",
 }
 
 export enum TypeMouvement {

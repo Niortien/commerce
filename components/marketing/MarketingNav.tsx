@@ -9,10 +9,11 @@ import { BrandMark } from "@/components/common/BrandMark";
 import { ThemeToggle } from "@/components/common/ThemeToggle";
 
 const LINKS = [
+  { href: "#comment", label: "Comment ça marche" },
   { href: "#fonctionnalites", label: "Fonctionnalités" },
-  { href: "#abonnements", label: "Abonnements" },
   { href: "#roles", label: "Rôles" },
-  { href: "#plans", label: "Plans" },
+  { href: "#temoignages", label: "Témoignages" },
+  { href: "#plans", label: "Tarifs" },
   { href: "#faq", label: "FAQ" },
 ];
 
@@ -33,7 +34,7 @@ export function MarketingNav() {
       <motion.div
         aria-hidden
         style={{ scaleX: progress }}
-        className="absolute inset-x-0 top-0 h-0.5 origin-left bg-gradient-to-r from-[#7c3aed] via-[#2563eb] to-[#06b6d4]"
+        className="absolute inset-x-0 top-0 h-0.5 origin-left bg-gradient-to-r from-[#FFC531] via-[#2563eb] to-[#06b6d4]"
       />
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 md:px-6">
         <Link href="/" aria-label="Mon Djossi — accueil" className="rounded-md">
@@ -56,8 +57,8 @@ export function MarketingNav() {
           <Button as={Link} href="/login" variant="light" className="font-medium text-text">
             Se connecter
           </Button>
-          <Button as={Link} href="/inscription" className="bg-accent font-semibold text-white">
-            Inscrire ma boutique
+          <Button as={Link} href="/inscription?plan=ESSAI" className="h-[46px] rounded-full bg-accent px-5 font-bold text-white">
+            Essai gratuit
           </Button>
         </div>
 

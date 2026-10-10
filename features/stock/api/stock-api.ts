@@ -1,11 +1,11 @@
 import { apiGet } from "@/lib/api";
-import type { MouvementStock, StockAlerte, StockItem, Taille, TypeMouvement } from "@/types";
+import type { MouvementStock, StockAlerte, StockItem, TypeMouvement } from "@/types";
 
 export interface StockListParams {
   page?: number;
   limit?: number;
   alerte?: boolean;
-  taille?: Taille;
+  taille?: string;
   couleur?: string;
   categorieId?: string;
   sortOrder?: "asc" | "desc";

@@ -44,6 +44,7 @@ const config: Config = {
     extend: {
       fontFamily: {
         display: ["var(--font-display)", "sans-serif"],
+        brand:   ["var(--font-brand)", "var(--font-display)", "sans-serif"],
         body:    ["var(--font-body)", "sans-serif"],
         mono:    ["var(--font-mono)", "monospace"],
       },

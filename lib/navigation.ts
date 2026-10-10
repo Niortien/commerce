@@ -8,6 +8,7 @@ import {
   IconDiscount,
   IconFileInvoice,
   IconLayoutDashboard,
+  IconMessageCircle,
   IconPackageExport,
   IconPackageImport,
   IconPackages,
@@ -24,6 +25,8 @@ export interface NavItem {
   href: string;
   label: string;
   icon: ComponentType<IconProps>;
+  /** Pastille de non-lus (messagerie). */
+  badge?: "chat";
 }
 
 export interface NavSection {
@@ -88,6 +91,7 @@ export const BOUTIQUE_ADMIN_NAV: NavSection = {
   items: [
     { href: "/admin/boutiques", label: "Ma boutique", icon: IconBuildingStore },
     { href: "/admin/utilisateurs", label: "Caissiers", icon: IconUsers },
+    { href: "/messages", label: "Messages", icon: IconMessageCircle, badge: "chat" },
   ],
 };
 
@@ -107,6 +111,7 @@ export function getSuperAdminNav(secteur: TypeCommerce | "TOUS"): NavSection[] {
           icon: profile ? profile.icon : IconBuildingStore,
         },
         { href: "/super-admin/utilisateurs", label: "Utilisateurs", icon: IconUsers },
+        { href: "/super-admin/messages", label: "Messages", icon: IconMessageCircle, badge: "chat" },
       ],
     },
   ];

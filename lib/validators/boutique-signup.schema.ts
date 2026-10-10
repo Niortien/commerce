@@ -12,6 +12,7 @@ export const boutiqueSignupSchema = z
     nomBoutique: z.string().min(2, "Nom de la boutique requis"),
     ville: z.string().optional(),
     whatsapp: z.string().optional(),
+    telephone: z.string().min(8, "Numéro de téléphone requis"),
     email: z.string().email("Email invalide"),
     password: z.string().min(8, "8 caractères minimum"),
     plan: z.enum(SIGNUP_PLANS),

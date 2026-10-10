@@ -1,13 +1,12 @@
-import { ModePaiement, Taille, TypeSortie } from "@/types";
+import { ModePaiement, TypeSortie } from "@/types";
 import type { ParsedCommand } from "@/types";
 import { formatCurrency } from "./formatCurrency";
 
-const TAILLE_VALUES = new Set(Object.values(Taille));
 
-function parseTaille(token?: string): Taille | undefined {
-  if (!token) return undefined;
-  const normalized = token.toUpperCase();
-  return TAILLE_VALUES.has(normalized as Taille) ? (normalized as Taille) : undefined;
+/** Le 1er axe de variante est libre (S, 42, 50 cl, 128 Go…) : on rejette seulement montants et modes de paiement. */
+function parseTaille(token?: string): string | undefined {
+  if (!token || token.startsWith("@") || parseModePaiement(token)) return undefined;
+  return token;
 }
 
 function parseModePaiement(token?: string): ModePaiement | undefined {

@@ -109,6 +109,15 @@ export function RegisterBoutiqueView({ initialPlan = "ESSAI" }: { initialPlan?: 
           {...register("whatsapp")}
         />
         <Input
+          type="tel"
+          label="Votre téléphone (admin)"
+          variant="bordered"
+          placeholder="+225 07 00 00 00 00"
+          isInvalid={Boolean(errors.telephone)}
+          errorMessage={errors.telephone?.message}
+          {...register("telephone")}
+        />
+        <Input
           type="email"
           label="Votre email (admin)"
           variant="bordered"
