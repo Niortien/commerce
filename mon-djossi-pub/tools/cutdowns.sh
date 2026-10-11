@@ -27,4 +27,4 @@ cut() { # cut <sortie> <début fin> <début fin> ...
 # 30 s : nuit · rupture · « avec Mon Djossi » + logo · caisse · hors ligne · Awa soulagée · écran de fin
 cut out/mon-djossi-30s.mp4 0.4 3.6  7.0 9.6  13.0 18.3  25.0 31.0  31.6 34.2  48.6 50.6  51.6 60
 # 15 s : nuit · logo · caisse · offre + slogan
-cut out/mon-djossi-15s.mp4 0.4 3.6  15.9 18.3  25.0 28.0  54.8 60
+cut out/mon-djossi-15s.mp4 0.4 3.6  15.6 18.6  25.0 28.4  54.8 60
