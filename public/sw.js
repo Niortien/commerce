@@ -3,7 +3,7 @@
  * Garde de quoi rouvrir l'application sans internet (pages déjà visitées, scripts, styles, icônes).
  * Les données (API) ne passent pas par ici : la caisse hors connexion les garde elle-même sur l'appareil.
  */
-const VERSION = "mon-djossi-v1";
+const VERSION = "mon-djossi-v2"; // changer la version purge les anciennes copies (ex. ancien favicon)
 const PAGES = `${VERSION}-pages`;
 const STATIQUES = `${VERSION}-statiques`;
 /** Pages ouvertes d'avance pour pouvoir vendre même si on ne les a jamais visitées sur cet appareil. */
@@ -26,6 +26,10 @@ self.addEventListener("activate", (event) => {
       .then(() => self.clients.claim())
   );
 });
+
+function estVersionne(url) {
+  return url.pathname.startsWith("/_next/static/") || url.search.length > 1;
+}
 
 function estStatique(url) {
   return url.pathname.startsWith("/_next/static/") || /\.(?:png|svg|ico|webp|jpg|jpeg|woff2?|css|js)$/.test(url.pathname);
@@ -64,15 +68,25 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Scripts, styles, polices, images : la copie d'abord (leurs noms changent à chaque mise à jour).
+  // Scripts, styles, polices, images.
   if (estStatique(url)) {
     event.respondWith(
       caches.open(STATIQUES).then(async (cache) => {
         const garde = await cache.match(req);
-        if (garde) return garde;
-        const rep = await fetch(req);
-        if (rep.ok) cache.put(req, rep.clone());
-        return rep;
+        // Fichier versionné (/_next/static ou ?empreinte) : son contenu ne change jamais, la copie suffit.
+        if (garde && estVersionne(url)) return garde;
+        // Sinon (/favicon.ico, /icons/…) : la copie tout de suite si on l'a, et le réseau la remplace en arrière-plan.
+        const reseau = fetch(req)
+          .then((rep) => {
+            if (rep.ok) cache.put(req, rep.clone());
+            return rep;
+          })
+          .catch(() => garde || Response.error());
+        if (garde) {
+          event.waitUntil(reseau);
+          return garde;
+        }
+        return reseau;
       })
     );
   }

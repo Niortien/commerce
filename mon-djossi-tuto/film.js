@@ -636,7 +636,7 @@
     UI.text(ctx, 'dans le menu « Guide »', W / 2, 864, { size: 50, weight: 800, color: B.yellow, align: 'center', alpha: a });
     const p2 = UI.pop(t, S.endCard + 1.2, 0.3, 2.2);
     if (p2 > 0) { ctx.save(); ctx.translate(W / 2, 990); ctx.scale(p2, p2); const wd = UI.measure(ctx, '14 jours d’essai gratuit', 42, 800) + 80; UI.pill(ctx, -wd / 2, -40, '14 jours d’essai gratuit', { bg: B.yellow, fg: B.ink, size: 42, h: 80, weight: 800 }); ctx.restore(); }
-    UI.text(ctx, 'mon-djossi.vercel.app', W / 2, 1110, { size: 36, weight: 700, color: '#FFFFFF', align: 'center', alpha: after(t, S.endCard + 1.6, 0.3) });
+    UI.text(ctx, 'www.mon-djossi.shop', W / 2, 1110, { size: 36, weight: 700, color: '#FFFFFF', align: 'center', alpha: after(t, S.endCard + 1.6, 0.3) });
     burst(ctx, t, S.endCard, W / 2, 520);
   }
 
