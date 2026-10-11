@@ -3,10 +3,12 @@ import Link from "next/link";
 import { IconAlertTriangle, IconBulb, IconChevronRight, IconLock } from "@tabler/icons-react";
 import { COMMERCE_PROFILES } from "@/lib/commerce";
 import type { EtapeGuide, Guide } from "@/lib/guides";
+import { TypeCommerce } from "@/types";
 import { GuideDeck } from "./GuideDeck";
 import { GuideFaq } from "./GuideFaq";
 import { GuideMots } from "./GuideMots";
 import { GuideTexteComplet } from "./GuideTexteComplet";
+import { GuideVideos } from "./GuideVideos";
 
 interface GuideViewProps {
   guide: Guide;
@@ -55,7 +57,7 @@ function TitreBloc({ id, children, sousTitre }: { id: string; children: string; 
 }
 
 /**
- * Tutoriel d'un type de commerce, pensé pour qui n'aime pas lire : un paquet de cartes à faire glisser
+ * Tutoriel d'un type de commerce, pensé pour qui n'aime pas lire : la vidéo, un paquet de cartes à faire glisser
  * (une étape par carte), le menu de l'application tel qu'on le voit, les mots à toucher, les questions
  * fréquentes, et tout le texte replié pour ceux qui veulent quand même lire.
  */
@@ -68,6 +70,13 @@ export function GuideView({ guide, dansApp }: GuideViewProps) {
 
   return (
     <div style={couleurs} className="mx-auto max-w-6xl space-y-14 md:space-y-16">
+      <section id="video" aria-labelledby="video-titre" className="scroll-mt-24">
+        <TitreBloc id="video-titre" sousTitre="Regarde Awa installer sa boutique puis faire sa première vente, écran par écran.">
+          Le guide en vidéo
+        </TitreBloc>
+        <GuideVideos autreCommerce={guide.type !== TypeCommerce.VETEMENTS} />
+      </section>
+
       <GuideDeck guide={guide} dansApp={dansApp} />
 
       <section id="pages" aria-labelledby="pages-titre" className="scroll-mt-24">
