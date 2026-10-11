@@ -16,10 +16,9 @@ const EPISODES = [
 ];
 EPISODES.forEach(([name, a, b], i) => {
   const out = path.join(ROOT, 'out', `episode-${name}.mp4`);
-  const fc = `[0:v]trim=0.4:2.6,setpts=PTS-STARTPTS[v0];[0:a]atrim=0.4:2.6,asetpts=PTS-STARTPTS,afade=t=out:st=2.0:d=0.2[a0];` +
-    `[0:v]trim=${a}:${b},setpts=PTS-STARTPTS,fade=t=out:st=${(b - a - 0.4).toFixed(2)}:d=0.4[v1];` +
-    `[0:a]atrim=${a}:${b},asetpts=PTS-STARTPTS,afade=t=in:d=0.08,afade=t=out:st=${(b - a - 0.5).toFixed(2)}:d=0.5[a1];` +
-    `[v0][a0][v1][a1]concat=n=2:v=1:a=1[v][a]`;
-  execFileSync('ffmpeg', ['-v', 'error', '-y', '-i', SRC, '-filter_complex', fc, '-map', '[v]', '-map', '[a]', '-c:v', 'libx264', '-crf', '19', '-preset', 'medium', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '192k', '-movflags', '+faststart', out]);
+  // deux entrées positionnées par -ss (sans tout décoder en mémoire) : le logo, puis le chapitre
+  const fc = `[0:a]afade=t=out:st=2.0:d=0.2[a0];[1:v]fade=t=out:st=${(b - a - 0.4).toFixed(2)}:d=0.4[v1];` +
+    `[1:a]afade=t=in:d=0.08,afade=t=out:st=${(b - a - 0.5).toFixed(2)}:d=0.5[a1];[0:v][a0][v1][a1]concat=n=2:v=1:a=1[v][a]`;
+  execFileSync('ffmpeg', ['-v', 'error', '-y', '-ss', '0.4', '-t', '2.2', '-i', SRC, '-ss', String(a), '-t', String(b - a), '-i', SRC, '-filter_complex', fc, '-map', '[v]', '-map', '[a]', '-c:v', 'libx264', '-crf', '19', '-preset', 'medium', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '192k', '-movflags', '+faststart', out]);
   console.log(`episode ${i + 1}: ${out} (${(b - a + 2.2).toFixed(1)} s)`);
 });
