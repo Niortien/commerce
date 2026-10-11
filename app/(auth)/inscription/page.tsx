@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { RegisterBoutiqueView } from "@/components/auth/RegisterBoutiqueView";
-import { openGraphPage } from "@/lib/seo";
+import { openGraphPage, twitterPage } from "@/lib/seo";
 import { SIGNUP_PLANS, type SignupPlan } from "@/lib/validators/boutique-signup.schema";
 
 const DESCRIPTION =
@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/inscription" },
   robots: { index: true, follow: true },
   openGraph: openGraphPage("Inscrire ma boutique | Mon Djossi", DESCRIPTION, "/inscription"),
+  twitter: twitterPage("Inscrire ma boutique | Mon Djossi", DESCRIPTION),
 };
 
 export default async function InscriptionPage({ searchParams }: { searchParams: Promise<{ plan?: string }> }) {
