@@ -5,6 +5,7 @@ import { MarketingFooter } from "@/components/marketing/MarketingFooter";
 import { MarketingNav } from "@/components/marketing/MarketingNav";
 import { TYPES_COMMERCE } from "@/lib/commerce";
 import { getGuide, slugGuide, typeDepuisSlug } from "@/lib/guides";
+import { metadonneesGuide } from "@/lib/seo";
 
 interface GuideTypePageProps {
   params: { type: string };
@@ -16,9 +17,7 @@ export function generateStaticParams() {
 
 export function generateMetadata({ params }: GuideTypePageProps): Metadata {
   const type = typeDepuisSlug(params.type);
-  if (!type) return {};
-  const guide = getGuide(type);
-  return { title: guide.titre, description: guide.accroche, alternates: { canonical: `/guides/${guide.slug}` } };
+  return type ? metadonneesGuide(type) : {};
 }
 
 export default function GuideTypePage({ params }: GuideTypePageProps) {
