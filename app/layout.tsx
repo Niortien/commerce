@@ -3,7 +3,7 @@ import { JetBrains_Mono, Inter, Plus_Jakarta_Sans } from "next/font/google";
 import { Providers } from "@/providers";
 import { ThemeInit } from "@/components/common/ThemeInit";
 import { ServiceWorkerInit } from "@/components/common/ServiceWorkerInit";
-import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_SOCIAL_TITLE, SITE_TITLE, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 // Applique le thème persisté avant le premier paint pour éviter un flash
@@ -55,7 +55,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Mon Djossi — Logiciel de gestion de boutiques : stock et caisse",
+    default: SITE_TITLE,
     template: "%s | Mon Djossi",
   },
   description: SITE_DESCRIPTION,
@@ -66,12 +66,12 @@ export const metadata: Metadata = {
     locale: "fr_CI",
     url: SITE_URL,
     siteName: SITE_NAME,
-    title: "Mon Djossi — Gérez vos boutiques : stock, caisse, abonnements",
+    title: SITE_SOCIAL_TITLE,
     description: SITE_DESCRIPTION,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Mon Djossi — Gérez vos boutiques : stock, caisse, abonnements",
+    title: SITE_SOCIAL_TITLE,
     description: SITE_DESCRIPTION,
   },
   robots: { index: true, follow: true },
