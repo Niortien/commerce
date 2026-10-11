@@ -30,9 +30,11 @@ fx.addMono(I.thud(60, 0.14), ev.rupture, 0.75);
 fx.addMono(I.thwack(), ev.rupture, 0.4);
 drums.addMono(I.crash(9), ev.rupture, 0.18, -0.2);
 // RÉSEAU : le wifi se coupe, glitch
-fx.addMono(I.bwomp(), ev.wifiCut, 0.45);
+fx.addMono(I.thud(140, 0.05), ev.wifiCut, 0.9);
+fx.addMono(I.thwack(), ev.wifiCut, 0.35);
+fx.addMono(I.bwomp(), ev.wifiCut + 0.05, 0.3);
 fx.addMono(I.tvClick(), ev.wifiCut, 0.5);
-for (let i = 0; i < 5; i++) fx.addMono(I.pop(3000 - i * 420, 200 + i), ev.wifiCut + 0.09 + i * 0.07, 0.12, i % 2 ? 0.5 : -0.5);
+for (let i = 0; i < 5; i++) fx.addMono(I.pop(3000 - i * 420, 200 + i), ev.wifiCut + 0.25 + i * 0.07, 0.07, i % 2 ? 0.5 : -0.5);
 // REMBOBINAGE : bande qui recule, souffle montant, puis silence
 fx.addMono(I.noiseSweep(BREATH[0] - ev.rewind, 6000, 300, { q: 1.2, pink: true }), ev.rewind, 0.18);
 fx.addMono(I.noiseSweep(BREATH[0] - ev.rewind - 0.3, 200, 8000, { q: 0.9, shape: (x) => x * x, pink: true }), ev.rewind + 0.3, 0.3);

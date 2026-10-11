@@ -405,7 +405,7 @@
   function shotApp(ctx, t) {
     lightBg(ctx, t);
     const up = ease.outBack(clamp((t - ev.phoneUp) / 0.5), 1.1);
-    const down = ease.inCubic(clamp((t - (T(17) - 0.32)) / 0.32));
+    const down = ease.inCubic(clamp((t - (T(17) - 0.5)) / 0.25));
     const left = ease.inOutCubic(clamp((t - ev.caisse) / 0.4)) * (1 - ease.inOutCubic(clamp((t - ev.offline) / 0.4)));
     const cx = W / 2 - 110 * left, cy = lerp(H + 700, 820, up) + down * 1400;
     const label = t < ev.caisse ? ['Alertes de stock', T(8)] : t < ev.offline ? ['Caisse rapide', ev.caisse] : ['Même sans internet', ev.offline];
@@ -499,9 +499,13 @@
     bgGrad(ctx, s.bg[1], s.bg[0]);
     blob(ctx, 900, 300, 600, 'rgba(255,255,255,0.5)');
     badgeRow(ctx, t, 'Adapté à votre métier', ev.metiers[0]);
-    const t0 = ev.metiers[i], u = clamp((t - t0) / 0.3);
-    if (i > 0 && u < 1) sectorCard(ctx, SECTORS[i - 1], t, ev.metiers[i - 1], -ease.inCubic(u) * W);
-    sectorCard(ctx, s, t, t0, (1 - ease.outBack(u, 1.1)) * W);
+    const t0 = ev.metiers[i];
+    // la carte suivante glisse pendant le dernier quart de temps et se pose PILE sur le temps (le coup de log drum)
+    const nx = ev.metiers[i + 1], v = nx ? clamp((t - (nx - 0.25)) / 0.25) : 0;
+    const land = 1 - clamp((t - t0) / 0.18);
+    sectorCard(ctx, s, t, t0, -ease.inCubic(v) * W * 0.35 + (i === 0 ? (1 - ease.outCubic(clamp((t - (t0 - 0.25)) / 0.25))) * W : 0));
+    if (v > 0) sectorCard(ctx, SECTORS[i + 1], t, nx, (1 - ease.inCubic(v)) * W);
+    if (land > 0 && t >= t0) { ctx.fillStyle = `rgba(255,255,255,${0.45 * land})`; ctx.fillRect(0, 0, W, H); }
     // et les autres métiers
     if (i === 2) {
       const other = ['Chaussures', 'Beauté', 'Alimentation', 'Pharmacie', 'Électronique'];
@@ -600,7 +604,7 @@
       if (t < ev.rewind) shotBefore(ctx, t);
       else if (t < ev.logo) shotRewind(ctx, t);
       else if (t < ev.phoneUp) shotLogo(ctx, t);
-      else if (t < ev.metiers[0]) shotApp(ctx, t);
+      else if (t < ev.metiers[0] - 0.25) shotApp(ctx, t);
       else if (t < ev.soir) shotMetiers(ctx, t);
       else if (t < ev.endCard) shotSoir(ctx, t);
       else shotFin(ctx, t);
