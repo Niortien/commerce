@@ -8,7 +8,8 @@ import { useTypeCommerce } from "@/hooks/useTypeCommerce";
 import { formatDateCourte } from "@/lib/devis";
 import { formatDateFr } from "@/lib/dateUtils";
 import { useAuthStore } from "@/stores/authStore";
-import { getBoutiqueContact } from "@/lib/boutiqueConfig";
+import { enteteRecu } from "@/lib/boutiqueConfig";
+import { useMyBoutique } from "@/features/boutiques/query/boutiques-queries";
 
 export interface RecuLigne {
   produitNom: string;
@@ -97,9 +98,9 @@ export function RecuPrint({
   credit,
 }: RecuPrintProps) {
   const boutiqueName = useAuthStore((s) => s.user?.boutiqueName ?? null);
-  // Chaque boutique imprime ses reçus à son nom (l'en-tête « Luxury Boutique » datait de la version mono-boutique).
-  const enseigne = boutiqueName ?? "Mon Djossi";
-  const contact = getBoutiqueContact(boutiqueName);
+  // Chaque boutique imprime ses reçus avec les informations de « Ma boutique » : nom, logo, adresse, téléphones.
+  const { data: maBoutique } = useMyBoutique();
+  const { enseigne, logoUrl, lignes: lignesEntete } = enteteRecu(maBoutique?.data, boutiqueName);
 
   const now = new Date();
   const isFeteIndependance = now.getMonth() === 7 && (now.getDate() === 7 || now.getDate() === 8);
@@ -122,10 +123,14 @@ export function RecuPrint({
       {/* Zone d'impression — hors modal, visible uniquement @media print */}
       <div id="recu-print-root" aria-hidden="true" style={{ display: "none" }}>
         <div style={{ textAlign: "center", marginBottom: 4 }}>
-          <div style={{ fontSize: 15, fontWeight: "bold", letterSpacing: 2 }}>{enseigne.toUpperCase()}</div>
-          {contact && (
-            <div style={{ fontSize: 9, marginTop: 1 }}>{contact.telephones.join(" / ")}</div>
+          {logoUrl && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={logoUrl} alt="" style={{ display: "block", maxHeight: 48, maxWidth: "60%", margin: "0 auto 3px", filter: "grayscale(1)" }} />
           )}
+          <div style={{ fontSize: 15, fontWeight: "bold", letterSpacing: 2 }}>{enseigne.toUpperCase()}</div>
+          {lignesEntete.map((l) => (
+            <div key={l} style={{ fontSize: 9, marginTop: 1 }}>{l}</div>
+          ))}
         </div>
         <div style={{ borderTop: "1px dashed #000", margin: "4px 0" }} />
         <div style={{ fontSize: 9 }}>
@@ -246,10 +251,14 @@ export function RecuPrint({
             <div className="rounded-lg border border-border/60 bg-white p-4 text-black">
               {/* En-tête */}
               <div className="mb-2 text-center">
-                <p className="text-base font-bold tracking-[0.15em]">{enseigne.toUpperCase()}</p>
-                {contact && (
-                  <p className="text-[10px] text-gray-500">{contact.telephones.join(" / ")}</p>
+                {logoUrl && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={logoUrl} alt={`Logo ${enseigne}`} className="mx-auto mb-1 max-h-12 max-w-[60%] object-contain" />
                 )}
+                <p className="text-base font-bold tracking-[0.15em]">{enseigne.toUpperCase()}</p>
+                {lignesEntete.map((l) => (
+                  <p key={l} className="text-[10px] text-gray-500">{l}</p>
+                ))}
               </div>
               <div className="my-2 border-t border-dashed border-gray-300" />
 

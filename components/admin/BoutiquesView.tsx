@@ -10,6 +10,7 @@ import { useUpdateMyBoutique } from "@/features/boutiques/mutation/boutiques-mut
 import { StatutAbonnement, StatutBoutique } from "@/types";
 import { CommerceBadge } from "@/components/common/CommerceBadge";
 import { resolveTypeCommerce } from "@/lib/commerce";
+import { LogoBoutiqueField } from "./LogoBoutiqueField";
 
 const schema = z.object({
   nom: z.string().min(1, "Requis"),
@@ -18,6 +19,7 @@ const schema = z.object({
   whatsapp: z.string().optional(),
   email: z.string().email("Email invalide").optional().or(z.literal("")),
   telephone: z.string().optional(),
+  logoUrl: z.string().optional(),
 });
 type FormData = z.infer<typeof schema>;
 
@@ -39,7 +41,7 @@ export function BoutiquesView() {
   const boutique = res?.data;
   const updateMutation = useUpdateMyBoutique();
 
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
+  const { register, handleSubmit, reset, watch, setValue, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
   });
 
@@ -52,14 +54,18 @@ export function BoutiquesView() {
         whatsapp: boutique.whatsapp ?? "",
         email: boutique.email ?? "",
         telephone: boutique.telephone ?? "",
+        logoUrl: boutique.logoUrl ?? "",
       });
     }
   }, [boutique, reset]);
 
-  const onSubmit = handleSubmit(async (data) => {
+  const onSubmit = handleSubmit(async ({ logoUrl, ...data }) => {
+    // Le logo (une image) n'est renvoyé que s'il a changé ; une chaîne vide le retire.
+    const logoChange = (logoUrl ?? "") !== (boutique?.logoUrl ?? "");
     await updateMutation.mutateAsync({
       ...data,
       email: data.email || undefined,
+      ...(logoChange ? { logoUrl: logoUrl ?? "" } : {}),
     });
   });
 
@@ -119,6 +125,8 @@ export function BoutiquesView() {
         <Input label="WhatsApp" variant="bordered" placeholder="+225 07 00 00 00 00" {...register("whatsapp")} />
         <Input label="Email de contact" variant="bordered" isInvalid={!!errors.email} errorMessage={errors.email?.message} {...register("email")} />
         <Input label="Téléphone" variant="bordered" {...register("telephone")} />
+        <LogoBoutiqueField value={watch("logoUrl") ?? ""} onChange={(v) => setValue("logoUrl", v, { shouldDirty: true })} />
+        <p className="text-xs text-text-muted">Le nom, le logo, l&apos;adresse, la ville, le téléphone et le WhatsApp s&apos;impriment en haut de vos reçus.</p>
         <Button type="submit" className="mt-2 w-fit bg-accent text-white" isLoading={updateMutation.isPending}>
           Enregistrer
         </Button>
