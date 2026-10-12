@@ -18,7 +18,7 @@ import {
   SelectItem,
   useDisclosure,
 } from "@heroui/react";
-import { IconCash, IconChartLine, IconEye, IconPlus, IconRefresh, IconUsers } from "@tabler/icons-react";
+import { IconCash, IconChartLine, IconEye, IconPlus, IconRefresh, IconTrash, IconUsers } from "@tabler/icons-react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSuperAdminBoutiques } from "@/features/super-admin/query/superadmin-queries";
@@ -26,6 +26,7 @@ import {
   useChangerStatutBoutique,
   useChangerTypeCommerce,
   useCreateAbonnement,
+  useDeleteSuperAdminBoutique,
   useRegisterBoutique,
 } from "@/features/super-admin/mutation/superadmin-mutations";
 import {
@@ -64,6 +65,8 @@ export function BoutiquesView() {
   const abonnementMutation = useCreateAbonnement();
   const typeMutation = useChangerTypeCommerce();
   const [typeChange, setTypeChange] = useState<{ boutique: Boutique; type: TypeCommerce } | null>(null);
+  const deleteMutation = useDeleteSuperAdminBoutique();
+  const [aSupprimer, setASupprimer] = useState<Boutique | null>(null);
 
   const registerModal = useDisclosure();
   const abonnementModal = useDisclosure();
@@ -113,6 +116,16 @@ export function BoutiquesView() {
     if (!typeChange) return;
     await typeMutation.mutateAsync({ id: typeChange.boutique.id, typeCommerce: typeChange.type });
     setTypeChange(null);
+  }
+
+  async function confirmSuppression() {
+    if (!aSupprimer) return;
+    try {
+      await deleteMutation.mutateAsync(aSupprimer.id);
+      setASupprimer(null);
+    } catch {
+      // Le message d'erreur est déjà affiché par la mutation ; la fenêtre reste ouverte.
+    }
   }
 
   return (
@@ -278,6 +291,16 @@ export function BoutiquesView() {
                     >
                       {attente ? "Confirmer le paiement" : "Renouveler"}
                     </Button>
+                    <Button
+                      isIconOnly
+                      variant="bordered"
+                      className="min-h-11 min-w-11 border-[var(--color-out)]/40 text-[var(--color-out)]"
+                      aria-label={`Supprimer la boutique ${b.nom}`}
+                      title="Supprimer la boutique"
+                      onPress={() => setASupprimer(b)}
+                    >
+                      <IconTrash size={18} aria-hidden />
+                    </Button>
                   </div>
                 </div>
               </li>
@@ -354,6 +377,22 @@ export function BoutiquesView() {
             : ""
         }
         confirmLabel={typeChange ? `Passer en ${COMMERCE_PROFILES[typeChange.type].label.toLowerCase()}` : "Confirmer"}
+      />
+
+      {/* Suppression : le backend archive la boutique si elle a de l'historique, sinon la supprime. */}
+      <ConfirmModal
+        isOpen={aSupprimer !== null}
+        onClose={() => setASupprimer(null)}
+        onConfirm={() => void confirmSuppression()}
+        isLoading={deleteMutation.isPending}
+        danger
+        title="Supprimer la boutique"
+        message={
+          aSupprimer
+            ? `« ${aSupprimer.nom} » ne sera plus accessible. Si elle a déjà des produits, des entrées, des ventes ou des sessions de caisse, elle sera archivée et son historique conservé ; sinon elle sera supprimée définitivement.`
+            : ""
+        }
+        confirmLabel="Supprimer"
       />
 
       {/* Renouvellement / changement de plan */}

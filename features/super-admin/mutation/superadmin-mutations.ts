@@ -2,7 +2,7 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import type { StatutBoutique, TypeCommerce } from "@/types";
+import { StatutBoutique, type AppError, type TypeCommerce } from "@/types";
 import { COMMERCE_PROFILES } from "@/lib/commerce";
 import {
   changerStatutBoutique,
@@ -77,11 +77,16 @@ export function useDeleteSuperAdminBoutique() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: deleteSuperAdminBoutique,
-    onSuccess: () => {
+    // Le backend archive une boutique qui a de l'historique (produits, ventes…) et supprime les autres.
+    onSuccess: (res) => {
       invalidateBoutiques(qc);
-      toast.success("Boutique archivée / supprimée");
+      toast.success(
+        res.data.statut === StatutBoutique.ARCHIVE
+          ? `« ${res.data.nom} » archivée : son historique est conservé`
+          : `« ${res.data.nom} » supprimée`
+      );
     },
-    onError: () => toast.error("Erreur lors de la suppression"),
+    onError: (error: AppError) => toast.error(error?.message ?? "La boutique n'a pas pu être supprimée"),
   });
 }
 
