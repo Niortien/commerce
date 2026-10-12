@@ -16,5 +16,9 @@ export function useMyBoutique() {
     queryFn: getMyBoutique,
     enabled: !!token,
     staleTime: 60_000,
+    // Le Super Admin peut changer le type de commerce à tout moment : un espace déjà ouvert doit le voir
+    // (menu, vocabulaire, pages métier) sans reconnexion. La barre latérale reste montée, d'où ces relectures.
+    refetchOnWindowFocus: true,
+    refetchInterval: 120_000,
   });
 }
