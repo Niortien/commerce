@@ -10,6 +10,8 @@ export interface UpdateMyBoutiqueBody {
   email?: string;
   telephone?: string;
   logoUrl?: string;
+  /** Publie (ou retire) la vitrine en ligne de la boutique. */
+  vitrineActive?: boolean;
 }
 
 /** Profil de la boutique de l'ADMIN/CAISSIER connecté. */

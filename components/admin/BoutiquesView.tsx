@@ -11,6 +11,7 @@ import { StatutAbonnement, StatutBoutique } from "@/types";
 import { CommerceBadge } from "@/components/common/CommerceBadge";
 import { resolveTypeCommerce } from "@/lib/commerce";
 import { LogoBoutiqueField } from "./LogoBoutiqueField";
+import { VitrineBoutiqueSection } from "./VitrineBoutiqueSection";
 
 const schema = z.object({
   nom: z.string().min(1, "Requis"),
@@ -117,6 +118,8 @@ export function BoutiquesView() {
           Il règle les pages et le vocabulaire de votre espace. Pour le changer, contactez le support Mon Djossi.
         </p>
       </div>
+
+      <VitrineBoutiqueSection boutique={boutique} />
 
       <form onSubmit={(e) => void onSubmit(e)} className="flex max-w-xl flex-col gap-3 rounded-lg border border-border bg-surface p-4">
         <Input label="Nom de la boutique" variant="bordered" isInvalid={!!errors.nom} errorMessage={errors.nom?.message} {...register("nom")} />

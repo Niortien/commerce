@@ -10,3 +10,4 @@ export * from "./devis.types";
 export * from "./balle.types";
 export * from "./client.types";
 export * from "./audit.types";
+export * from "./vitrine.types";

@@ -38,6 +38,8 @@ export interface Boutique {
   email: string | null;
   telephone: string | null;
   logoUrl: string | null;
+  /** Vitrine en ligne publiée (page publique /boutique/{slug}). */
+  vitrineActive?: boolean;
   isActive: boolean;
   statut: StatutBoutique;
   /** Absent sur les boutiques créées avant les types de commerce : elles sont traitées comme VETEMENTS. */
