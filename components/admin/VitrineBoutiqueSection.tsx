@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Button, Snippet, Switch } from "@heroui/react";
 import { IconBrandWhatsapp, IconExternalLink } from "@tabler/icons-react";
 import { useUpdateMyBoutique } from "@/features/boutiques/mutation/boutiques-mutations";
@@ -64,7 +65,11 @@ export function VitrineBoutiqueSection({ boutique }: { boutique: Boutique }) {
           </div>
           {!boutique.whatsapp ? (
             <p className="text-xs text-warning">
-              Ajoutez votre numéro WhatsApp ci-dessous : c&apos;est là que vos clients vous enverront leurs commandes.
+              Ajoutez votre numéro WhatsApp dans{" "}
+              <Link href="/admin/boutiques" className="underline">
+                Ma boutique
+              </Link>{" "}
+              : c&apos;est là que vos clients vous enverront leurs commandes.
             </p>
           ) : null}
         </>

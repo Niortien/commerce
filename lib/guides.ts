@@ -840,6 +840,7 @@ export function getGuide(type: TypeCommerce): Guide {
     { nom: nomCategories, href: "/admin/categories", role: "Les tiroirs où ranger tes produits.", admin: true },
     { nom: "Promotions", href: "/promotions", role: "Les prix réduits pour une période." },
     { nom: "Ma boutique", href: "/admin/boutiques", role: "Les informations qui apparaissent sur tes reçus.", admin: true },
+    { nom: "Vitrine en ligne", href: "/admin/vitrine", role: "Ta boutique sur internet, à partager sur WhatsApp.", admin: true },
     { nom: "Caissiers", href: "/admin/utilisateurs", role: "Les accès de ton équipe.", admin: true },
     { nom: "Messages", href: "/messages", role: "Parler avec le support Mon Djossi.", admin: true },
   ];

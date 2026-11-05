@@ -18,6 +18,7 @@ import {
   IconReportMoney,
   IconRosetteDiscount,
   IconUsers,
+  IconWorld,
 } from "@tabler/icons-react";
 import type { ComponentType } from "react";
 import type { IconProps } from "@tabler/icons-react";
@@ -95,6 +96,7 @@ export const BOUTIQUE_ADMIN_NAV: NavSection = {
   label: "Administration",
   items: [
     { href: "/admin/boutiques", label: "Ma boutique", icon: IconBuildingStore },
+    { href: "/admin/vitrine", label: "Vitrine en ligne", icon: IconWorld },
     { href: "/admin/utilisateurs", label: "Caissiers", icon: IconUsers },
     { href: "/messages", label: "Messages", icon: IconMessageCircle, badge: "chat" },
   ],
