@@ -3,7 +3,7 @@ import { getApiBaseUrl } from "@/lib/apiBase";
 import { SITE_URL } from "@/lib/site";
 import { toWhatsAppHref } from "@/lib/phone";
 import { formatCurrency } from "@/lib/formatCurrency";
-import type { ApiResponse, Vitrine, VitrineProduit, VitrineVariante } from "@/types";
+import type { ApiResponse, LignePanier, Vitrine, VitrineProduit, VitrineVariante } from "@/types";
 
 /** Rafraîchie au plus toutes les minutes : un article vendu en caisse disparaît vite de la vitrine. */
 const REVALIDATE_SECONDES = 60;
@@ -67,6 +67,59 @@ export function lienCommande(whatsapp: string, boutiqueSlug: string, p: VitrineP
     `Vu sur votre vitrine : ${vitrineUrl(boutiqueSlug)}`,
   ];
   return `${toWhatsAppHref(numeroInternational(whatsapp))}?text=${encodeURIComponent(lignes.join("\n"))}`;
+}
+
+/** Identifiant d'une ligne de panier : un même article dans deux tailles fait deux lignes. */
+export function cleLigne(produitId: string, varianteId: string | null): string {
+  return `${produitId}:${varianteId ?? "-"}`;
+}
+
+export function totalPanier(lignes: LignePanier[]): number {
+  return lignes.reduce((total, l) => total + l.prixUnitaire * l.quantite, 0);
+}
+
+export function nombreArticles(lignes: LignePanier[]): number {
+  return lignes.reduce((n, l) => n + l.quantite, 0);
+}
+
+export interface InfosClient {
+  nom: string;
+  precision: string;
+}
+
+/** Lien WhatsApp qui envoie tout le panier à la boutique, avec le total et les infos du client. */
+export function lienCommandePanier(
+  whatsapp: string,
+  boutique: { nom: string; slug: string },
+  lignes: LignePanier[],
+  client: InfosClient,
+): string {
+  return `${toWhatsAppHref(numeroInternational(whatsapp))}?text=${encodeURIComponent(messageCommandePanier(boutique, lignes, client))}`;
+}
+
+/** Le message exact envoyé sur WhatsApp : le panier l'affiche tel quel avant l'envoi. */
+export function messageCommandePanier(boutique: { nom: string; slug: string }, lignes: LignePanier[], client: InfosClient): string {
+  const articles = lignes.map((l) => {
+    const variante = l.libelleVariante ? ` (${l.libelleVariante})` : "";
+    const sousTotal = l.quantite > 1 ? ` = ${formatCurrency(l.prixUnitaire * l.quantite)}` : "";
+    return `• ${l.quantite} × ${l.nom}${variante} : ${formatCurrency(l.prixUnitaire)}${sousTotal}`;
+  });
+  const lignesMessage = [
+    `Bonjour ${boutique.nom}, je souhaite commander :`,
+    ...articles,
+    "",
+    `Total : ${formatCurrency(totalPanier(lignes))}`,
+    ...(client.nom.trim() ? [`Nom : ${client.nom.trim()}`] : []),
+    ...(client.precision.trim() ? [`Livraison / précisions : ${client.precision.trim()}`] : []),
+    "",
+    `Commande préparée sur votre vitrine : ${vitrineUrl(boutique.slug)}`,
+  ];
+  return lignesMessage.join("\n");
+}
+
+/** Recherche sans tenir compte des accents ni des majuscules : « tshirt » ou « écharpe » / « echarpe ». */
+export function normaliser(texte: string): string {
+  return texte.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim();
 }
 
 /** Lien WhatsApp de contact simple (sans article). */

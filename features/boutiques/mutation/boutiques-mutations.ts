@@ -2,6 +2,7 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import type { AppError } from "@/types";
 import { updateMyBoutique } from "../api/boutiques-api";
 import { boutiqueKeys } from "../query/boutiques-queries";
 
@@ -13,6 +14,6 @@ export function useUpdateMyBoutique() {
       void qc.invalidateQueries({ queryKey: boutiqueKeys.me() });
       toast.success("Boutique mise à jour");
     },
-    onError: () => toast.error("Erreur lors de la mise à jour"),
+    onError: (error: AppError) => toast.error(error?.message ?? "Erreur lors de la mise à jour"),
   });
 }

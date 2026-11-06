@@ -1,83 +1,111 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { Button } from "@heroui/react";
-import { IconBuildingStore } from "@tabler/icons-react";
-import type { Vitrine, VitrineProduit } from "@/types";
-import { ProduitVitrineCard } from "./ProduitVitrineCard";
+import { useEffect, useMemo, useState } from "react";
+import { resolveTypeCommerce, sectorStyle } from "@/lib/commerce";
+import { libelleVariante, nombreArticles, normaliser, prixAffiche, totalPanier } from "@/lib/vitrine";
+import { usePanier, usePanierVitrineStore } from "@/stores/panierVitrineStore";
+import type { Vitrine, VitrineProduit, VitrineVariante } from "@/types";
+import { PanierBar } from "./PanierBar";
+import { PanierDrawer } from "./PanierDrawer";
 import { ProduitVitrineModal } from "./ProduitVitrineModal";
+import { VitrineCatalogue } from "./VitrineCatalogue";
+import { VitrineContact } from "./VitrineContact";
+import { VitrineEtapes } from "./VitrineEtapes";
 import { VitrineFooter } from "./VitrineFooter";
 import { VitrineHeader } from "./VitrineHeader";
+import { VitrineToolbar } from "./VitrineToolbar";
 
 export function VitrineView({ vitrine }: { vitrine: Vitrine }) {
   const { boutique, categories, produits } = vitrine;
   const [categorieId, setCategorieId] = useState<string | null>(null);
+  const [recherche, setRecherche] = useState("");
   const [ouvert, setOuvert] = useState<VitrineProduit | null>(null);
+  const [panierOuvert, setPanierOuvert] = useState(false);
+  const [signalAjout, setSignalAjout] = useState(0);
 
+  const lignes = usePanier(boutique.slug);
+  const ajouter = usePanierVitrineStore((s) => s.ajouter);
+  const synchroniser = usePanierVitrineStore((s) => s.synchroniser);
+
+  // Le panier vient du navigateur : on le relit après le premier rendu, puis on retire ce qui n'est plus en vitrine.
+  useEffect(() => {
+    void Promise.resolve(usePanierVitrineStore.persist.rehydrate()).then(() => synchroniser(boutique.slug, produits));
+  }, [boutique.slug, produits, synchroniser]);
+
+  const q = normaliser(recherche);
   const visibles = useMemo(
-    () => (categorieId ? produits.filter((p) => p.categorieId === categorieId) : produits),
-    [produits, categorieId],
+    () =>
+      produits.filter(
+        (p) =>
+          (categorieId === null || p.categorieId === categorieId) &&
+          (q === "" || normaliser(`${p.nom} ${p.description ?? ""}`).includes(q)),
+      ),
+    [produits, categorieId, q],
   );
 
+  const ajouterAuPanier = (produit: VitrineProduit, variante: VitrineVariante | null, quantite: number) => {
+    ajouter(
+      boutique.slug,
+      {
+        produitId: produit.id,
+        varianteId: variante?.id ?? null,
+        nom: produit.nom,
+        libelleVariante: variante ? libelleVariante(variante) : "",
+        prixUnitaire: prixAffiche(produit),
+        image: produit.images[0] ?? null,
+      },
+      quantite,
+    );
+    setSignalAjout((n) => n + 1);
+  };
+
+  // « + » sous un article : ajout direct s'il n'y a rien à choisir, sinon la fiche s'ouvre.
+  const ajoutRapide = (produit: VitrineProduit) => {
+    if (produit.variantes.length > 1) setOuvert(produit);
+    else ajouterAuPanier(produit, produit.variantes[0] ?? null, 1);
+  };
+
+  const nombre = nombreArticles(lignes);
+
   return (
-    <div className="min-h-dvh bg-base">
-      <main className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 pb-10 pt-6 sm:px-6">
-        <VitrineHeader boutique={boutique} />
+    <div className="min-h-dvh bg-base" style={sectorStyle(resolveTypeCommerce(boutique.typeCommerce))}>
+      <VitrineHeader
+        boutique={boutique}
+        produits={produits}
+        nombrePanier={nombre}
+        onOuvrirProduit={setOuvert}
+        onOuvrirPanier={() => setPanierOuvert(true)}
+      />
 
-        {categories.length > 1 ? (
-          <nav aria-label="Catégories" className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0">
-            <Button
-              size="sm"
-              radius="full"
-              variant={categorieId === null ? "solid" : "bordered"}
-              className={categorieId === null ? "shrink-0 bg-text !text-surface" : "shrink-0"}
-              aria-pressed={categorieId === null}
-              onPress={() => setCategorieId(null)}
-            >
-              Tout · {produits.length}
-            </Button>
-            {categories.map((c) => {
-              const actif = categorieId === c.id;
-              return (
-                <Button
-                  key={c.id}
-                  size="sm"
-                  radius="full"
-                  variant={actif ? "solid" : "bordered"}
-                  className={actif ? "shrink-0 bg-text !text-surface" : "shrink-0"}
-                  aria-pressed={actif}
-                  onPress={() => setCategorieId(actif ? null : c.id)}
-                >
-                  {c.nom}
-                </Button>
-              );
-            })}
-          </nav>
-        ) : null}
-
-        <section aria-label="Articles disponibles" aria-live="polite">
-          {visibles.length === 0 ? (
-            <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-border px-6 py-16 text-center">
-              <IconBuildingStore size={40} className="text-text-dim" aria-hidden />
-              <p className="font-semibold text-text">Les articles arrivent bientôt</p>
-              <p className="max-w-sm text-sm text-text-muted">
-                Écrivez à la boutique sur WhatsApp pour savoir ce qui est disponible aujourd&apos;hui.
+      {produits.length > 0 ? (
+        <>
+          <VitrineToolbar
+            categories={categories}
+            categorieId={categorieId}
+            onCategorie={setCategorieId}
+            recherche={recherche}
+            onRecherche={setRecherche}
+            total={produits.length}
+          />
+          <main className="mx-auto w-full max-w-[1600px] px-5 pt-8 sm:px-8 sm:pt-10" aria-live="polite">
+            {visibles.length === 0 ? (
+              <p className="max-w-md py-16 text-base text-text">
+                Aucun article ne correspond à « {recherche} ». Essayez un autre mot, ou écrivez à la boutique sur WhatsApp.
               </p>
-            </div>
-          ) : (
-            <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-              {visibles.map((p) => (
-                <li key={p.id}>
-                  <ProduitVitrineCard produit={p} onOuvrir={setOuvert} />
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-      </main>
+            ) : (
+              <VitrineCatalogue produits={visibles} categories={categories} aplatir={q !== ""} onOuvrir={setOuvert} onAjouter={ajoutRapide} />
+            )}
+          </main>
+          <VitrineEtapes boutique={boutique} produits={produits} />
+        </>
+      ) : null}
 
-      <VitrineFooter slug={boutique.slug} />
-      <ProduitVitrineModal produit={ouvert} boutique={boutique} onFermer={() => setOuvert(null)} />
+      <VitrineContact boutique={boutique} />
+      <VitrineFooter slug={boutique.slug} boutiqueNom={boutique.nom} />
+
+      <ProduitVitrineModal produit={ouvert} boutique={boutique} onFermer={() => setOuvert(null)} onAjouter={ajouterAuPanier} />
+      <PanierBar nombre={nombre} total={totalPanier(lignes)} signalAjout={signalAjout} onOuvrir={() => setPanierOuvert(true)} />
+      <PanierDrawer isOpen={panierOuvert} onClose={() => setPanierOuvert(false)} boutique={boutique} lignes={lignes} />
     </div>
   );
 }

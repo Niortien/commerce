@@ -38,6 +38,18 @@ export interface VitrineProduit {
   variantes: VitrineVariante[];
 }
 
+/** Une ligne du panier de la vitrine (côté visiteur, gardée dans son navigateur). */
+export interface LignePanier {
+  produitId: string;
+  varianteId: string | null;
+  nom: string;
+  /** « M · Noir », vide pour un article sans taille ni couleur. */
+  libelleVariante: string;
+  prixUnitaire: number;
+  image: string | null;
+  quantite: number;
+}
+
 export interface Vitrine {
   boutique: VitrineBoutique;
   categories: VitrineCategorie[];
