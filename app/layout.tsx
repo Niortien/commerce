@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { JetBrains_Mono, Inter, Plus_Jakarta_Sans } from "next/font/google";
+import localFont from "next/font/local";
 import { Providers } from "@/providers";
 import { ThemeInit } from "@/components/common/ThemeInit";
 import { ServiceWorkerInit } from "@/components/common/ServiceWorkerInit";
@@ -27,22 +27,25 @@ const THEME_INIT_SCRIPT = `
 `;
 
 // ERP + site de présentation : Plus Jakarta Sans (titres), Inter (corps), JetBrains Mono (données).
-const displayFont = Plus_Jakarta_Sans({
+// Polices auto-hébergées (fichiers variables latins, licence OFL) : le build ne dépend plus de Google Fonts.
+const displayFont = localFont({
   variable: "--font-display",
-  subsets: ["latin"],
-  weight: ["500", "600", "700", "800"],
+  display: "swap",
+  src: [{ path: "./fonts/plus-jakarta-sans-latin.woff2", weight: "500 800", style: "normal" }],
 });
 
-const bodyFont = Inter({
+const bodyFont = localFont({
   variable: "--font-body",
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  display: "swap",
+  src: [{ path: "./fonts/inter-latin.woff2", weight: "400 600", style: "normal" }],
 });
 
-const monoFont = JetBrains_Mono({
+// Données uniquement : pas préchargée, elle n'est téléchargée que sur les pages qui l'affichent.
+const monoFont = localFont({
   variable: "--font-mono",
-  subsets: ["latin"],
-  weight: ["400", "500"],
+  display: "swap",
+  preload: false,
+  src: [{ path: "./fonts/jetbrains-mono-latin.woff2", weight: "400 500", style: "normal" }],
 });
 
 // Couleur de la barre du navigateur mobile, selon le thème de l'appareil.

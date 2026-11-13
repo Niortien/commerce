@@ -1,10 +1,10 @@
-import { Unbounded } from "next/font/google";
+import localFont from "next/font/local";
 
 // Titres du site de présentation uniquement : la police n'est chargée que sur cette route.
-const brandFont = Unbounded({
+const brandFont = localFont({
   variable: "--font-brand",
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  display: "swap",
+  src: [{ path: "../fonts/unbounded-latin.woff2", weight: "500 700", style: "normal" }],
 });
 
 export default function MarketingLayout({ children }: Readonly<{ children: React.ReactNode }>) {
