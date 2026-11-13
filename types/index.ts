@@ -11,3 +11,4 @@ export * from "./balle.types";
 export * from "./client.types";
 export * from "./audit.types";
 export * from "./vitrine.types";
+export * from "./webvitals.types";

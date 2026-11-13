@@ -251,9 +251,9 @@
 /* ════════════════════════════════════════════════════════════
    Thème sombre du back-office — activé par la classe .dark sur
    <html> (voir stores/themeStore.ts + components/common/ThemeInit.tsx).
-   Même identité bleu azur, adaptée à un fond sombre. Le storefront
-   public ([data-vitrine]) n'est pas concerné, il garde sa propre
-   palette noir + or indépendante de cette classe.
+   Même identité bleu azur, adaptée à un fond sombre. La vitrine
+   publique ([data-vitrine]) a ses propres couleurs (« Façade », en
+   fin de fichier) et passe en nuit avec cette même classe.
    ════════════════════════════════════════════════════════════ */
 :root.dark {
   color-scheme: dark;
@@ -553,25 +553,95 @@ input[type="number"] {
   }
 }
 
-/* ── Vitrine publique des boutiques ──────────────────────────────────────────
-   Entrées au défilement en CSS pur (animation-timeline: view()) : sans
-   JavaScript ou dans un navigateur qui ne les gère pas, le contenu reste visible.
-   Le délai d'entrée décale les éléments d'une même section. */
-@keyframes vitrine-monte { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
-@keyframes vitrine-respire { from { transform: scale(1); } to { transform: scale(1.06); } }
-
-@supports (animation-timeline: view()) {
-  .vitrine-entre {
-    animation: vitrine-monte linear both;
-    animation-timeline: view();
-    animation-range: entry 0% entry calc(45% + var(--vitrine-decalage, 0%));
-  }
+/* ── Vitrine publique des boutiques : design system « Façade » ──────────────
+   Une vitrine se lit comme une devanture : un mur peint à la couleur de la
+   boutique (data-mur), le nom en très grand, les articles comme des étiquettes.
+   Jour par défaut, nuit quand l'appareil est en sombre (classe .dark).
+   Le mur ne change pas entre jour et nuit. */
+[data-vitrine] {
+  --fa-sol: #f1f3f2;
+  --fa-sol-pas: #e2e8e5;
+  --fa-papier: #ffffff;
+  --fa-encre: #141414;
+  --fa-encre-douce: #47524e;
+  --fa-action: #0b5d4f;
+  --fa-action-appui: #08473c;
+  --fa-sur-action: #ffffff;
+  --fa-focus: #141414;
+  --fa-rare: #c2410c;
+  --fa-bulle: #d6f0e1;
+  --fa-voile: rgba(12, 22, 20, 0.48);
+  --fa-sable: #e7dfd0;
+  --fa-gris-vert: #cbd6d0;
+  --fa-flottant: 0 -18px 40px -22px rgba(10, 20, 18, 0.45);
+  --fa-courbe-sortie: cubic-bezier(0.22, 1, 0.36, 1);
+  --fa-courbe-peinture: cubic-bezier(0.77, 0, 0.175, 1);
+  --fa-courbe-tiroir: cubic-bezier(0.32, 0.72, 0, 1);
+  --fa-mur: #1f4fd1;
+  --fa-sur-mur: #ffffff;
+  color-scheme: light;
 }
+:root.dark [data-vitrine] {
+  --fa-sol: #0f1a1c;
+  --fa-sol-pas: #1a292c;
+  --fa-papier: #142326;
+  --fa-encre: #edf2f0;
+  --fa-encre-douce: #a6b5b1;
+  --fa-action: #3dcfa8;
+  --fa-action-appui: #5addbb;
+  --fa-sur-action: #062019;
+  --fa-focus: #ffffff;
+  --fa-rare: #fb8a4c;
+  --fa-bulle: #173d30;
+  --fa-voile: rgba(0, 0, 0, 0.6);
+  --fa-sable: #2c2721;
+  --fa-gris-vert: #22322e;
+  --fa-flottant: 0 -18px 40px -18px rgba(0, 0, 0, 0.7);
+  color-scheme: dark;
+}
+/* Les huit murs, chacun avec la couleur de texte qui y reste lisible (4,5:1 au moins). */
+[data-mur="bleu"]      { --fa-mur: #1f4fd1; --fa-sur-mur: #ffffff; }
+[data-mur="vert"]      { --fa-mur: #137547; --fa-sur-mur: #ffffff; }
+[data-mur="jaune"]     { --fa-mur: #f2b705; --fa-sur-mur: #141414; }
+[data-mur="orange"]    { --fa-mur: #e2591b; --fa-sur-mur: #141414; }
+[data-mur="rose"]      { --fa-mur: #c42a6b; --fa-sur-mur: #ffffff; }
+[data-mur="turquoise"] { --fa-mur: #0e7a7e; --fa-sur-mur: #ffffff; }
+[data-mur="brique"]    { --fa-mur: #b03a2e; --fa-sur-mur: #ffffff; }
+[data-mur="ocre"]      { --fa-mur: #b5832a; --fa-sur-mur: #141414; }
+
+/* Bandes des étiquettes : le mur, puis sable, gris vert et encre, dans l'ordre du catalogue. */
+[data-vitrine] [data-champ="1"] { --fa-champ: var(--fa-mur); --fa-sur-champ: var(--fa-sur-mur); }
+[data-vitrine] [data-champ="2"] { --fa-champ: var(--fa-sable); --fa-sur-champ: var(--fa-encre); }
+[data-vitrine] [data-champ="3"] { --fa-champ: var(--fa-gris-vert); --fa-sur-champ: var(--fa-encre); }
+[data-vitrine] [data-champ="4"] { --fa-champ: var(--fa-encre); --fa-sur-champ: var(--fa-sol); }
+
+[data-vitrine] :focus-visible { outline: 3px solid var(--fa-focus); outline-offset: 2px; }
+[data-vitrine] .fa-sur-mur :focus-visible { outline-color: var(--fa-sur-mur); }
+
+/* Mouvement signature, une seule fois au chargement : le mur se peint, le nom arrive,
+   les photos s'ouvrent comme un volet. En CSS pur : sans JavaScript, tout est là. */
+@keyframes fa-peindre { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes fa-arriver {
+  from { opacity: 0; transform: translateY(18px); filter: blur(4px); }
+  to { opacity: 1; transform: none; filter: blur(0); }
+}
+@keyframes fa-volet { from { clip-path: inset(100% 0 0 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes fa-poser { from { transform: scale(1.12); } to { transform: scale(1); } }
+@keyframes fa-change { 0% { transform: translateY(0); } 40% { transform: translateY(-3px); } 100% { transform: translateY(0); } }
 
 @media (prefers-reduced-motion: no-preference) {
-  .vitrine-respire { animation: vitrine-respire 9s ease-in-out infinite alternate; }
-}
+  .fa-peint { animation: fa-peindre 700ms var(--fa-courbe-peinture) both; }
+  .fa-arrive { animation: fa-arriver 460ms var(--fa-courbe-sortie) both; animation-delay: var(--fa-delai, 0ms); }
+  .fa-volet { animation: fa-volet 900ms var(--fa-courbe-peinture) both; animation-delay: calc(520ms + var(--fa-i, 0) * 70ms); }
+  .fa-volet img { animation: fa-poser 1100ms var(--fa-courbe-sortie) both; animation-delay: calc(520ms + var(--fa-i, 0) * 70ms); }
+  .fa-change { animation: fa-change 320ms var(--fa-courbe-sortie); }
 
-@media (prefers-reduced-motion: reduce) {
-  .vitrine-entre { animation: none; }
+  /* Entrée des articles et des étapes au défilement, pilotée par le défilement là où le navigateur le permet. */
+  @supports (animation-timeline: view()) {
+    .fa-defile {
+      animation: fa-arriver linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+    }
+  }
 }

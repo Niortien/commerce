@@ -47,6 +47,7 @@ const config: Config = {
         brand:   ["var(--font-brand)", "var(--font-display)", "sans-serif"],
         body:    ["var(--font-body)", "sans-serif"],
         mono:    ["var(--font-mono)", "monospace"],
+        facade:  ["var(--font-facade)", "Helvetica Neue", "Arial", "sans-serif"],
       },
       fontSize: {
         "2xs": "var(--text-2xs)",
@@ -90,6 +91,27 @@ const config: Config = {
         text:            withAlpha("--color-text"),
         "text-muted":    withAlpha("--color-text-muted"),
         "text-dim":      withAlpha("--color-text-dim"),
+
+        /* ── Vitrine publique « Façade » (valeurs dans globals.css, sous [data-vitrine]) ── */
+        fa: {
+          sol:          withAlpha("--fa-sol"),
+          "sol-pas":    withAlpha("--fa-sol-pas"),
+          papier:       withAlpha("--fa-papier"),
+          encre:        withAlpha("--fa-encre"),
+          "encre-douce": withAlpha("--fa-encre-douce"),
+          action:       withAlpha("--fa-action"),
+          "action-appui": withAlpha("--fa-action-appui"),
+          "sur-action": withAlpha("--fa-sur-action"),
+          rare:         withAlpha("--fa-rare"),
+          bulle:        withAlpha("--fa-bulle"),
+          voile:        withAlpha("--fa-voile"),
+          sable:        withAlpha("--fa-sable"),
+          "gris-vert":  withAlpha("--fa-gris-vert"),
+          mur:          withAlpha("--fa-mur"),
+          "sur-mur":    withAlpha("--fa-sur-mur"),
+          champ:        withAlpha("--fa-champ"),
+          "sur-champ":  withAlpha("--fa-sur-champ"),
+        },
 
         sidebar: {
           DEFAULT: withAlpha("--sidebar-bg"),
@@ -228,6 +250,7 @@ const config: Config = {
         "glow-red":     "var(--shadow-glow-red)",
         "glow-purple":  "var(--shadow-glow-purple)",
         "glow-orange":  "var(--shadow-glow-orange)",
+        "fa-flottant":  "var(--fa-flottant)",
       },
       zIndex: {
         base:     "var(--z-base)",

@@ -3,10 +3,13 @@ import { getApiBaseUrl } from "@/lib/apiBase";
 import { SITE_URL } from "@/lib/site";
 import { toWhatsAppHref } from "@/lib/phone";
 import { formatCurrency } from "@/lib/formatCurrency";
+import { TypeCommerce } from "@/types";
 import type { ApiResponse, LignePanier, Vitrine, VitrineProduit, VitrineVariante } from "@/types";
 
 /** Rafraîchie au plus toutes les minutes : un article vendu en caisse disparaît vite de la vitrine. */
 const REVALIDATE_SECONDES = 60;
+/** Au-delà, on abandonne : une API figée ne doit pas laisser la page tourner indéfiniment. */
+const DELAI_API_MS = 8000;
 
 /**
  * Vitrine publique d'une boutique, lue côté serveur (pour que Google et l'aperçu
@@ -16,6 +19,7 @@ export async function getVitrine(slug: string): Promise<Vitrine | null> {
   const res = await fetch(`${getApiBaseUrl()}/api/v1/vitrine/${encodeURIComponent(slug)}`, {
     headers: { Accept: "application/json" },
     next: { revalidate: REVALIDATE_SECONDES },
+    signal: AbortSignal.timeout(DELAI_API_MS),
   });
   if (res.status === 404) return null;
   if (!res.ok) throw new Error(`Vitrine indisponible (${res.status})`);
@@ -132,6 +136,67 @@ export function lienContact(whatsapp: string, boutiqueNom: string): string {
 function numeroInternational(numero: string): string {
   const chiffres = numero.replace(/\D/g, "");
   return chiffres.length === 10 ? `225${chiffres}` : chiffres;
+}
+
+/**
+ * Les photos produits sont des originaux Cloudinary (JPEG 1200 px). On demande à Cloudinary une
+ * version à la largeur affichée, au meilleur format que le téléphone accepte (AVIF/WebP) :
+ * plusieurs fois plus légère sur données mobiles. Toute autre adresse est rendue telle quelle.
+ */
+const CLOUDINARY_UPLOAD = /^(https:\/\/res\.cloudinary\.com\/[^/]+\/image\/upload\/)(?!f_auto)/;
+
+export function imageVitrine(url: string, largeur: number): string {
+  return url.replace(CLOUDINARY_UPLOAD, `$1f_auto,q_auto,c_limit,w_${largeur}/`);
+}
+
+/** `srcset` des largeurs utiles d'une photo Cloudinary ; `undefined` pour une autre adresse. */
+export function srcsetVitrine(url: string, largeurs: number[] = [320, 480, 768, 1080]): string | undefined {
+  if (!CLOUDINARY_UPLOAD.test(url)) return undefined;
+  return largeurs.map((l) => `${imageVitrine(url, l)} ${l}w`).join(", ");
+}
+
+/** Les huit couleurs de mur du design system Façade (valeurs dans globals.css, `[data-mur]`). */
+export type MurFacade = "bleu" | "vert" | "jaune" | "orange" | "rose" | "turquoise" | "brique" | "ocre";
+
+/**
+ * Couleur du mur de la vitrine, tirée du métier de la boutique : deux boutiques d'un même métier
+ * se ressemblent, deux métiers différents se distinguent dès le premier écran.
+ */
+const MUR_PAR_METIER: Record<TypeCommerce, MurFacade> = {
+  [TypeCommerce.VETEMENTS]: "bleu",
+  [TypeCommerce.FRIPERIE]: "orange",
+  [TypeCommerce.CHAUSSURES]: "brique",
+  [TypeCommerce.BEAUTE]: "rose",
+  [TypeCommerce.RESTAURANT]: "ocre",
+  [TypeCommerce.ALIMENTATION]: "vert",
+  [TypeCommerce.SUPERMARCHE]: "turquoise",
+  [TypeCommerce.PHARMACIE]: "vert",
+  [TypeCommerce.ELECTRONIQUE]: "turquoise",
+  [TypeCommerce.QUINCAILLERIE]: "jaune",
+  [TypeCommerce.AUTRE]: "bleu",
+};
+
+export function murDeLaBoutique(typeCommerce: TypeCommerce | null): MurFacade {
+  return typeCommerce ? MUR_PAR_METIER[typeCommerce] : "bleu";
+}
+
+/** Initiales affichées à la place d'un logo absent : « Akwaba Street » → « AS ». */
+export function initiales(nom: string): string {
+  const mots = nom.trim().split(/\s+/).filter(Boolean);
+  const lettres = mots.length > 1 ? mots[0].charAt(0) + mots[1].charAt(0) : nom.trim().slice(0, 2);
+  return lettres.toUpperCase();
+}
+
+const nombreFr = new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 0 });
+
+/** Prix affiché dans la vitrine : « 15 000 F » (le message WhatsApp garde « FCFA »). */
+export function prixCourt(montant: number): string {
+  return `${nombreFr.format(montant)} F`;
+}
+
+/** « 1 article », « 24 articles ». */
+export function articles(n: number): string {
+  return `${n} article${n > 1 ? "s" : ""}`;
 }
 
 /** Lien de la mention « Propulsé par Mon Djossi », tracé pour mesurer les essais venus des vitrines. */

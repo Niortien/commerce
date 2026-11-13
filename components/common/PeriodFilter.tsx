@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { DateRangePicker } from "@heroui/react";
+import { PlageDatesDifferee } from "@/components/common/PlageDatesDifferee";
 import {
   endOfMonth,
   endOfWeek,
@@ -72,22 +72,7 @@ export function PeriodFilter({ value, onChange, ariaLabel, tone = "accent", exte
         }}
         options={presets.map(({ key, label }) => ({ key, label }))}
       />
-      <DateRangePicker
-        aria-label={`${ariaLabel} — plage personnalisée`}
-        value={value}
-        onChange={(val) => val && onChange(val)}
-        maxValue={now}
-        visibleMonths={2}
-        size="sm"
-        classNames={{
-          base: "w-full lg:max-w-[320px]",
-          inputWrapper:
-            "h-10 border border-border bg-surface shadow-none hover:border-[var(--color-accent)] focus-within:!border-[var(--color-accent)]",
-          segment: "text-text",
-          separator: "text-text-muted",
-          calendarContent: "bg-surface border border-border rounded-xl shadow-lg",
-        }}
-      />
+      <PlageDatesDifferee value={value} onChange={(r) => r && onChange(r)} maxValue={now} ariaLabel={`${ariaLabel} — plage personnalisée`} />
     </div>
   );
 }

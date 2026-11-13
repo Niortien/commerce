@@ -1,14 +1,13 @@
-import type { CSSProperties } from "react";
 import type { VitrineCategorie, VitrineProduit } from "@/types";
 import { ProduitVitrineCard } from "./ProduitVitrineCard";
 
 interface Props {
   produits: VitrineProduit[];
   categories: VitrineCategorie[];
-  /** Recherche en cours : une seule planche, sans rangées par catégorie. */
+  /** Recherche ou catégorie en cours : une seule grille, sans rangées par catégorie. */
   aplatir: boolean;
   onOuvrir: (p: VitrineProduit) => void;
-  onAjouter: (p: VitrineProduit) => void;
+  onAjouter: (p: VitrineProduit) => boolean;
 }
 
 interface Rangee {
@@ -20,32 +19,33 @@ interface Rangee {
 const RANGEE_MIN_POUR_AGRANDIR = 5;
 
 /**
- * La planche contact de la boutique : tout le stock d'un coup, une rangée par catégorie,
- * le nom de la catégorie à la même petite taille que le reste.
+ * Le catalogue : une rangée par catégorie, deux colonnes sur téléphone, quatre sur ordinateur.
+ * Dans une rangée assez fournie, l'article en promotion est mis en avant (un carré de deux sur deux).
  */
 export function VitrineCatalogue({ produits, categories, aplatir, onOuvrir, onAjouter }: Props) {
-  const rangees = aplatir ? [{ id: "resultats", titre: "Résultats", produits }] : regrouper(produits, categories);
+  const rangees = aplatir ? [{ id: "resultats", titre: "", produits }] : regrouper(produits, categories);
+  const avecTitres = rangees.length > 1;
 
   return (
-    <div className="flex flex-col gap-14 sm:gap-20">
+    <div className="flex flex-col gap-14 min-[900px]:gap-20">
       {rangees.map((r) => {
-        // Une seule vue agrandie par rangée, l'article en promotion, si la rangée est assez fournie.
         const agrandiId = r.produits.length >= RANGEE_MIN_POUR_AGRANDIR ? r.produits.find((p) => p.prixPromo !== null)?.id : undefined;
         return (
-          <section key={r.id} aria-labelledby={`rangee-${r.id}`}>
-            <h2 id={`rangee-${r.id}`} className="vitrine-entre mb-4 text-base font-semibold text-text">
-              {r.titre} <span className="font-normal text-text-muted">· {r.produits.length}</span>
-            </h2>
-            <ul className="grid grid-flow-dense grid-cols-2 gap-x-2 gap-y-6 sm:grid-cols-3 sm:gap-x-2.5 md:grid-cols-4 xl:grid-cols-6">
-              {r.produits.map((p, i) => (
-                <li
-                  key={p.id}
-                  className={`vitrine-entre ${p.id === agrandiId ? "col-span-2 row-span-2" : ""}`}
-                  style={{ "--vitrine-decalage": `${(i % 6) * 6}%` } as CSSProperties}
-                >
-                  <ProduitVitrineCard produit={p} onOuvrir={onOuvrir} onAjouter={onAjouter} agrandi={p.id === agrandiId} />
-                </li>
-              ))}
+          <section key={r.id} aria-labelledby={avecTitres ? `rangee-${r.id}` : undefined} aria-label={avecTitres ? undefined : "Articles"}>
+            {avecTitres ? (
+              <h3 id={`rangee-${r.id}`} className="mb-4 text-[22px] font-semibold leading-tight tracking-[-0.02em]">
+                {r.titre} <span className="font-normal text-fa-encre-douce">· {r.produits.length}</span>
+              </h3>
+            ) : null}
+            <ul className="grid grid-flow-dense grid-cols-2 gap-x-2 gap-y-7 min-[900px]:grid-cols-4 min-[900px]:gap-x-3 min-[900px]:gap-y-9">
+              {r.produits.map((p, i) => {
+                const agrandi = p.id === agrandiId;
+                return (
+                  <li key={p.id} className={`fa-defile ${agrandi ? "col-span-2 min-[900px]:row-span-2" : ""}`}>
+                    <ProduitVitrineCard produit={p} champ={(i % 4) + 1} agrandi={agrandi} onOuvrir={onOuvrir} onAjouter={onAjouter} />
+                  </li>
+                );
+              })}
             </ul>
           </section>
         );

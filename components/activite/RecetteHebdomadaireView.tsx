@@ -3,7 +3,8 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { DateRangePicker, Spinner } from "@heroui/react";
+import { Spinner } from "@heroui/react";
+import { PlageDatesDifferee } from "@/components/common/PlageDatesDifferee";
 import {
   endOfMonth,
   endOfWeek,
@@ -154,21 +155,13 @@ export function RecetteHebdomadaireView() {
             }}
             options={presets.map(({ key, label }) => ({ key, label }))}
           />
-          <DateRangePicker
-            aria-label="Période d'analyse (choisir la même date pour un jour précis)"
+          <PlageDatesDifferee
+            ariaLabel="Période d'analyse (choisir la même date pour un jour précis)"
             value={dateRange}
             onChange={(val) => val && setDateRange(val)}
             maxValue={now}
-            visibleMonths={2}
-            size="sm"
-            classNames={{
-              base: "w-full lg:max-w-[340px]",
-              inputWrapper:
-                "h-10 border border-border bg-surface shadow-none hover:border-[var(--color-cash)] focus-within:!border-[var(--color-cash)]",
-              segment: "text-text",
-              separator: "text-text-muted",
-              calendarContent: "bg-surface border border-border rounded-xl shadow-lg",
-            }}
+            ton="cash"
+            largeur="w-full lg:max-w-[340px]"
           />
         </div>
       </PageHero>

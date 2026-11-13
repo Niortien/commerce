@@ -8,34 +8,36 @@ interface Props {
   max?: number;
 }
 
-/** Choix d'une quantité avec − et +, utilisable au pouce sur téléphone. */
+/** Choix d'une quantité avec − et +, utilisable au pouce sur téléphone. Angles droits, comme toute la vitrine. */
 export function QuantiteStepper({ valeur, onChange, libelle, max = 99 }: Props) {
   return (
-    <div role="group" aria-label={libelle} className="inline-flex items-center rounded-full bg-surface-high">
+    <div role="group" aria-label={libelle} className="inline-flex items-center bg-fa-sol-pas">
       <Button
         isIconOnly
-        radius="full"
+        radius="none"
         variant="light"
+        disableRipple
         aria-label="Retirer un"
         isDisabled={valeur <= 1}
         onPress={() => onChange(valeur - 1)}
-        className="h-10 w-10 min-w-10 active:scale-90"
+        className="h-11 w-11 min-w-11 text-fa-encre data-[hover=true]:bg-transparent data-[pressed=true]:scale-90"
       >
-        <IconMinus size={16} aria-hidden />
+        <IconMinus size={18} stroke={2.2} aria-hidden />
       </Button>
-      <span className="min-w-8 text-center text-base font-semibold tabular-nums text-text" aria-live="polite">
+      <span className="min-w-8 text-center text-base font-semibold tabular-nums" aria-live="polite">
         {valeur}
       </span>
       <Button
         isIconOnly
-        radius="full"
+        radius="none"
         variant="light"
+        disableRipple
         aria-label="Ajouter un"
         isDisabled={valeur >= max}
         onPress={() => onChange(valeur + 1)}
-        className="h-10 w-10 min-w-10 active:scale-90"
+        className="h-11 w-11 min-w-11 text-fa-encre data-[hover=true]:bg-transparent data-[pressed=true]:scale-90"
       >
-        <IconPlus size={16} aria-hidden />
+        <IconPlus size={18} stroke={2.2} aria-hidden />
       </Button>
     </div>
   );

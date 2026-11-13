@@ -1,54 +1,78 @@
-import { IconBrandWhatsapp, IconPhone } from "@tabler/icons-react";
+import { Button } from "@heroui/react";
 import { toTelHref } from "@/lib/phone";
-import { lienContact } from "@/lib/vitrine";
-import type { VitrineBoutique } from "@/types";
+import { imageVitrine, lienContact } from "@/lib/vitrine";
+import type { VitrineBoutique, VitrineProduit } from "@/types";
+import { boutonFacade } from "./facade";
 
-/** La fin de la vitrine : une phrase, le logo, et les deux façons de joindre la boutique. */
-export function VitrineContact({ boutique }: { boutique: VitrineBoutique }) {
-  if (!boutique.whatsapp && !boutique.telephone) return null;
+const PHOTOS_MAX = 4;
+
+/** La section existe dès qu'il y a une adresse ou un moyen de joindre la boutique. */
+export function avecPassage(boutique: VitrineBoutique): boolean {
+  return Boolean(boutique.whatsapp || boutique.telephone || boutique.adresse || boutique.ville);
+}
+
+/**
+ * « Passer à la boutique » : un second mur, peint de la même couleur que l'enseigne, avec l'adresse
+ * telle qu'on la donne et les deux façons de joindre la boutique. Sur ordinateur, des photos à droite.
+ */
+export function VitrineContact({ boutique, produits }: { boutique: VitrineBoutique; produits: VitrineProduit[] }) {
+  if (!avecPassage(boutique)) return null;
   const lieu = [boutique.adresse, boutique.ville].filter(Boolean).join(", ");
+  const photos = produits.filter((p) => p.images[0]).slice(-PHOTOS_MAX);
 
   return (
-    <section aria-label="Contacter la boutique" className="bg-surface-high">
-      <div className="mx-auto grid w-full max-w-[1600px] grid-cols-[96px_1fr] gap-x-5 gap-y-8 px-5 py-20 sm:grid-cols-12 sm:gap-x-6 sm:px-8 sm:py-32">
-        <p className="vitrine-entre col-span-2 max-w-[34ch] font-display text-2xl font-semibold leading-[1.15] tracking-[-0.01em] text-text sm:col-span-6 sm:text-[clamp(1.5rem,2.2vw,2rem)]">
-          Une question sur une taille, une couleur ou la livraison ? {boutique.nom} vous répond sur WhatsApp.
-        </p>
-
-        <div className="vitrine-entre aspect-square w-24 overflow-hidden sm:col-span-2 sm:col-start-8 sm:w-full sm:max-w-[170px]">
-          {boutique.logoUrl ? (
-            <img src={boutique.logoUrl} alt={`Logo ${boutique.nom}`} width={170} height={170} loading="lazy" className="h-full w-full bg-white object-contain p-3" />
-          ) : (
-            <span aria-hidden className="flex h-full w-full items-center justify-center bg-[color:var(--sector)] font-display text-5xl font-bold text-white">
-              {boutique.nom.charAt(0).toUpperCase()}
-            </span>
-          )}
+    <section
+      id="boutique"
+      aria-labelledby="boutique-titre"
+      className="fa-sur-mur scroll-mt-4 bg-fa-mur text-fa-sur-mur"
+    >
+      <div className="mx-auto grid w-full max-w-[1600px] gap-6 px-5 py-14 min-[900px]:grid-cols-2 min-[900px]:gap-12 min-[900px]:px-8 min-[900px]:py-24">
+        <div className="fa-defile flex flex-col items-start gap-6">
+          <h2 id="boutique-titre" className="text-[min(10vw,60px)] font-semibold leading-none tracking-[-0.035em]">
+            {lieu ? "Passer à la boutique" : "Joindre la boutique"}
+          </h2>
+          {lieu ? <p className="max-w-[34ch] text-[19px] font-medium leading-[1.4]">{lieu}</p> : null}
+          <p className="max-w-[40ch] text-[17px] leading-[1.5]">
+            Une question sur une taille, une couleur ou la livraison ? {boutique.nom} vous répond directement.
+          </p>
+          <div className="flex w-full max-w-[420px] flex-wrap gap-2">
+            {boutique.whatsapp ? (
+              <Button
+                as="a"
+                href={lienContact(boutique.whatsapp, boutique.nom)}
+                target="_blank"
+                rel="noopener noreferrer"
+                radius="none"
+                disableRipple
+                className={`${boutonFacade.surMur} flex-1`}
+              >
+                WhatsApp
+              </Button>
+            ) : null}
+            {boutique.telephone ? (
+              <Button as="a" href={toTelHref(boutique.telephone)} radius="none" disableRipple className={`${boutonFacade.surMur} flex-1`}>
+                Appeler
+              </Button>
+            ) : null}
+          </div>
         </div>
 
-        <div className="vitrine-entre flex flex-col gap-3 sm:col-span-3 sm:col-start-10">
-          <p className="text-lg font-medium text-text">Joindre la boutique</p>
-          {boutique.whatsapp ? (
-            <a
-              href={lienContact(boutique.whatsapp, boutique.nom)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex min-h-11 items-center gap-2 text-lg text-text underline underline-offset-4 hover:text-[color:var(--sector)]"
-            >
-              <IconBrandWhatsapp size={20} aria-hidden />
-              {boutique.whatsapp}
-            </a>
-          ) : null}
-          {boutique.telephone ? (
-            <a
-              href={toTelHref(boutique.telephone)}
-              className="inline-flex min-h-11 items-center gap-2 text-lg text-text underline underline-offset-4 hover:text-[color:var(--sector)]"
-            >
-              <IconPhone size={20} aria-hidden />
-              Appeler
-            </a>
-          ) : null}
-          {lieu ? <p className="text-sm text-text-muted">{lieu}</p> : null}
-        </div>
+        {photos.length >= 2 ? (
+          <div aria-hidden className="-mx-5 flex gap-2 overflow-x-auto px-5 [scrollbar-width:none] min-[900px]:mx-0 min-[900px]:grid min-[900px]:grid-cols-2 min-[900px]:content-start min-[900px]:overflow-visible min-[900px]:px-0 [&::-webkit-scrollbar]:hidden">
+            {photos.map((p) => (
+              <img
+                key={p.id}
+                src={imageVitrine(p.images[0], 480)}
+                alt=""
+                width={240}
+                height={300}
+                loading="lazy"
+                decoding="async"
+                className="fa-defile aspect-[4/5] h-40 w-auto shrink-0 bg-fa-sol object-cover min-[900px]:h-auto min-[900px]:w-full min-[900px]:max-h-[300px]"
+              />
+            ))}
+          </div>
+        ) : null}
       </div>
     </section>
   );

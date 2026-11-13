@@ -1,193 +1,149 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import { Button, Card } from "@heroui/react";
-import { IconBrandWhatsapp, IconShoppingBag } from "@tabler/icons-react";
+import { IconShoppingBag } from "@tabler/icons-react";
 import { getCommerceProfile } from "@/lib/commerce";
-import { formatCurrency } from "@/lib/formatCurrency";
-import { toTelHref } from "@/lib/phone";
-import { lienContact, prixAffiche } from "@/lib/vitrine";
+import { articles, imageVitrine, initiales, prixAffiche, prixCourt, srcsetVitrine } from "@/lib/vitrine";
 import type { VitrineBoutique, VitrineProduit } from "@/types";
+import { boutonFacade } from "./facade";
 
-const PHOTOS_MAX = 14;
+const PHOTOS_MAX = 5;
+const PHOTOS_MIN = 3;
 
 interface Props {
   boutique: VitrineBoutique;
   produits: VitrineProduit[];
   nombrePanier: number;
+  /** La section « Passer à la boutique » existe (adresse ou contact) : le lien secondaire y mène. */
+  avecPassage: boolean;
   onOuvrirProduit: (p: VitrineProduit) => void;
   onOuvrirPanier: () => void;
 }
 
-/** Plus le nom est long, plus il est composé petit : il tient toujours en deux lignes. */
+/** Le nom tient en deux lignes au plus : plus il est long, plus il est composé petit. */
 function tailleDuNom(nom: string): string {
-  if (nom.length <= 12) return "text-[clamp(2.75rem,10vw,10rem)]";
-  if (nom.length <= 20) return "text-[clamp(2.5rem,7.5vw,8rem)]";
-  if (nom.length <= 32) return "text-[clamp(2.25rem,5.5vw,6rem)]";
-  return "text-[clamp(2rem,4.5vw,4.5rem)]";
+  if (nom.length <= 14) return "text-[min(15.5vw,132px)] min-[900px]:text-[min(9vw,132px)]";
+  if (nom.length <= 24) return "text-[min(11vw,92px)] min-[900px]:text-[min(6.5vw,92px)]";
+  return "text-[min(8.5vw,64px)] min-[900px]:text-[min(4.6vw,64px)]";
 }
 
+const delai = (ms: number) => ({ "--fa-delai": `${ms}ms` }) as CSSProperties;
+
 /**
- * Ouverture de la vitrine : sur un champ bleu nuit teinté de la couleur du métier, le nom de la boutique
- * en très grand, puis une bande des articles en photo que l'on fait glisser du pouce. La photo au centre
- * est éclairée, les autres restent dans la pénombre jusqu'à ce qu'elles y arrivent.
+ * L'enseigne : le mur peint à la couleur de la boutique, son nom en très grand, une phrase et
+ * l'action « Voir les articles » ; à côté, une mosaïque de ses vrais articles.
+ * À l'arrivée, une seule fois : le mur se peint, le nom arrive, les photos s'ouvrent comme un volet.
  */
-export function VitrineHeader({ boutique, produits, nombrePanier, onOuvrirProduit, onOuvrirPanier }: Props) {
+export function VitrineHeader({ boutique, produits, nombrePanier, avecPassage, onOuvrirProduit, onOuvrirPanier }: Props) {
   const profil = boutique.typeCommerce ? getCommerceProfile(boutique.typeCommerce) : null;
   const photos = produits.filter((p) => p.images[0]).slice(0, PHOTOS_MAX);
-  const avecBande = photos.length >= 3;
+  const avecMosaique = photos.length >= PHOTOS_MIN;
   const quoi = [profil?.label, boutique.ville ? `à ${boutique.ville}` : null].filter(Boolean).join(" ");
+  const commande = boutique.whatsapp ? "vous commandez sur WhatsApp" : "vous appelez la boutique pour commander";
+  const phrase =
+    produits.length > 0
+      ? `${quoi ? `${quoi}. ` : ""}Vous choisissez ici, ${commande}.`
+      : "Les nouveautés arrivent. Écrivez à la boutique pour savoir ce qui est disponible.";
+
+  // Trois colonnes décalées : 1re et 4e photo, 2e et 5e, puis la 3e (sur ordinateur seulement).
+  const colonnes = [
+    [photos[0], photos[3]],
+    [photos[1], photos[4]],
+    [photos[2]],
+  ].map((c) => c.filter((p): p is VitrineProduit => p !== undefined));
 
   return (
-    <header
-      className="text-white"
-      style={{ backgroundColor: "color-mix(in srgb, var(--sector) 28%, #0F1B33)" }}
-    >
-      <div className="mx-auto flex w-full max-w-[1600px] flex-col px-5 pb-10 pt-5 sm:px-8 sm:pb-14 sm:pt-7">
-        <div className="grid grid-cols-2 gap-x-6 gap-y-1 text-sm text-white/75 sm:grid-cols-12">
-          <p className="col-span-1 sm:col-span-3">{quoi || "Vitrine en ligne"}</p>
-          <p className="hidden sm:col-span-3 sm:block">{boutique.adresse ?? ""}</p>
-          <p className="hidden sm:col-span-3 sm:block">
-            {boutique.telephone ? (
-              <a href={toTelHref(boutique.telephone)} className="text-white underline-offset-4 hover:underline">
-                {boutique.telephone}
-              </a>
-            ) : null}
-          </p>
-          <div className="col-span-1 flex justify-end sm:col-span-3">
-            <Button
-              size="sm"
-              radius="full"
-              variant="light"
-              onPress={onOuvrirPanier}
-              className="-mr-3 -mt-1 font-medium text-white data-[hover=true]:bg-white/10"
-              startContent={<IconShoppingBag size={18} aria-hidden />}
-            >
-              Panier · {nombrePanier}
-            </Button>
-          </div>
+    <header className={`grid grid-cols-1 ${avecMosaique ? "min-[900px]:min-h-[680px] min-[900px]:grid-cols-2" : ""}`}>
+      <div className="fa-sur-mur fa-peint flex flex-col gap-5 bg-fa-mur px-5 pb-7 pt-5 text-fa-sur-mur min-[900px]:px-8 min-[900px]:pb-10 min-[900px]:pt-8">
+        <div className="flex items-center justify-between gap-3">
+          {boutique.logoUrl ? (
+            <img
+              src={boutique.logoUrl}
+              alt={`Logo ${boutique.nom}`}
+              width={48}
+              height={48}
+              className="h-12 w-12 bg-fa-sur-mur object-contain p-1"
+            />
+          ) : (
+            <span aria-hidden className="grid h-12 w-12 place-items-center bg-fa-sur-mur text-xl font-semibold tracking-[-0.04em] text-fa-mur">
+              {initiales(boutique.nom)}
+            </span>
+          )}
+          <Button
+            radius="none"
+            variant="light"
+            disableRipple
+            onPress={onOuvrirPanier}
+            className="-mr-3 h-11 min-w-0 gap-2 px-3 text-base font-medium text-fa-sur-mur data-[hover=true]:bg-transparent data-[hover=true]:underline"
+            startContent={<IconShoppingBag size={20} stroke={2} aria-hidden />}
+          >
+            Panier · {nombrePanier}
+          </Button>
         </div>
 
         <h1
-          className={`mt-8 max-w-[14ch] font-display font-bold leading-[0.92] tracking-[-0.035em] text-balance sm:mt-12 ${tailleDuNom(boutique.nom)}`}
+          className={`fa-arrive mt-7 max-w-[14ch] font-semibold leading-[0.9] tracking-[-0.045em] [overflow-wrap:anywhere] [text-wrap:balance] min-[900px]:mt-auto ${tailleDuNom(boutique.nom)}`}
+          style={delai(300)}
         >
           {boutique.nom}
         </h1>
-      </div>
 
-      {avecBande ? <BandePhotos photos={photos} onOuvrir={onOuvrirProduit} /> : null}
-
-      <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-5 px-5 pb-10 pt-8 sm:flex-row sm:items-end sm:justify-between sm:px-8 sm:pb-12">
-        <p className="max-w-[44ch] text-base text-white/85 sm:text-lg">
-          {produits.length > 0
-            ? `${produits.length} article${produits.length > 1 ? "s" : ""} en stock aujourd'hui. Choisissez, puis envoyez votre commande sur WhatsApp.`
-            : "Les nouveautés arrivent. Écrivez-nous sur WhatsApp pour savoir ce qui est disponible."}
+        <p className="fa-arrive m-0 max-w-[34ch] text-[19px] font-medium leading-[1.4] tracking-[-0.01em]" style={delai(380)}>
+          {phrase}
         </p>
-        <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
+
+        <div className="fa-arrive mt-1 flex flex-wrap items-center gap-x-5 gap-y-3" style={delai(450)}>
           {produits.length > 0 ? (
-            <Button
-              as="a"
-              href="#articles"
-              size="lg"
-              radius="full"
-              className="bg-[color:var(--sector)] px-7 font-semibold text-white transition-transform active:scale-[0.97]"
-            >
-              Voir les articles
+            <Button as="a" href="#articles" radius="none" disableRipple className={boutonFacade.surMur}>
+              Voir les {articles(produits.length)}
             </Button>
           ) : null}
-          {boutique.whatsapp ? (
-            <a
-              href={lienContact(boutique.whatsapp, boutique.nom)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex min-h-11 items-center gap-2 font-medium text-white underline-offset-4 hover:underline"
-            >
-              <IconBrandWhatsapp size={20} aria-hidden />
-              Écrire sur WhatsApp
+          {avecPassage ? (
+            <a href="#boutique" className="text-base font-semibold text-fa-sur-mur underline underline-offset-4">
+              {boutique.adresse || boutique.ville ? "Passer à la boutique" : "Joindre la boutique"}
             </a>
           ) : null}
         </div>
       </div>
-    </header>
-  );
-}
 
-function BandePhotos({ photos, onOuvrir }: { photos: VitrineProduit[]; onOuvrir: (p: VitrineProduit) => void }) {
-  const bande = useRef<HTMLDivElement>(null);
-  const [centre, setCentre] = useState(Math.min(1, photos.length - 1));
-
-  useEffect(() => {
-    const el = bande.current;
-    if (!el) return;
-    const cadres = Array.from(el.querySelectorAll<HTMLElement>("[data-cadre]"));
-    // On ouvre sur le 2e article : la bande est coupée par les deux bords, on voit qu'elle continue.
-    const depart = cadres[Math.min(1, cadres.length - 1)];
-    if (depart) el.scrollLeft = depart.offsetLeft - (el.clientWidth - depart.offsetWidth) / 2;
-
-    let attente = 0;
-    const mesurer = () => {
-      attente = 0;
-      const milieu = el.scrollLeft + el.clientWidth / 2;
-      let meilleur = 0;
-      let ecart = Number.POSITIVE_INFINITY;
-      cadres.forEach((c, i) => {
-        const d = Math.abs(c.offsetLeft + c.offsetWidth / 2 - milieu);
-        if (d < ecart) {
-          ecart = d;
-          meilleur = i;
-        }
-      });
-      setCentre(meilleur);
-    };
-    const auDefilement = () => {
-      if (!attente) attente = requestAnimationFrame(mesurer);
-    };
-    mesurer();
-    el.addEventListener("scroll", auDefilement, { passive: true });
-    return () => {
-      el.removeEventListener("scroll", auDefilement);
-      if (attente) cancelAnimationFrame(attente);
-    };
-  }, [photos.length]);
-
-  const actif = photos[centre];
-
-  return (
-    <div>
-      <div
-        ref={bande}
-        role="list"
-        aria-label="Articles en photo"
-        className="flex snap-x snap-mandatory gap-2.5 overflow-x-auto px-[max(1.25rem,calc(50vw-18vh))] [scrollbar-width:none] sm:px-[max(2rem,calc(50vw-14vh))] [&::-webkit-scrollbar]:hidden"
-      >
-        {photos.map((p, i) => (
-          <div key={p.id} role="listitem" data-cadre className="shrink-0 snap-center">
-            <Card
-              isPressable
-              radius="none"
-              shadow="none"
-              onPress={() => onOuvrir(p)}
-              aria-label={`${p.nom}, ${formatCurrency(prixAffiche(p))}`}
-              className="block aspect-[4/5] h-[46vh] max-h-[520px] min-h-[260px] overflow-hidden bg-white/5 sm:h-[34vh] sm:min-h-[240px]"
-            >
-              <img
-                src={p.images[0]}
-                alt=""
-                width={400}
-                height={500}
-                className={`h-full w-full object-cover transition-[filter,transform] duration-500 ${
-                  i === centre ? "vitrine-respire brightness-100" : "brightness-[0.55] hover:brightness-90"
-                }`}
-              />
-            </Card>
-          </div>
-        ))}
-      </div>
-      {actif ? (
-        <p className="mx-auto mt-3 w-full max-w-[1600px] px-5 text-sm text-white/85 sm:px-8 sm:text-center" aria-live="polite">
-          {actif.nom} · <span className="tabular-nums">{formatCurrency(prixAffiche(actif))}</span>
-        </p>
+      {avecMosaique ? (
+        <div
+          aria-label="Quelques articles"
+          role="group"
+          className="grid max-h-[520px] grid-cols-2 gap-2 overflow-hidden bg-fa-sol-pas px-5 pt-3 min-[900px]:max-h-none min-[900px]:grid-cols-[1fr_1fr_0.6fr] min-[900px]:pl-8 min-[900px]:pr-0 min-[900px]:pt-8"
+        >
+          {colonnes.map((colonne, c) => (
+            <div key={c} className={`flex flex-col gap-2 ${c > 0 ? "mt-12" : ""} ${c === 2 ? "hidden min-[900px]:flex" : ""}`}>
+              {colonne.map((p) => (
+                <Card
+                  key={p.id}
+                  isPressable
+                  radius="none"
+                  shadow="none"
+                  disableRipple
+                  onPress={() => onOuvrirProduit(p)}
+                  aria-label={`${p.nom}, ${prixCourt(prixAffiche(p))}`}
+                  className="fa-volet block aspect-[4/5] w-full overflow-hidden bg-fa-sol"
+                  style={{ "--fa-i": photos.indexOf(p) } as CSSProperties}
+                >
+                  <img
+                    src={imageVitrine(p.images[0], 480)}
+                    srcSet={srcsetVitrine(p.images[0], [320, 480, 768])}
+                    sizes="(min-width: 900px) 20vw, 45vw"
+                    alt=""
+                    width={480}
+                    height={600}
+                    decoding="async"
+                    loading={photos.indexOf(p) === 0 ? "eager" : "lazy"}
+                    className="h-full w-full object-cover"
+                  />
+                </Card>
+              ))}
+            </div>
+          ))}
+        </div>
       ) : null}
-    </div>
+    </header>
   );
 }

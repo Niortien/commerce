@@ -1,6 +1,7 @@
 "use client";
 
-import { Button, DateRangePicker, Spinner } from "@heroui/react";
+import { Button, Spinner } from "@heroui/react";
+import { PlageDatesDifferee } from "@/components/common/PlageDatesDifferee";
 import { useMemo, useState } from "react";
 import {
   getLocalTimeZone,
@@ -65,21 +66,14 @@ export function SessionsList() {
 
         {/* Filtre plage de date */}
         <div className="mb-4 flex flex-wrap items-center gap-2">
-          <DateRangePicker
-            aria-label="Filtrer par période"
+          <PlageDatesDifferee
+            ariaLabel="Filtrer par période"
             value={dateRange}
             onChange={(val) => setDateRange(val)}
             maxValue={now}
-            size="sm"
-            classNames={{
-              base: "max-w-[300px]",
-              inputWrapper:
-                "border border-border bg-surface shadow-none hover:border-cash/50 focus-within:!border-cash h-10",
-              segment: "text-text focus:bg-cash/20",
-              separator: "text-text-dim",
-              calendarContent:
-                "bg-surface border border-border rounded-xl shadow-lg",
-            }}
+            ton="cash"
+            visibleMonths={1}
+            largeur="w-full max-w-[300px]"
           />
           {dateRange && (
             <Button
